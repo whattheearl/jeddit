@@ -7,7 +7,7 @@ import { page } from "$app/stores";
     <div style="display: flex; width: 100%;">
         <div style="margin: 16px 0;">jeddit</div>
 
-        <a href={`${base}/auth/signin`} style="display: flex; align-items: center; margin: 16px 0 16px auto">signin</a>
+        <a href={`${base}/auth/google/signin`} style="display: flex; align-items: center; margin: 16px 0 16px auto">signin</a>
         <!-- <div id="username" style="display: flex; align-items: center; margin: 16px 0 16px auto">{$page.data.user.name}</div> -->
     </div>
 </div>

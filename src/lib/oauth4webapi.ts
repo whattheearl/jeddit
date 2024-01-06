@@ -38,13 +38,13 @@ export async function getAuthorizationUrl() {
     }
 }
 
-export async function getUserClaims(currentUrl: URL, code_verifier: string) {
+export async function getUserInfo(currentUrl: URL, code_verifier: string) {
     let sub: string
     let access_token: string
     {
         const params = oauth.validateAuthResponse(as, client, currentUrl, oauth.expectNoState)
         if (oauth.isOAuth2Error(params)) {
-            console.log('error', params)
+            console.error('error', params)
             throw new Error() // Handle OAuth 2.0 redirect error
         }
 
@@ -59,14 +59,14 @@ export async function getUserClaims(currentUrl: URL, code_verifier: string) {
         let challenges: oauth.WWWAuthenticateChallenge[] | undefined
         if ((challenges = oauth.parseWwwAuthenticateChallenges(response))) {
             for (const challenge of challenges) {
-                console.log('challenge', challenge)
+                console.error('challenge', challenge)
             }
             throw new Error() // Handle www-authenticate challenges as needed
         }
 
         const result = await oauth.processAuthorizationCodeOpenIDResponse(as, client, response)
         if (oauth.isOAuth2Error(result)) {
-            console.log('error', result)
+            console.error('error', result)
             throw new Error() // Handle OAuth 2.0 response body error
         }
 

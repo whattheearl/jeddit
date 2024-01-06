@@ -1,13 +1,10 @@
 import { base } from "$app/paths";
-import { getAuthorizationUrl, getUserClaims } from "$lib/oauth4webapi";
+import { getAuthorizationUrl, getUserInfo } from "$lib/oauth4webapi";
 import { redirect, type Handle, error } from "@sveltejs/kit";
 
 export const oauthHandler: Handle = async ({ event, resolve }) => {
     switch (event.url.pathname) {
-        case `${base}/auth/signout`:
-            event.cookies.delete('sid', { path: `${base}/` });
-            break;
-        case `${base}/auth/signin`:
+        case `${base}/auth/google/signin`:
             {
                 const referer = event.request.headers.get('Referer') ?? '';
                 const redirect_user_url = referer.includes(event.url.hostname) ? referer : `${base}`
@@ -21,8 +18,8 @@ export const oauthHandler: Handle = async ({ event, resolve }) => {
                 if (!cookie)
                     error(400, 'Something went wrong...');
                 const { code_verifier, redirect_user_url } = JSON.parse(cookie);
-                const claims = await getUserClaims(event.url, code_verifier);
-                console.log({ claims })
+                const userinfo = await getUserInfo(event.url, code_verifier);
+                console.log({ claims: userinfo })
                 redirect(302, redirect_user_url);
             }
     }
