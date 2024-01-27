@@ -6,8 +6,8 @@ export const oauthHandler: Handle = async ({ event, resolve }) => {
     switch (event.url.pathname) {
         case `${base}/auth/google/signin`:
             {
-                const referer = event.request.headers.get('Referer') ?? '';
-                const redirect_user_url = referer.includes(event.url.hostname) ? referer : `${base}`
+                const referer = event.url.searchParams.get('referer') ?? `${base}/`;
+                const redirect_user_url = referer.includes(event.url.hostname) ? referer : `${base}`;
                 const { authorizationUrl, code_verifier } = await getAuthorizationUrl();
                 event.cookies.set('oauth', JSON.stringify({ code_verifier, redirect_user_url }), { path: `${base}/auth` })
                 redirect(302, authorizationUrl);
