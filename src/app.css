@@ -2,6 +2,7 @@
 html {
     box-sizing: border-box;
     font-size: 16px;
+    font-family: "Noto Sans", sans-serif;
 }
 
 *, *:before, *:after {
@@ -23,3 +24,8 @@ img {
     height: auto;
 }
 /* css reset end */
+
+body {
+    width: 100vw;
+    height: 100vh;
+}
