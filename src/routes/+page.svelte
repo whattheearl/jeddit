@@ -3,27 +3,47 @@
 	import { page } from '$app/stores';
 </script>
 
-<div style="display: flex; flex-direction: column; align-items: center; max-width: 700px; margin: 0 auto;">
-	<div style="display: flex; width: 100%; padding: 0 16px;">
-		<div style="margin: 16px 0;">jeddit</div>
-		<a
-			href={`${base}/account/login?referer=${$page.data.url}`}
-			style="display: flex; align-items: center; margin: 16px 0 16px auto">signin</a
-		>
-		<!-- <div id="username" style="display: flex; align-items: center; margin: 16px 0 16px auto">{$page.data.user.name}</div> -->
+<header
+	style="display: flex; width: 100%; padding: 0 20px; background-color: #fff; border-bottom: 1px solid #ddd; align-items: center;"
+>
+	<div
+		style="display: flex; height: 48px; align-items: center; color: rgb(255, 69, 0); font-weight: 800; font-size: 24px; letter-spacing: -2px;"
+	>
+		jeddit
 	</div>
-	<form method="POST" style="padding: 16px; border: 1px solid black; width: 100%;">
-		<div style="display: flex; align-items: center;">
-			<label for="post" style="padding-right: 4px;">Create&nbsp;Post</label>
-			<input id="post" name="post" type="text" style="font-size: 24px; width: 100%;" />
-			<button type="submit" style="height: 33.5px">submit</button>
-		</div>
-	</form>
+	<a
+		href={`${base}/account/login?referer=${$page.data.url}`}
+		style="background-color: rgb(217, 58, 0); margin-left: auto; border: none; height: 40px; text-decoration: none; display: flex; align-items: center;"
+	>
+		<span style=" padding: 0 12px; color: white; font-weight: 600; font-size: 14px;">Log In</span>
+	</a>
+</header>
+<div style="padding: 20px 24px;">
+	<div
+		style="display: flex; flex-direction: column; align-items: center; max-width: 700px; margin: 0 auto;"
+	>
+		<form
+			method="POST"
+			style="margin-bottom: 16px; padding: 8px; background-color: #fff; border: 1px solid #ddd; width: 100%;"
+		>
+			<div style="display: flex; align-items: center;">
+				<input
+					name="post"
+					type="text"
+					style="height: 38px; font-size: 14px; padding-inline-end: 16px; line-height: 21px; padding-inline-start: 16px; width: 100%;"
+					placeholder="Create Post"
+				/>
+				<button type="submit" style="height: 38px; border: 1px solid #ddd;">Create</button>
+			</div>
+		</form>
 
-	<main style="width: 100%;">
-		<article style="border: 1px solid black; margin: 16px 0; padding: 8px; width: 100%;">
-			<h2 style="margin-bottom: 16px;">Hello world!</h2>
-			<p>Just some palce holder text. Don't worry about it...</p>
-		</article>
-	</main>
+		<main style="width: 100%;">
+			<article
+				style="width: 100%;  background-color: #fff; border: 1px solid #ddd;"
+			>
+				<h3 style="margin: 5px 8px 0 8px; color: rgb(34, 34, 34); font-size: 18px; line-height: 22px;">Hello world!</h3>
+				<p style="color: rgb(28, 28, 28); font-size: 14px; line-height: 22px; padding: 5px 8px 10px 8px; margin-top: 8px;">Just some palce holder text. Don't worry about it...</p>
+			</article>
+		</main>
+	</div>
 </div>
