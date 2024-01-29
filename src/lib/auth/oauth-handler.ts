@@ -1,5 +1,5 @@
 import { base } from "$app/paths";
-import { getAuthorizationUrl, getUserInfo } from "$lib/oauth4webapi";
+import { getAuthorizationUrl, getUserInfo } from "./oauth4webapi";
 import { redirect, type Handle, error } from "@sveltejs/kit";
 
 export const oauthHandler: Handle = async ({ event, resolve }) => {
