@@ -1,24 +1,26 @@
 import * as oauth from 'oauth4webapi';
-import { env } from '$env/dynamic/private';
 
-const issuer = new URL(env.oauth_authority)
-const as = await oauth
-    .discoveryRequest(issuer)
-    .then((response) => oauth.processDiscoveryResponse(issuer, response))
+export async function getAuthorizationUrl(
+    authority: string,
+    client_id: string,
+    client_secret: string,
+    redirect_uri: string,
+) {
+    const issuer = new URL(authority);
+    const as = await oauth
+        .discoveryRequest(issuer)
+        .then((response) => oauth.processDiscoveryResponse(issuer, response))
 
-const client: oauth.Client = {
-    client_id: env.oauth_client_id,
-    client_secret: env.oauth_client_secret,
-    token_endpoint_auth_method: 'client_secret_basic',
-}
+    const client: oauth.Client = {
+        client_id,
+        client_secret,
+        token_endpoint_auth_method: 'client_secret_basic',
+    }
 
-const redirect_uri = env.oauth_redirect_url;
-
-export async function getAuthorizationUrl() {
     if (as.code_challenge_methods_supported?.includes('S256') !== true) {
         // This example assumes S256 PKCE support is signalled
         // If it isn't supported, random `nonce` must be used for CSRF protection.
-        throw new Error()
+        throw new Error('S256 PKCE not supported')
     }
 
     const code_verifier = oauth.generateRandomCodeVerifier()
@@ -32,13 +34,32 @@ export async function getAuthorizationUrl() {
     authorizationUrl.searchParams.set('redirect_uri', redirect_uri)
     authorizationUrl.searchParams.set('response_type', 'code');
     authorizationUrl.searchParams.set('scope', 'openid email');
+
     return {
         authorizationUrl,
         code_verifier,
     }
 }
 
-export async function getUserInfo(currentUrl: URL, code_verifier: string) {
+export async function getUserInfo(
+    authority: string,
+    client_id: string,
+    client_secret: string,
+    redirect_uri: string,
+    currentUrl: URL, 
+    code_verifier: string
+) {
+    const issuer = new URL(authority)
+    const as = await oauth
+        .discoveryRequest(issuer)
+        .then((response) => oauth.processDiscoveryResponse(issuer, response));
+
+    const client: oauth.Client = {
+        client_id,
+        client_secret,
+        token_endpoint_auth_method: 'client_secret_basic',
+    }
+
     let sub: string
     let access_token: string
     {
@@ -94,4 +115,3 @@ export async function getUserInfo(currentUrl: URL, code_verifier: string) {
         return result;
     }
 }
-
