@@ -12,12 +12,17 @@
 	>
 		jeddit
 	</div>
-	<a
-		href={`${base}/login?referer=${$page.data.url}`}
-		style="background-color: rgb(217, 58, 0); margin-left: auto; border: none; height: 40px; text-decoration: none; display: flex; align-items: center;"
-	>
-		<span style=" padding: 0 12px; color: white; font-weight: 600; font-size: 14px;">Log In</span>
-	</a>
+	{#if $page.data.user}
+		<!-- placeholder -->
+		<div style={'margin-left:auto'}>{$page.data.user.email}</div>
+	{:else}
+		<a
+			href={`${base}/login?referer=${$page.data.url}`}
+			style="background-color: rgb(217, 58, 0); margin-left: auto; border: none; height: 40px; text-decoration: none; display: flex; align-items: center;"
+		>
+			<span style=" padding: 0 12px; color: white; font-weight: 600; font-size: 14px;">Log In</span>
+		</a>
+	{/if}
 </header>
 
 <slot />
