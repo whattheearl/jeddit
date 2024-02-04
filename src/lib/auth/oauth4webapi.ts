@@ -41,7 +41,7 @@ export async function getAuthorizationUrl(
     }
 }
 
-export async function getUserInfo(
+export async function getOidcClaims(
     authority: string,
     client_id: string,
     client_secret: string,

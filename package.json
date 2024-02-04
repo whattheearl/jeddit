@@ -13,8 +13,8 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"generate": "drizzle-kit generate:mysql",
-		"migrate": "tsx src/lib/db/migrate.ts",
+		"db:generate": "drizzle-kit generate:mysql",
+		"db:migrate": "tsx src/lib/db/migrate.ts",
 		"studio": "drizzle-kit studio"
 	},
 	"devDependencies": {
@@ -43,6 +43,7 @@
 	"type": "module",
 	"dependencies": {
 		"drizzle-orm": "^0.29.3",
+		"jose": "^5.2.1",
 		"mysql2": "^3.7.0",
 		"oauth4webapi": "^2.4.3"
 	}

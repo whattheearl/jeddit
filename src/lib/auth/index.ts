@@ -1,10 +1,9 @@
 import { base } from "$app/paths";
-import { getAuthorizationUrl, getUserInfo } from "./oauth4webapi";
+import { getAuthorizationUrl, getOidcClaims } from "./oauth4webapi";
 import { redirect, type Handle, error } from "@sveltejs/kit";
 import { getProviderByName } from './providers';
 import { env } from "$env/dynamic/private";
-import { users } from "$lib/db/schema";
-import { db } from "$lib/db/db";
+
 
 export const oauthHandler: Handle = async ({ event, resolve }) => {
     // not auth
@@ -31,7 +30,6 @@ export const oauthHandler: Handle = async ({ event, resolve }) => {
             {
                 let referer = event.url.searchParams.get('referer') ?? `${env.host}${base}/`;
                 const redirect_user_url = referer.includes(event.url.hostname) ? referer : `${base}/`;
-
                 const { authorizationUrl, code_verifier } = await getAuthorizationUrl(
                     provider.authority,
                     provider.client_id,
@@ -42,45 +40,35 @@ export const oauthHandler: Handle = async ({ event, resolve }) => {
                 redirect(302, authorizationUrl);
             }
         case 'callback':
-            const cookie = event.cookies.get('oauth');
-            if (!cookie)
-                error(400, 'Something went wrong. Please login again...');
+            {
+                const cookie = event.cookies.get('oauth');
+                if (!cookie)
+                    error(400, 'Something went wrong. Please login again...');
 
-            const { code_verifier, redirect_user_url } = JSON.parse(cookie);
-            const userinfo = await getUserInfo(
-                provider.authority,
-                provider.client_id,
-                provider.client_secret,
-                provider.redirect_uri,
-                event.url,
-                code_verifier
-            );
-            console.log({ claims: userinfo });
-            let user = await db.query.users.findFirst({
-                where: ((users, { eq, and }) => and(
-                    eq(users.sub, userinfo.sub),
-                    eq(users.authority, provider.authority),
-                    eq(users.clientId, provider.client_id)
-                )),
-            });
-            console.log({ user })
-            if (!user)
-                await db.insert(users).values({
-                    email: userinfo.email,
-                    sub: userinfo.sub,
+                const { code_verifier, redirect_user_url } = JSON.parse(cookie);
+                const claims = await getOidcClaims(
+                    provider.authority,
+                    provider.client_id,
+                    provider.client_secret,
+                    provider.redirect_uri,
+                    event.url,
+                    code_verifier
+                );
+
+                // pass oidc to locals to be processed by another handler
+                event.locals.oauth = {
                     authority: provider.authority,
-                    clientId: provider.client_id,
-                })
-            user = await db.query.users.findFirst({
-                where: ((users, { eq, and }) => and(
-                    eq(users.sub, userinfo.sub),
-                    eq(users.authority, provider.authority),
-                    eq(users.clientId, provider.client_id)
-                )),
-            });
-            console.log({ user })
-            redirect(302, redirect_user_url);
-
+                    client_id: provider.client_id,
+                    redirect_url: redirect_user_url,
+                    claims: {
+                        sub: claims.sub,
+                        email: claims.email ?? '',
+                        email_verified: claims.email_verified ?? false,
+                        picture: claims.picture ?? ''                        
+                    },
+                }
+                return resolve(event);
+            }
         default:
             {
                 error(400, `flow not found: '${flow}'`);

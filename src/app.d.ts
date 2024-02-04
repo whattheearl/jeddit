@@ -1,12 +1,14 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
 			oauth: {
 				authority: string,
-				iss: string,
+				client_id: string,
+				redirect_url: string,
 				claims: {
 					sub: string;
 					picture: string;
@@ -14,10 +16,7 @@ declare global {
 					email_verified: boolean;
 				},
 			},
-			user: {
-				id: string,
-				email: string,
-			}
+			user: User
 		}
 		// interface PageData {}
 		// interface PageState {}
