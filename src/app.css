@@ -29,3 +29,19 @@ body {
     width: 100vw;
     height: 100vh;
 }
+
+input {
+    background-color: rgb(246, 247, 248);
+    border: 1px solid #eee;
+    padding: 0 8px;
+    height: 38px; 
+    font-size: 14px; 
+    padding-inline-end: 16px; 
+    line-height: 21px; 
+    padding-inline-start: 16px; 
+    width: 100%;
+}
+
+input:focus {
+    outline: 1px solid rgb(0, 121, 211);
+}
