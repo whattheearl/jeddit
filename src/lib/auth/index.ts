@@ -56,10 +56,10 @@ export const oauthHandler: Handle = async ({ event, resolve }) => {
                 );
 
                 // pass oidc to locals to be processed by another handler
+                event.locals.redirect_url = redirect_user_url,
                 event.locals.oauth = {
                     authority: provider.authority,
                     client_id: provider.client_id,
-                    redirect_url: redirect_user_url,
                     claims: {
                         sub: claims.sub,
                         email: claims.email ?? '',

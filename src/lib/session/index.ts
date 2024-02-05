@@ -2,56 +2,25 @@ import { base } from "$app/paths";
 import { redirect, type Handle, type RequestEvent } from "@sveltejs/kit";
 import { decryptToken, encryptToken } from "./jwe";
 import { env } from "$env/dynamic/private";
-import { users } from "$lib/db/schema";
-import { db } from "$lib/db";
+import type { IUser } from "$lib/user";
 
 const USER_CLAIMS_COOKIE = "uc";
 
-export interface IUser {
-    id: number;
-    username: string;
-}
-
 export const localSessionHandler: Handle = async ({ event, resolve }) => {
+    // create session if user just created
+    if (event.locals.user) {
+        // create session
+        await setSession(event, event.locals.user as any);
+        event.locals.user = event.locals.user as IUser;
+        redirect(302, event.locals.oauth.redirect_url ?? `${base}/`)
+    }
+
+    // resolve session if already created
     const session = await getSession(event);
-    if (session) {
+    if (session)
         event.locals.user = session;
-        return resolve(event);
-    }
-
-    if (!event.locals.oauth)
-        return resolve(event);
-
-    // find user
-    let user = await db.query.users.findFirst({
-        where: ((users, { eq, and }) => and(
-            eq(users.sub, event.locals.oauth.claims.sub),
-            eq(users.authority, event.locals.oauth.authority),
-            eq(users.clientId, event.locals.oauth.client_id)
-        )),
-    });
-
-    if (!user) {
-        // create user
-        await db.insert(users).values({
-            email: event.locals.oauth.claims.email,
-            sub: event.locals.oauth.claims.sub,
-            authority: event.locals.oauth.authority,
-            clientId: event.locals.oauth.client_id,
-        }) as any
-        user = await db.query.users.findFirst({
-            where: ((users, { eq, and }) => and(
-                eq(users.sub, event.locals.oauth.claims.sub),
-                eq(users.authority, event.locals.oauth.authority),
-                eq(users.clientId, event.locals.oauth.client_id)
-            )),
-        });
-    }
     
-    // create session
-    await setSession(event, user as any);
-    event.locals.user = user as IUser;
-    redirect(302, event.locals.oauth.redirect_url)
+    return resolve(event);
 }
 
 export async function getSession(event: RequestEvent) {

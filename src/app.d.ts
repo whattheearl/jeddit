@@ -1,14 +1,16 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
+import type { IUser } from "$lib/user";
+
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
+			redirect_url: string,
 			oauth: {
 				authority: string,
 				client_id: string,
-				redirect_url: string,
 				claims: {
 					sub: string;
 					picture: string;
@@ -16,7 +18,7 @@ declare global {
 					email_verified: boolean;
 				},
 			},
-			user: User
+			user: IUser
 		}
 		// interface PageData {}
 		// interface PageState {}
