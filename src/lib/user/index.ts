@@ -1,5 +1,4 @@
 
-import { type Handle } from "@sveltejs/kit";
 import { users } from "$lib/db/schema";
 import { db } from "$lib/db";
 
@@ -19,6 +18,9 @@ export async function findUser(authority: string, client_id: string, sub: string
             eq(users.clientId, client_id)
         )),
     });
+    if (!dbUser)
+        return null;
+
     return mapDbUserToUser(dbUser);
 }
 
@@ -29,10 +31,16 @@ export async function createUser(authority: string, client_id: string, sub: stri
         sub: sub,
         email: email,
     });
+    if (!dbUser)
+        return null;
+    
     return mapDbUserToUser(dbUser);
 }
 
 function mapDbUserToUser(dbUser: any) {
+    if (!dbUser)
+        return null;
+
     return {
         id: dbUser?.id ?? '',
         sub: dbUser?.sub ?? '',
