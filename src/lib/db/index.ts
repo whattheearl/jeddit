@@ -4,7 +4,7 @@ import * as schema from './schema';
 
 // handle reading env var outside of sveltekit
 async function getEnv() {
-  if (process.env.IS_DB_MIGRATION) {
+  if (process?.env?.IS_DB_MIGRATION) {
     const { env } = await import('$env/dynamic/private');
     return env;
   } else {
@@ -24,5 +24,6 @@ async function getConfig() {
   }
 }
 
-export const connection = await mysql.createConnection(await getConfig());
+const config = await getConfig();
+export const connection = await mysql.createConnection(config);
 export const db = drizzle(connection, { schema: schema, mode: 'default' });
