@@ -4,6 +4,9 @@ import { error, type RequestEvent } from "@sveltejs/kit";
 const flows = ['signin', 'signout', 'callback'];
 
 export function getFlow(event: RequestEvent) {
+    if (event.url.pathname == '/auth/signout')
+        return 'signout';
+
     const path = event.url.pathname.slice(base.length);
     const parts = path.split('/');
     if (parts.length < 4)

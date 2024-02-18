@@ -2,7 +2,7 @@ import { base } from "$app/paths";
 import { redirect, type Handle, error } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import { getUserSession, removeSession, setUserSession } from "$lib/session";
-import { createUser, findUser } from "$lib/user";
+import { createUser, findUser, type IUser } from "$lib/user";
 import { getFlow, getProvider, getAuthorizationUrl, getOidcClaims } from "$lib/auth";
 
 
@@ -53,15 +53,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         let user = await findUser(provider.authority, provider.client_id, claims.sub);
         user = user ?? await createUser(provider.authority, provider.client_id, claims.sub, claims.email ?? '');
-
-        await setUserSession(event, user);
+        await setUserSession(event, user as IUser);
         
         return redirect(302, redirect_user_url)
       }
     case 'signout':
       {
         removeSession(event);
-        return resolve(event);
+        return redirect(302, `${base}/`);
       }
     default:
       {
