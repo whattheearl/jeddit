@@ -2,7 +2,11 @@ import * as jose from 'jose';
 
 const EXPIRATION = '30d';
 
-export const encryptToken = async (payload: jose.JWTPayload, sessionSecret: string, expiration: string = EXPIRATION) => {
+export const encryptToken = async (
+	payload: jose.JWTPayload,
+	sessionSecret: string,
+	expiration: string = EXPIRATION
+) => {
 	const secret = jose.base64url.decode(sessionSecret);
 	const jwt = await new jose.EncryptJWT(payload)
 		.setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
