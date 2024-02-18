@@ -1,4 +1,4 @@
-version: "3.5"
+version: '3.5'
 services:
   db:
     image: mysql:8.0
@@ -15,7 +15,7 @@ services:
       - MYSQL_DEFAULTS_FILE=/etc/mysql/my.cnf
       - MYSQL_LOG_QUERIES_ENABLED=1
     labels:
-      - "traefik.enabled=false"
+      - 'traefik.enabled=false'
 
 volumes:
   data:

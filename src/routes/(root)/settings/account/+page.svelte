@@ -17,7 +17,11 @@
 			</div>
 			<div style="display: flex; align-items: center; margin-left: auto;">
 				<input type="text" placeholder="Display name" style="width: 35ch; height: 38px;" />
-				<button class="setting-anchor" style="height: 40px; width: 78px; display: flex; justify-content: center; background-color: white;" type="submit">
+				<button
+					class="setting-anchor"
+					style="height: 40px; width: 78px; display: flex; justify-content: center; background-color: white;"
+					type="submit"
+				>
 					<span>Change</span>
 				</button>
 			</div>
