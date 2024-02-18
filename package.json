@@ -13,8 +13,8 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"db:generate": "drizzle-kit generate:mysql",
-		"db:migrate": "tsx src/lib/db/migrate.ts",
+		"generate": "drizzle-kit generate:mysql",
+		"migrate": "tsx src/lib/db/migrate.ts",
 		"studio": "drizzle-kit studio"
 	},
 	"devDependencies": {
