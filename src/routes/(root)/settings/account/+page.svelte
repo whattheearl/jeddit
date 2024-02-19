@@ -1,5 +1,5 @@
-<script>
-	import { base } from '$app/paths';
+<script lang="ts">
+	import { page } from '$app/stores';
 </script>
 
 <main style="max-width: 1200px; width: 100%; margin: 0 auto;">
@@ -10,19 +10,25 @@
 			Account settings
 		</h2>
 
-		<form method="POST" action="" class="setting-row">
+		<form method="POST" class="setting-row">
 			<div>
 				<h3 class="setting-name">Display name</h3>
 				<p class="setting-value">Set a display name.</p>
 			</div>
 			<div style="display: flex; align-items: center; margin-left: auto;">
-				<input type="text" placeholder="Display name" style="width: 35ch; height: 38px;" />
+				<input
+					type="text"
+					name="username"
+					placeholder={$page.data.user.username ?? 'Display name'}
+					style="width: 35ch; height: 38px;"
+					bind:value={$page.data.user.username}
+				/>
 				<button
 					class="setting-anchor"
 					style="height: 40px; width: 78px; display: flex; justify-content: center; background-color: white;"
 					type="submit"
 				>
-					<span>Change</span>
+					<span>{'Update'}</span>
 				</button>
 			</div>
 		</form>
@@ -30,21 +36,8 @@
 		<div class="setting-row">
 			<div>
 				<h3 class="setting-name">Email address</h3>
-				<p class="setting-value">earl.jonathan@gmail.com</p>
+				<p class="setting-value">{$page.data.user.email}</p>
 			</div>
-			<a class="setting-anchor" href={`${base}/settings/account/email`}>
-				<span>Change</span>
-			</a>
-		</div>
-
-		<div class="setting-row">
-			<div>
-				<h3 class="setting-name">Change password</h3>
-				<p class="setting-value">Password must be at least 8 characters long.</p>
-			</div>
-			<a class="setting-anchor" href={`${base}/settings/account/password`}>
-				<span>Change</span>
-			</a>
 		</div>
 	</div>
 </main>

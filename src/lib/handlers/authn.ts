@@ -49,7 +49,9 @@ export const authnHandler: Handle = async ({ event, resolve }) => {
       );
 
       let user = await getUserSession(event);
+      console.log({ getUserSession: user })
       user = user ?? (await findUser(provider.authority, provider.client_id, claims.sub));
+      console.log({ findUser: user })
       user =
         user ??
         (await createUser(
@@ -58,6 +60,7 @@ export const authnHandler: Handle = async ({ event, resolve }) => {
           claims.sub,
           claims.email as string
         ));
+      console.log({ createUser: user })
       await setUserSession(event, user as any);
       const redirectUrl = !event?.locals?.user?.username
         ? `${base}/settings/account`

@@ -1,5 +1,7 @@
 import { users } from '$lib/db/schema';
 import { db } from '$lib/db';
+import { error } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
 
 export interface IUser {
 	id: number;
@@ -14,8 +16,21 @@ export async function findUser(authority: string, client_id: string, sub: string
 		where: (users, { eq, and }) =>
 			and(eq(users.sub, sub), eq(users.authority, authority), eq(users.clientId, client_id))
 	});
-	if (!dbUser) return null;
+	return mapDbUserToUser(dbUser);
+}
 
+export async function findUserById(id: number | undefined) {
+  if (!id) return null;
+  const dbUser = await db.query.users.findFirst({
+		where: (users, { eq }) => eq(users.id, id)
+	});
+  return mapDbUserToUser(dbUser);
+}
+
+export async function findUserByUsername(username: string) {
+	const dbUser = await db.query.users.findFirst({
+		where: (users, { eq }) => eq(users.username, username)
+	});
 	return mapDbUserToUser(dbUser);
 }
 
@@ -26,12 +41,24 @@ export async function createUser(authority: string, client_id: string, sub: stri
 		sub: sub,
 		email: email
 	});
-
 	return mapDbUserToUser(dbUser);
 }
 
+export async function updateUser(id: number, user: IUser) {
+	const dbUser = await db.query.users.findFirst({
+		where: (users, { eq }) => eq(users.id, id)
+	});
+	if (!dbUser)
+		error(404, 'User not found');
+
+	dbUser.username = user.username;
+	await db.update(users)
+		.set({ username: user.username })
+		.where(eq(users.id, user.id))
+}
+
 function mapDbUserToUser(dbUser: any) {
-	if (!dbUser) throw new Error('dbUser must be defined');
+	if (!dbUser) return null;
 
 	return {
 		id: dbUser?.id ?? '',

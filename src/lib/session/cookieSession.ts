@@ -7,8 +7,6 @@ import type { IUser } from '$lib/db/users';
 const USER_CLAIMS_COOKIE = 'uc';
 
 export async function getUserSession(event: RequestEvent) {
-	if (event.locals.user) return event.locals.user;
-
 	const userClaimToken = event.cookies.get(USER_CLAIMS_COOKIE);
 	if (!userClaimToken) return null;
 
