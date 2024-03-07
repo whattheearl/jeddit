@@ -35,7 +35,8 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test:integration": "playwright test",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "migrate": "bun --bun ./scripts/migrate.ts"
   },
   "type": "module"
 }
