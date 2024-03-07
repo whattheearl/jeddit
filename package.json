@@ -1,22 +1,6 @@
 {
   "name": "jeddit",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "bun --bun vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "npm run test:integration && npm run test:unit",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check . && eslint .",
-    "format": "prettier --write .",
-    "test:integration": "playwright test",
-    "test:unit": "vitest",
-    "generate": "drizzle-kit generate:mysql",
-    "migrate": "tsx src/lib/db/migrate.ts",
-    "studio": "drizzle-kit studio"
-  },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
     "@sveltejs/adapter-auto": "^3.0.0",
@@ -26,7 +10,6 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "dotenv": "^16.4.1",
-    "drizzle-kit": "^0.20.13",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.35.1",
@@ -40,11 +23,18 @@
     "vite": "^5.0.3",
     "vitest": "^1.0.0"
   },
-  "type": "module",
-  "dependencies": {
-    "drizzle-orm": "^0.29.3",
-    "jose": "latest",
-    "mysql2": "^3.7.0",
-    "oauth4webapi": "latest"
-  }
+  "private": true,
+  "scripts": {
+    "dev": "bun --bun vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "npm run test:integration && npm run test:unit",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "test:integration": "playwright test",
+    "test:unit": "vitest"
+  },
+  "type": "module"
 }
