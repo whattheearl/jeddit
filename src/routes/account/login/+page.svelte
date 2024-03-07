@@ -12,7 +12,6 @@
 		<p style="font-size: 12px; margin-top: 8px; margin-bottom: 48px;">
 			By continuing, you agree to our User Agreement and the Privacy Policy.
 		</p>
-		<input name="referer" type="search" value={$page.data.referer} hidden />
 		<button
 			type="submit"
 			formaction="/auth/google/signin"
