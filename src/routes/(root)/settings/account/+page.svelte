@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 </script>
 
-<main style="max-width: 1200px; width: 100%; margin: 0 auto;">
+<main class="w-full max-w-[900px] mx-auto">
 	<div class="display: flex; flex-direction: column;">
 		<h2
 			style="margin: 40px 0; padding: 0 16px; font-weight: 500; font-size: 20px; color: rgb(28, 28, 28); line-height: 24px;"
