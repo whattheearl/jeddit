@@ -8,11 +8,12 @@
 <header
 	style="display: flex; width: 100%; padding: 0 20px; background-color: #fff; border-bottom: 1px solid #ddd; align-items: center;"
 >
-	<div
+	<a
+		href="/"
 		style="display: flex; height: 48px; align-items: center; color: rgb(255, 69, 0); font-weight: 800; font-size: 24px; letter-spacing: -2px;"
 	>
 		jeddit
-	</div>
+	</a>
 	{#if $page.data.user}
 		<div class="ml-auto">
 			<Avatar />
