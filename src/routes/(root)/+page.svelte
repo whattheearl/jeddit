@@ -35,7 +35,4 @@
 </div>
 
 <style>
-	:global(body) {
-		background-color: #ddd;
-	}
 </style>

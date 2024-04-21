@@ -1,14 +1,18 @@
 # Jon's Reddit
+
 Just another practice project...
 
 ## tldr
+
 ```bash
 npm i
+npm run generate
 docker compose up -d
-npx drizzle-kit generate:mysql 
+npm run migrate
 ```
 
 ## Todo
+
 - [x] login page
 - [x] oauth google login
 - [ ] fix drizzle db connection
