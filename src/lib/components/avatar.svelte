@@ -24,7 +24,7 @@
 			/>
 			<span class="hidden lg:flex lg:items-center" style="display: hidden;">
 				<span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true"
-					>{user.name}</span
+					>{user.username ?? user.name ?? ''}</span
 				>
 				<svg
 					class="ml-2 h-5 w-5 text-gray-400"
@@ -60,7 +60,15 @@
 		>
 			<!-- Active: "bg-gray-50", Not Active: "" -->
 			<a
-        on:click={() => (open = !open)}
+				on:click={() => (open = !open)}
+				href="/settings/account"
+				class="block px-3 py-1 text-sm leading-6 text-gray-900"
+				role="menuitem"
+				tabindex="-1"
+				id="user-menu-item-1">Settings</a
+			>
+			<a
+				on:click={() => (open = !open)}
 				href="/auth/signout"
 				class="block px-3 py-1 text-sm leading-6 text-gray-900"
 				role="menuitem"
