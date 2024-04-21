@@ -5,12 +5,11 @@ import { Database } from 'bun:sqlite';
 const db = new Database('./db.sqlite');
 
 export const load: PageServerLoad = async ({ cookies }) => {
-  const sid = cookies.get('session_id') as string;
-  if (!sid)
-    return redirect(302, '/');
+  const sid = cookies.get('sid') as string;
   const session = db.query('SELECT * FROM sessions WHERE id = $id').get({ $id: sid }) as any;
   if (!session)
     return redirect(302, '/');
+
   const user = db.query('SELECT * FROM users WHERE id = $id').get({
     $id: session.user_id
   });
@@ -22,9 +21,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 export const actions: Actions = {
   // update user account settings
   default: async ({ cookies, request }) => {
-    const sid = cookies.get('session_id') as string;
-    if (!sid)
-      return redirect(302, '/');
+    const sid = cookies.get('sid') as string;
     const session = db.query('SELECT * FROM sessions WHERE id = $id').get({ $id: sid }) as any;
     console.log({session})
     if (!session)
