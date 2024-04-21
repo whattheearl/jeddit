@@ -10,7 +10,8 @@ db.exec(`DROP TABLE IF EXISTS sessions`);
 console.log('CREATING TABLES');
 db.exec(`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  sub TEXT UNIQUE,
+  sub TEXT,
+  iss TEXT,
   name TEXT,
   given_name TEXT,
   family_name TEXT,

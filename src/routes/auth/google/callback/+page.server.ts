@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
   const session = db
     .query('SELECT * FROM sessions WHERE id = $sid')
     .get({ $sid: sid }) as any;
-    
+
   logger.info('session', session);
   if (!session)
     redirect(302, '/');
@@ -43,17 +43,18 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
   const picture = Buffer.from(buf);
 
   let user = db
-    .query('SELECT * FROM users WHERE email = $email')
-    .get({ $email: claims.email }) as any;
-  logger.debug('initial user lookup', { user: user?.email, id: user?.id })
+    .query('SELECT * FROM users WHERE sub = $sub AND iss = $iss')
+    .get({ $sub: claims.sub, $iss: claims.iss }) as any;
+  logger.debug('initial user lookup', { sub: claims.sub, iss: claims.iss });
 
   if (!user) {
     logger.debug('user nto found... creating user');
     db.prepare(`
-      INSERT INTO users (sub, name, given_name, family_name, picture, email, email_verified, local) 
-      VALUES ($sub, $name, $given_name, $family_name, $picture, $email, $email_verified, $local)
+      INSERT INTO users (sub, iss, name, given_name, family_name, picture, email, email_verified, local) 
+      VALUES ($sub, $iss, $name, $given_name, $family_name, $picture, $email, $email_verified, $local)
     `).run({
       $sub: claims.sub,
+      $iss: claims.iss,
       $name: claims.name,
       $given_name: claims.given_name,
       $family_name: claims.family_name,
