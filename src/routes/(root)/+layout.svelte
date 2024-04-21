@@ -1,6 +1,7 @@
 <script>
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import Avatar from '$lib/components/avatar.svelte';
 	import '../../app.css';
 </script>
 
@@ -13,8 +14,9 @@
 		jeddit
 	</div>
 	{#if $page.data.user}
-		<!-- placeholder -->
-		<div style={'margin-left:auto'}>{$page.data.user.email}</div>
+		<div class="ml-auto">
+			<Avatar />
+		</div>
 	{:else}
 		<a
 			href={`${base}/login?referer=${$page.data.url}`}
