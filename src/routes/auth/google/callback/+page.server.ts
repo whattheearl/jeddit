@@ -4,6 +4,7 @@ import type { PageServerLoad } from './$types';
 import { Database } from 'bun:sqlite';
 import { Logger } from '$lib/logger';
 import { generateTokenUrl, getDiscoveryDocument, getTokensAsync, getClaims } from '$lib/auth';
+import { generateUsername } from '$lib/namer';
 
 const logger = Logger('oauth.google.callback');
 
@@ -48,19 +49,16 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
   logger.debug('initial user lookup', { sub: claims.sub, iss: claims.iss });
 
   if (!user) {
-    logger.debug('user nto found... creating user');
+    logger.debug('user not found... creating user...');
     db.prepare(`
-      INSERT INTO users (sub, iss, name, given_name, family_name, picture, email, email_verified, local) 
-      VALUES ($sub, $iss, $name, $given_name, $family_name, $picture, $email, $email_verified, $local)
+      INSERT INTO users (name, sub, iss, picture, email, email_verified) 
+      VALUES ($name, $sub, $iss, $picture, $email, $email_verified)
     `).run({
+      $name: generateUsername(),
       $sub: claims.sub,
       $iss: claims.iss,
-      $name: claims.name,
-      $given_name: claims.given_name,
-      $family_name: claims.family_name,
       $email: claims.email,
       $email_verified: claims.email_verified,
-      $local: claims.local,
       $picture: picture.toString('base64')
     });
   }
@@ -68,7 +66,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
   user = user ?? db
     .query('SELECT * FROM users WHERE email = $email')
     .get({ $email: claims.email }) as any;
-  logger.info('user', { user: user.email, id: user.id });
+  logger.info('user found:', user);
 
   logger.debug('updating session', { user_id: user.id, sid, })
   db.prepare('UPDATE sessions SET user_id = $user_id WHERE id == $sid')

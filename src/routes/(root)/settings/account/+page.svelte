@@ -1,81 +1,53 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+
+	const settingRowClass = 'flex px-4 max-w-[700px] mb-8';
+	const settingNameClass = 'font-semibold text-gray-800';
+	const settingValueClass = 'text-sm text-gray-400';
 </script>
 
 <main class="w-full max-w-[900px] mx-auto">
 	<div class="display: flex; flex-direction: column;">
-		<h2
-			style="margin: 40px 0; padding: 0 16px; font-weight: 500; font-size: 20px; color: rgb(28, 28, 28); line-height: 24px;"
-		>
-			Account settings
-		</h2>
+		<h2 class="mx-4 py-4 font-semibold text-xl text-gray-800">Account settings</h2>
 
-		<form method="POST" class="setting-row">
+		<form method="POST" class={settingRowClass}>
 			<div>
-				<h3 class="setting-name">Display name</h3>
-				<p class="setting-value">Set a display name.</p>
+				<h3 class={settingNameClass}>Display name</h3>
+				<p class={settingValueClass}>
+					{#if !data.user.name_finalized}
+						<span>Set a display name.</span>
+					{:else}
+						<span>This is your forever name.</span>
+					{/if}
+				</p>
 			</div>
 			<div style="display: flex; align-items: center; margin-left: auto;">
 				<input
+					class="mr-2 w-[35ch] h-[38px]"
 					type="text"
-					name="username"
-					placeholder={$page.data.user.username ?? 'Display name'}
-					style="width: 35ch; height: 38px;"
-					bind:value={$page.data.user.username}
+					name="name"
+					placeholder={data.user.name ?? 'Display name'}
+					readonly={data.user.name_finalized}
+					bind:value={data.user.name}
 				/>
-				<button
-					class="setting-anchor"
-					style="height: 40px; width: 78px; display: flex; justify-content: center; background-color: white;"
-					type="submit"
-				>
-					Update
-				</button>
+				{#if !data.user.name_finalized}
+					<button
+						class="py-2 px-4 bg-blue-600 font-extrabold text-white hover:curser hover:bg-blue-500"
+						type="submit"
+					>
+						Update
+					</button>
+				{/if}
 			</div>
 		</form>
 
-		<div class="setting-row">
+		<div class={settingRowClass}>
 			<div>
-				<h3 class="setting-name">Email address</h3>
-				<p class="setting-value">{$page.data.user.email}</p>
+				<h3 class={settingNameClass}>Email address</h3>
+				<p class={settingValueClass}>{data.user.email}</p>
 			</div>
 		</div>
 	</div>
 </main>
-
-<style>
-	.setting-row {
-		display: flex;
-		padding: 0 16px;
-		max-width: 700px;
-		margin-bottom: 32px;
-	}
-
-	.setting-name {
-		font-size: 16px;
-		font-weight: 500;
-		line-height: 16px;
-		color: rgb(28, 28, 28);
-	}
-
-	.setting-value {
-		font-size: 12px;
-		line-height: 16px;
-		color: rgb(124, 124, 124);
-	}
-
-	.setting-anchor {
-		border: 1px solid rgb(0, 121, 211);
-		margin-left: auto;
-		height: 40px;
-		text-decoration: none;
-		display: flex;
-		align-items: center;
-	}
-
-	.setting-anchor > span {
-		padding: 0 12px;
-		color: rgb(0, 121, 211);
-		font-weight: 600;
-		font-size: 14px;
-	}
-</style>

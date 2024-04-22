@@ -7,7 +7,7 @@ export const actions: Actions = {
     const db = new Database('db.sqlite');
 
     const sid = event.cookies.get('sid') as string;
-    const session = db.query('SELECT * FROM sessions WHERE id = $sid').values({ $sid: sid }) as any;
+    const session = db.query('SELECT * FROM sessions WHERE id = $sid').get({ $sid: sid }) as any;
     if (!session)
       redirect(302, '/')
 
@@ -18,9 +18,11 @@ export const actions: Actions = {
     if (!title)
       return { title, content };
 
-    db.prepare(`INSERT INTO posts (author_id, title, content) VALUES ($author_id, $title, $content)`)
-      .values({ $author_id: session.user_id, $title: title, $content: content });
+    const community_id = 1; //jeddit hardcoded`
 
-    return {};
+    db.prepare(`INSERT INTO posts (user_id, title, community_id, content) VALUES ($user_id, $title, $community_id, $content)`)
+      .values({ $user_id: session.user_id, $community_id: community_id, $title: title, $content: content });
+
+    redirect(302, '/');
   }
 }

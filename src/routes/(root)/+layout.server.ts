@@ -12,9 +12,8 @@ export const load: LayoutServerLoad = ({ cookies }) => {
   if (!session)
     return {};
 
-  const user = db.query('SELECT * FROM users WHERE id = $user_id')
-    .get({ $user_id: session.user_id }) as any;
-  logger.info('user', { email: user?.email });
+  const user = db.query('SELECT * FROM users WHERE id = $id').get({ $id: session.user_id }) as any;
+  logger.info('user', { ...user, picture: null });
 
   return { user }
 }
