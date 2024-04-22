@@ -20,8 +20,10 @@ export const actions: Actions = {
 
     const community_id = 1; //jeddit hardcoded`
 
-    db.prepare(`INSERT INTO posts (user_id, title, community_id, content) VALUES ($user_id, $title, $community_id, $content)`)
-      .values({ $user_id: session.user_id, $community_id: community_id, $title: title, $content: content });
+    const now = Date.now();
+    db.prepare(`INSERT INTO posts (user_id, title, community_id, content, createdAt) 
+      VALUES ($user_id, $title, $community_id, $content, $createdAt)`
+    ).values({ $user_id: session.user_id, $community_id: community_id, $title: title, $content: content, $createdAt: now });
 
     redirect(302, '/');
   }
