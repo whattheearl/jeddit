@@ -37,17 +37,13 @@ db.exec(`CREATE TABLE IF NOT EXISTS posts (
   user_id INTEGER,
   community_id INTEGER,
   title TEXT,
-  content TEXT
+  content TEXT,
+  createdAt INTEGER
 )`);
 
 db.exec('INSERT INTO users (id,name) VALUES (1,"firstuser")')
 
 db.exec(`INSERT INTO communities (id,name) VALUES (1,"jeddit")`)
 
-db.exec(`INSERT INTO posts (user_id, community_id, title, content)
-  VALUES (1, 1, "Hello world!!", "Just some palce holder text. Don't worry about it...")
-
-`)
-db.exec(`INSERT INTO posts (user_id, community_id, title, content)
-  VALUES (1, 1, "Hello world!!", "Just some palce holder text. Don't worry about it...")
-`)
+db.exec(`INSERT INTO posts (user_id, community_id, title, content, createdAt)
+  VALUES (1, 1, "Hello world!!", "Just some palce holder text. Don't worry about it...", 0)`)
