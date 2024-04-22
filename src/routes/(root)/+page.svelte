@@ -10,14 +10,20 @@
 	>
 		<main style="width: 100%;">
 			{#each data.posts as post}
-				<article class="border-b border-gray-200" style="width: 100%;  background-color: #fff;">
-					<a href={`/post/${post.id}`} class="px-4 py-1 my-1">
-						<h3 class="m-0" style="color: rgb(34, 34, 34); font-size: 18px; line-height: 22px;">
+				<article class="px-4 py-1 my-1 border-b border-gray-200 rounded hover:bg-gray-100">
+					<a href={`/post/${post.id}`}>
+						<header class="flex h-6">
+							<div class="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center text-white font-black">j/</div>
+							<a class="flex text-xs items-center" href={`/j/${post.community}`}
+								><span class="px-1 text-gray-700 font-semibold">{`/j/${post.community}`}</span></a
+							>
+						</header>
+						<h3 class="m-0 font-bold my-2" style="color: rgb(34, 34, 34); font-size: 18px; line-height: 22px;">
 							{post.title}
 						</h3>
 						{#if post.content}
 							<p
-								style="color: rgb(28, 28, 28); font-size: 14px; line-height: 22px; margin-top: 8px;"
+								style="color: rgb(28, 28, 28); font-size: 14px; line-height: 22px;"
 							>
 								{post.content}
 							</p>
