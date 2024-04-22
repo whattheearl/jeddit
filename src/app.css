@@ -39,6 +39,7 @@ img {
 	max-width: 100%;
 	height: auto;
 }
+
 /* css reset end */
 
 body {
@@ -58,6 +59,17 @@ input {
 	width: 100%;
 }
 
-input:focus {
+textarea {
+	background-color: rgb(246, 247, 248);
+	padding: 0 8px;
+	font-size: 14px;
+	padding-inline-end: 16px;
+	line-height: 21px;
+	padding-inline-start: 16px;
+	width: 100%;
+}
+
+input:focus,
+textarea:focus {
 	outline: 1px solid rgb(0, 121, 211);
 }
