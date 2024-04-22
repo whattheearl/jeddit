@@ -1,13 +1,9 @@
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
+import { Database } from 'bun:sqlite';
 
-export const actions: Actions = {
-	default: async (event) => {
-		const body = await event.request.formData();
-	}
-};
-
-export const load: PageServerLoad = ({ url, locals }) => {
-	return {
-		url: url.toString()
-	};
+export const load: PageServerLoad = ({ }) => {
+  const db = new Database('db.sqlite');
+  const posts = db.query('SELECT * FROM posts').all() as { id: number, author: number, title: string, content: string, createdAt: Date }[];
+  console.log({ posts })
+  return { posts };
 };
