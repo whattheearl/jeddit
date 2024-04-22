@@ -28,7 +28,7 @@
 					style="height: 40px; width: 78px; display: flex; justify-content: center; background-color: white;"
 					type="submit"
 				>
-					<span>{'Update'}</span>
+					Update
 				</button>
 			</div>
 		</form>
