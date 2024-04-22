@@ -9,7 +9,7 @@
 		<button
 			on:click={() => (open = !open)}
 			type="button"
-			class="-m-1.5 flex items-center p-1.5"
+			class="-m-1.5 flex items-center p-1.5 hover:curser hover:bg-gray-200 rounded-full"
 			style="margin: -6px; display: flex; align-items: center; padding: 6px;"
 			id="user-menu-button"
 			aria-expanded="false"
