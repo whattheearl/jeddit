@@ -18,8 +18,13 @@ export const load: PageServerLoad = async ({ cookies }) => {
   const db = new Database('./db.sqlite');
   db.prepare('INSERT INTO sessions (id, code_verifier) VALUES ($sid, $code_verifier)')
     .values({ $sid: sid, $code_verifier: code_verifier })
-
-  const redirectUri = generateAuthorizationUrl(discoveryDocument.authorization_endpoint, env.google_client_id, env.google_redirect_url, hashCodeChallenge(code_verifier))
+    
+  const redirectUri = generateAuthorizationUrl(
+    discoveryDocument.authorization_endpoint, 
+    env.google_client_id as string, 
+    env.google_redirect_url as string, 
+    await hashCodeChallenge(code_verifier)
+  )
 
   redirect(302, redirectUri);
 };

@@ -40,6 +40,3 @@
 		</main>
 	</div>
 </div>
-
-<style>
-</style>
