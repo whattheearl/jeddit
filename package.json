@@ -40,7 +40,7 @@
     "format": "prettier --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "migrate": "bun --bun ./scripts/migrate.ts"
+    "migrate": "./scripts/migrate.sh"
   },
   "type": "module"
 }
