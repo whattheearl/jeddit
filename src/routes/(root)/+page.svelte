@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import Heart from '$lib/components/heart.svelte';
 	import type { PageData } from './$types';
 

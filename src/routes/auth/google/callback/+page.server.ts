@@ -1,10 +1,11 @@
 import { env } from '$env/dynamic/private';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { Database } from 'bun:sqlite';
 import { Logger } from '$lib/logger';
 import { generateTokenUrl, getDiscoveryDocument, getTokensAsync, getClaims } from '$lib/auth';
 import { generateUsername } from '$lib/namer';
+import { addUser, getUserByEmail, getUserByIdentity, type IUser } from '$lib/user';
+import { getSession, updateSession, type ISession } from '$lib/session';
 
 const logger = Logger('oauth.google.callback');
 
@@ -23,11 +24,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
 	logger.debug('code', code);
 	if (!code) error(400, 'searchParam [code] missing');
 
-	const sid = cookies.get('sid') as string;
-	logger.debug('sid', sid);
-	const db = new Database('./db.sqlite');
-	const session = db.query('SELECT * FROM sessions WHERE id = $sid').get({ $sid: sid }) as any;
-
+	const session = getSession(cookies);
 	logger.info('session', session);
 	if (!session) redirect(302, '/');
 
@@ -55,42 +52,31 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
 	);
 	if (!claims) error(401, 'Unauthorized');
 
-	let res = await fetch(claims.picture);
+	const res = await fetch(claims.picture);
 	const buf = await res.arrayBuffer();
 	const picture = Buffer.from(buf);
 
-	let user = db
-		.query('SELECT * FROM users WHERE sub = $sub AND iss = $iss')
-		.get({ $sub: claims.sub, $iss: claims.iss }) as any;
+	let user = getUserByIdentity(claims.iss, claims.sub);
 	logger.debug('initial user lookup', { sub: claims.sub, iss: claims.iss });
 
 	if (!user) {
 		logger.debug('user not found... creating user...');
-		db.prepare(
-			`
-      INSERT INTO users (name, sub, iss, picture, email, email_verified) 
-      VALUES ($name, $sub, $iss, $picture, $email, $email_verified)
-    `
-		).run({
-			$name: generateUsername(),
-			$sub: claims.sub,
-			$iss: claims.iss,
-			$email: claims.email,
-			$email_verified: claims.email_verified,
-			$picture: picture.toString('base64')
-		});
+		addUser({
+			name: generateUsername(),
+			sub: claims.sub,
+			iss: claims.iss,
+			email: claims.email,
+			email_verified: claims.email_verified,
+			picture: picture.toString('base64'),
+			name_finalized: false
+		} as IUser);
 	}
 
-	user =
-		user ??
-		(db.query('SELECT * FROM users WHERE email = $email').get({ $email: claims.email }) as any);
+	user = user ?? (getUserByEmail(claims.email) as IUser);
 	logger.info('user found:', user);
 
-	logger.debug('updating session', { user_id: user.id, sid });
-	db.prepare('UPDATE sessions SET user_id = $user_id WHERE id == $sid').values({
-		$sid: sid,
-		$user_id: user.id
-	});
+	logger.debug('updating session', { user_id: user.id, session_id: session.id });
+	updateSession(cookies, { user_id: user.id } as ISession);
 
 	redirect(302, '/');
 };

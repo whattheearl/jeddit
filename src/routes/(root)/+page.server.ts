@@ -1,9 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { Database } from 'bun:sqlite';
-import { Logger } from '$lib/logger';
 import { getSecondsFromUTC } from '$lib/time';
-
-const logger = Logger('(root).load');
+import { getSession } from '$lib/session';
 
 export const load: PageServerLoad = ({ cookies }) => {
 	const db = new Database('db.sqlite');
@@ -27,8 +25,7 @@ export const load: PageServerLoad = ({ cookies }) => {
 		liked: boolean;
 	}[];
 
-	const sid = cookies.get('sid') as string;
-	const sess = db.query('SELECT * FROM sessions WHERE id = $sid').get({ $sid: sid }) as any;
+	const user = getSession(cookies);
 
 	return {
 		posts:
@@ -38,12 +35,12 @@ export const load: PageServerLoad = ({ cookies }) => {
 				likes: (
 					db
 						.query('SELECT COUNT(post_id) as count FROM posts_likes WHERE post_id = $pid')
-						.all({ $pid: p.id })[0] as any
+						.all({ $pid: p.id })[0] as { count: number }
 				).count,
-				liked: sess
+				liked: user
 					? db
 							.query('SELECT post_id FROM posts_likes WHERE post_id = $pid AND user_id = $uid')
-							.all({ $pid: p.id, $uid: sess.user_id }).length != 0
+							.all({ $pid: p.id, $uid: user.id }).length != 0
 					: false
 			})) ?? []
 	};

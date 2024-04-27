@@ -2,9 +2,7 @@
 	import { page } from '$app/stores';
 	$: open = false;
 
-	const onClick = (evt: any) => {
-		open = !open;
-	};
+	const onClick = () => (open = !open);
 </script>
 
 <div class="relative">

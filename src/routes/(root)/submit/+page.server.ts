@@ -1,16 +1,15 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { Database } from 'bun:sqlite';
+import { getSession } from '$lib/session';
 
 export const actions: Actions = {
-	default: async (event) => {
+	default: async ({ cookies, request }) => {
 		const db = new Database('db.sqlite');
+		const user = getSession(cookies);
+		if (!user) redirect(302, '/login');
 
-		const sid = event.cookies.get('sid') as string;
-		const session = db.query('SELECT * FROM sessions WHERE id = $sid').get({ $sid: sid }) as any;
-		if (!session) redirect(302, '/');
-
-		const formData = await event.request.formData();
+		const formData = await request.formData();
 		const title = formData.get('title') as string;
 		const content = formData.get('content') as string;
 
@@ -23,7 +22,7 @@ export const actions: Actions = {
 			`INSERT INTO posts (user_id, title, community_id, content, createdAt) 
       VALUES ($user_id, $title, $community_id, $content, $createdAt)`
 		).values({
-			$user_id: session.user_id,
+			$user_id: user.id,
 			$community_id: community_id,
 			$title: title,
 			$content: content,

@@ -67,8 +67,16 @@ export const generateTokenUrl = (
 	return endpoint.toString();
 };
 
+interface JWK extends JsonWebKey {
+	kid: string;
+}
+
+interface JWKS {
+	keys: JWK[];
+}
+
 export const getTokensAsync = async (token_uri: string) => {
-	let res = await fetch(token_uri, {
+	const res = await fetch(token_uri, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 	});
@@ -92,7 +100,7 @@ export const getClaims = async (
 ) => {
 	logger.info('getClaims');
 	const certs = await fetch(jwks_uri);
-	const jwks = (await certs.json()) as any;
+	const jwks = (await certs.json()) as JWKS;
 	logger.debug('jwks', jwks);
 
 	const [headerEncoded, payloadEncoded, signatureEncoded] = id_token.split('.');
@@ -100,27 +108,25 @@ export const getClaims = async (
 	const payload = JSON.parse(Buffer.from(payloadEncoded, 'base64').toString());
 	logger.debug('payload.header', { payload, header });
 
-	const jwk = jwks.keys.filter((k: any) => k.kid == header.kid)[0];
+	const jwk = jwks.keys.filter((k) => k.kid == header.kid)[0];
 	logger.debug('jwk', JSON.stringify(jwk));
 
 	const publicKey = await crypto.subtle.importKey(
 		'jwk',
 		jwk,
 		{
-			//these are the algorithm options
 			name: 'RSASSA-PKCS1-v1_5',
-			hash: { name: 'SHA-256' } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+			hash: { name: 'SHA-256' }
 		},
 		false,
 		['verify']
 	);
 	logger.debug('now verify', { signatureEncoded, payload });
-	// const isValidSignature = await crypto.subtle.verify('rsa-sha256', publicKey, Buffer.from(signatureEncoded), Buffer.from(payload));
 	const isValidSignature = await crypto.subtle.verify(
 		{
 			name: 'RSASSA-PKCS1-v1_5'
 		},
-		publicKey, //from generateKey or importKey above
+		publicKey,
 		Buffer.from(signatureEncoded, 'base64url'),
 		Buffer.from(`${headerEncoded}.${payloadEncoded}`)
 	);
