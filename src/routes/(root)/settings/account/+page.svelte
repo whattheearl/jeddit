@@ -34,7 +34,7 @@
 				/>
 				{#if !data.user.name_finalized}
 					<button
-						class="py-2 px-4 bg-blue-600 font-extrabold text-white hover:curser hover:bg-blue-500"
+						class="py-2 px-4 font-extrabold text-blue-600 rounded-full border border-blue-600 hover:curser hover:bg-blue-100"
 						type="submit"
 					>
 						Update

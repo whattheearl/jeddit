@@ -103,7 +103,7 @@ export const getClaims = async (id_token: string, jwks_uri: string, issuer: stri
       name: "RSASSA-PKCS1-v1_5",
     },
     publicKey, //from generateKey or importKey above
-    Buffer.from(signatureEncoded),
+    Buffer.from(signatureEncoded, 'base64url'),
     Buffer.from(`${headerEncoded}.${payloadEncoded}`)
   )
   logger.debug(isValidSignature)
