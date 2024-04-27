@@ -1,4 +1,4 @@
-import { getSession } from '$lib/session';
+import { getUserByCookie } from '$lib/user';
 import type { Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { Database } from 'bun:sqlite';
@@ -6,7 +6,7 @@ import { Database } from 'bun:sqlite';
 const db = new Database('db.sqlite');
 export const actions: Actions = {
 	default: ({ cookies, params, request }) => {
-		const user = getSession(cookies);
+		const user = getUserByCookie(cookies);
 		if (!user) return redirect(302, '/login');
 
 		const pid = params.id;

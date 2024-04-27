@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { Database } from 'bun:sqlite';
 import { getSecondsFromUTC } from '$lib/time';
-import { getSession } from '$lib/session';
+import { getUserByCookie } from '$lib/user';
 
 export const load: PageServerLoad = ({ cookies }) => {
 	const db = new Database('db.sqlite');
@@ -25,7 +25,7 @@ export const load: PageServerLoad = ({ cookies }) => {
 		liked: boolean;
 	}[];
 
-	const user = getSession(cookies);
+	const user = getUserByCookie(cookies);
 
 	return {
 		posts:

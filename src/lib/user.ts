@@ -17,7 +17,9 @@ export interface IUser {
 
 export const getUserByCookie = (cookies: Cookies) => {
 	const sess = getSession(cookies);
-	return db.query('SELECT * FROM users WHERE id = ?').get(sess.id) as IUser | undefined;
+  if (!sess)
+    return null;
+	return db.query('SELECT * FROM users WHERE id = ?').get(sess.user_id) as IUser;
 };
 
 export const getUserByIdentity = (iss: string, sub: string) =>

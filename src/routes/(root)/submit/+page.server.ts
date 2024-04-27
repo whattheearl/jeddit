@@ -1,12 +1,12 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { Database } from 'bun:sqlite';
-import { getSession } from '$lib/session';
+import { getUserByCookie } from '$lib/user';
 
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
 		const db = new Database('db.sqlite');
-		const user = getSession(cookies);
+		const user = getUserByCookie(cookies);
 		if (!user) redirect(302, '/login');
 
 		const formData = await request.formData();

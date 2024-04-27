@@ -2,13 +2,12 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { base } from '$app/paths';
 import { Database } from 'bun:sqlite';
-import { getSession } from '$lib/session';
 import { getUserByCookie } from '$lib/user';
 
 const db = new Database('./db.sqlite');
 
 export const load: PageServerLoad = async ({ cookies }) => {
-	const user = getSession(cookies);
+	const user = getUserByCookie(cookies);
 	if (!user) return redirect(302, '/');
 	return { user };
 };

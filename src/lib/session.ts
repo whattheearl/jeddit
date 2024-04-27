@@ -11,7 +11,9 @@ export interface ISession {
 }
 
 export const getSession = (cookies: Cookies) => {
-	const sid = cookies.get(cookieName) as string;
+	const sid = cookies.get(cookieName)?.toString();
+  if (!sid)
+    return null;
 	return db.query('SELECT * FROM sessions WHERE id = ?').get(sid) as ISession;
 };
 
