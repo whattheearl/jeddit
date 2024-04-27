@@ -41,7 +41,7 @@
 					<button
 						type="submit"
 						form="likeForm"
-						formaction="/post/1"
+						formaction={`/post/${p.id}`}
 						class="inline-flex my-2 items-center py-1 rounded-full bg-gray-100"
 					>
 						<Heart fill={p.liked} />
