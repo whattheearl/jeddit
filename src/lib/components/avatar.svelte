@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
   $: open = false;
 
 	const onClick = (evt: any) => {
-		evt.preventDefault();
 		open = !open;
 	};
 </script>
