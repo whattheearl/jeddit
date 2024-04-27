@@ -19,8 +19,6 @@ export const actions: Actions = {
     const liked = db.query('SELECT * FROM posts_likes WHERE post_id = ? AND user_id = ?')
       .get(pid, user.id);
 
-    console.log({ liked })
-
     if (liked) {
       db.prepare('DELETE FROM posts_likes WHERE post_id = ? AND user_id = ?').run(pid, user.id);
     } else {

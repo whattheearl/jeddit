@@ -67,7 +67,6 @@ const nouns = [
 ]
 
 export const generateUsername = () => {
-  console.log(adjectives.length, nouns.length)
   const first = adjectives[Math.floor(Math.random() * adjectives.length)];
   const second = nouns[Math.floor(Math.random() * nouns.length)];
   const num = Math.floor(Math.random()*99)

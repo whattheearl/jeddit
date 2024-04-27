@@ -24,7 +24,6 @@ export const actions: Actions = {
   default: async ({ cookies, request }) => {
     const sid = cookies.get('sid') as string;
     const session = db.query('SELECT * FROM sessions WHERE id = $id').get({ $id: sid }) as any;
-    console.log({ session })
     if (!session)
       return redirect(302, '/');
 

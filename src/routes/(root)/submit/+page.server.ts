@@ -14,7 +14,7 @@ export const actions: Actions = {
     const formData = await event.request.formData();
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
-    console.log({ title, content })
+
     if (!title)
       return { title, content };
 
