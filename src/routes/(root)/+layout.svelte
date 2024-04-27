@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/avatar.svelte';
-  import Plus from '$lib/components/plus.svelte';
+	import Plus from '$lib/components/plus.svelte';
 	import '../../app.css';
 </script>
 
@@ -17,14 +17,17 @@
 	</a>
 	{#if $page.data.user}
 		<div class="ml-auto flex items-center gap-8">
-      <a class="flex items-center gap-1 leading-4 py-2 px-4 rounded-full hover:curser hover:bg-gray-200" href="/submit">
-        <Plus/> Create
-      </a>
+			<a
+				class="flex items-center gap-1 leading-4 py-2 px-4 rounded-full hover:curser hover:bg-gray-200"
+				href="/submit"
+			>
+				<Plus /> Create
+			</a>
 			<Avatar />
 		</div>
 	{:else}
 		<a
-      class="rounded-full"
+			class="rounded-full"
 			href={`${base}/login`}
 			style="background-color: rgb(217, 58, 0); margin-left: auto; border: none; height: 40px; text-decoration: none; display: flex; align-items: center;"
 		>

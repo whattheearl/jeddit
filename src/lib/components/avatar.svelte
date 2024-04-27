@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-  $: open = false;
+	$: open = false;
 
-	const onClick = (evt: any) => {
-		open = !open;
-	};
+	const onClick = () => (open = !open);
 </script>
 
 <div class="relative">
@@ -62,7 +60,7 @@
 	>
 		<!-- Active: "bg-gray-50", Not Active: "" -->
 		<a
-      on:click={onClick}
+			on:click={onClick}
 			href="/settings/account"
 			class="block px-3 py-1 text-sm leading-6 text-gray-900"
 			role="menuitem"
@@ -70,7 +68,7 @@
 			id="user-menu-item-1">Settings</a
 		>
 		<a
-      on:click={onClick}
+			on:click={onClick}
 			href="/auth/signout"
 			class="block px-3 py-1 text-sm leading-6 text-gray-900"
 			role="menuitem"
