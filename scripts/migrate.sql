@@ -6,13 +6,13 @@ DROP TABLE IF EXISTS posts_likes;
 
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(38),
-  name_finalized BOOLEAN DEFAULT 0,
   sub TEXT,
   iss TEXT,
-  picture TEXT,
   email TEXT UNIQUE,
-  email_verified BOOLEAN
+  email_verified BOOLEAN,
+  username VARCHAR(38),
+  username_finalized BOOLEAN DEFAULT 0,
+  picture TEXT
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS posts_likes (
   PRIMARY KEY (post_id, user_id)
 );
 
-INSERT INTO users (id,name) VALUES (1,'firstuser');
+INSERT INTO users (id, username) VALUES (1,'firstuser');
 
-INSERT INTO communities (id,name) VALUES (1,'jeddit');
+INSERT INTO communities (id, name) VALUES (1,'jeddit');
 
 INSERT INTO posts (id, user_id, community_id, title, content, createdAt) VALUES (1, 1, 1, 'Hello world!!', 'Just some place holder text. Don''t worry about it...', 0);
 

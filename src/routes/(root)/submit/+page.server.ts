@@ -1,34 +1,35 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { Database } from 'bun:sqlite';
-import { getUserByCookie } from '$lib/user';
+import { getSession } from '$lib/auth/index';
 
 export const actions: Actions = {
-	default: async ({ cookies, request }) => {
-		const db = new Database('db.sqlite');
-		const user = getUserByCookie(cookies);
-		if (!user) redirect(302, '/login');
+  default: async (e) => {
+    const db = new Database('db.sqlite');
+    const { user } = getSession(e);
+    if (!user) redirect(302, '/signin');
 
-		const formData = await request.formData();
-		const title = formData.get('title') as string;
-		const content = formData.get('content') as string;
+    const { request } = e;
+    const formData = await request.formData();
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
 
-		if (!title) return { title, content };
+    if (!title) return { title, content };
 
-		const community_id = 1; //jeddit hardcoded`
+    const community_id = 1; //jeddit hardcoded`
 
-		const now = Date.now();
-		db.prepare(
-			`INSERT INTO posts (user_id, title, community_id, content, createdAt) 
+    const now = Date.now();
+    db.prepare(
+      `INSERT INTO posts (user_id, title, community_id, content, createdAt) 
       VALUES ($user_id, $title, $community_id, $content, $createdAt)`
-		).values({
-			$user_id: user.id,
-			$community_id: community_id,
-			$title: title,
-			$content: content,
-			$createdAt: now
-		});
+    ).values({
+      $user_id: user.id,
+      $community_id: community_id,
+      $title: title,
+      $content: content,
+      $createdAt: now
+    });
 
-		redirect(302, '/');
-	}
+    redirect(302, '/');
+  }
 };

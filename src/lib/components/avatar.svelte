@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	$: open = false;
 
+  console.log($page.data.user.username)
 	const onClick = () => (open = !open);
 </script>
 
@@ -24,7 +25,7 @@
 		/>
 		<span class="hidden lg:flex lg:items-center" style="display: hidden;">
 			<span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true"
-				>{$page.data.user.name}</span
+				>{$page.data.user.username}</span
 			>
 			<svg
 				class="ml-2 h-5 w-5 text-gray-400"
@@ -69,7 +70,7 @@
 		>
 		<a
 			on:click={onClick}
-			href="/auth/signout"
+			href="/signout"
 			class="block px-3 py-1 text-sm leading-6 text-gray-900"
 			role="menuitem"
 			tabindex="-1"
