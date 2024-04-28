@@ -1,7 +1,8 @@
-import { getUserByCookie } from '$lib/user';
+import { getSession } from '$lib/auth';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = ({ cookies }) => {
-  const user = getUserByCookie(cookies);
+export const load: LayoutServerLoad = (e) => {
+  const { user } = getSession(e);
   return { user };
 };
+  
