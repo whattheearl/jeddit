@@ -16,7 +16,7 @@
 			<div>
 				<h3 class={settingNameClass}>Display name</h3>
 				<p class={settingValueClass}>
-					{#if !data.user.name_finalized}
+					{#if !data.user.username_finalized}
 						<span>Set a display name.</span>
 					{:else}
 						<span>This is your forever name.</span>
@@ -28,11 +28,11 @@
 					class="mr-2 w-[35ch] h-[38px]"
 					type="text"
 					name="name"
-					placeholder={data.user.name ?? 'Display name'}
-					readonly={data.user.name_finalized}
-					bind:value={data.user.name}
+					placeholder={data.user.username ?? 'Display name'}
+					readonly={data.user.username_finalized}
+					bind:value={data.user.username}
 				/>
-				{#if !data.user.name_finalized}
+				{#if !data.user.username_finalized}
 					<button
 						class="py-2 px-4 font-extrabold text-blue-600 rounded-full border border-blue-600 hover:curser hover:bg-blue-100"
 						type="submit"

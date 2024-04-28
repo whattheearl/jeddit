@@ -18,7 +18,7 @@ export const actions: Actions = {
     const { user } = getSession(e);
     if (!user) return redirect(302, '/');
 
-    if (user.name_finalized) return error(400, 'name is already set');
+    if (user.username_finalized) return error(400, 'name is already set');
 
     if (!user) return redirect(302, `${base}/`);
 
@@ -30,7 +30,7 @@ export const actions: Actions = {
     const existingUser = db.query('SELECT id FROM users WHERE name = ?').get(name);
     if (existingUser) error(400, 'name is already taken');
 
-    user.name = name;
+    user.username = name;
     db.run('UPDATE users SET name=?, name_finalized=1 WHERE id=?', [name, user.id]);
 
     return {
