@@ -1,9 +1,17 @@
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { Database } from 'bun:sqlite';
 import { getSession } from '$lib/auth/index';
+import { getPostById } from '$lib/stores/posts.store';
+import { getSecondsFromUTC } from '$lib/time';
 
 const db = new Database('db.sqlite');
+
+export const load: PageServerLoad = ({ params }) => {
+  const post = getPostById(+params.id);
+  return { post: { ...post, createdAt: getSecondsFromUTC(post.createdAt) } };
+}
+
 export const actions: Actions = {
   default: (e) => {
     const { user } = getSession(e);
