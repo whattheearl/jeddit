@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	$: open = false;
-
-  console.log($page.data.user.username)
-	const onClick = () => (open = !open);
+	const toggleProfileMenu = () => (open = !open);
 </script>
 
 <div class="relative">
 	<button
-		on:click={onClick}
+		on:click={toggleProfileMenu}
 		type="button"
 		class="-m-1.5 flex items-center p-1.5 hover:curser hover:bg-gray-200 rounded-full"
 		style="margin: -6px; display: flex; align-items: center; padding: 6px;"
@@ -61,7 +59,7 @@
 	>
 		<!-- Active: "bg-gray-50", Not Active: "" -->
 		<a
-			on:click={onClick}
+			on:click={toggleProfileMenu}
 			href="/settings/account"
 			class="block px-3 py-1 text-sm leading-6 text-gray-900"
 			role="menuitem"
@@ -69,7 +67,7 @@
 			id="user-menu-item-1">Settings</a
 		>
 		<a
-			on:click={onClick}
+			on:click={toggleProfileMenu}
 			href="/signout"
 			class="block px-3 py-1 text-sm leading-6 text-gray-900"
 			role="menuitem"
