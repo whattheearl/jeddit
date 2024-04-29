@@ -2,18 +2,19 @@
 
 Just another practice project...
 
-## tldr
-
+## Dev
 ```bash
-npm i
-npm run generate
-docker compose up -d
-npm run migrate
+bun i
+bun run migrate
+bun run dev
+# goto http://localhost:5173
 ```
 
-## Todo
-
-- [x] login page
-- [x] oauth google login
-- [ ] fix drizzle db connection
-- [ ] add user table
+## Run
+```bash
+bun i
+bun run migrate
+bun run build
+bun ./build
+# goto http://localhost:5173
+```
