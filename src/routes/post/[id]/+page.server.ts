@@ -4,16 +4,28 @@ import { Database } from 'bun:sqlite';
 import { getSession } from '$lib/auth/index';
 import { getPostById } from '$lib/stores/posts.store';
 import { getSecondsFromUTC } from '$lib/time';
+import { addComment, getCommentsByPostId } from '$lib/stores/comments.store';
 
 const db = new Database('db.sqlite');
 
 export const load: PageServerLoad = ({ params }) => {
+  const pid = +params.id;
   const post = getPostById(+params.id);
-  return { post: { ...post, createdAt: getSecondsFromUTC(post.createdAt) } };
+  if (!post)
+    redirect(302, '/');
+
+  const comments = getCommentsByPostId(pid);
+  return {
+    post: {
+      ...post,
+      createdAt: post.createdAt ? getSecondsFromUTC(post.createdAt) : ''
+    },
+    comments: comments.map(c => ({ ...c, createdAt: getSecondsFromUTC(c.createdAt) }))
+  };
 }
 
 export const actions: Actions = {
-  default: (e) => {
+  like: (e) => {
     const { user } = getSession(e);
     if (!user) return redirect(302, '/signin');
 
@@ -32,5 +44,27 @@ export const actions: Actions = {
 
     const { request } = e;
     return redirect(302, request.headers.get('referer') ?? '/');
+  },
+  comment: async (e) => {
+    const { user } = getSession(e);
+    if (!user) return redirect(302, '/signin');
+
+    const { params } = e;
+    const pid = +params.id;
+    const post = getPostById(+pid);
+    if (!post) return redirect(302, '/');
+
+    const { request } = e;
+    const formData = await request.formData();
+    const content = formData.get('content')?.toString();
+    if (!content) redirect(302, `/post/${pid}`);
+
+    addComment({
+      post_id: pid,
+      user_id: user.id,
+      content,
+      createdAt: Date.now()
+    })
+    redirect(302, `/post/${pid}`);
   }
 };
