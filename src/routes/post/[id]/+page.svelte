@@ -54,6 +54,6 @@
 			<span class="ml-2 text-xs font-extrabold text-gray-400">•</span>
 			<span class="ml-1 text-xs font-thin text-gray-400">{comment.createdAt}</span>
 		</div>
-    <p class="ml-10 text-sm text-gray-800">{comment.content}</p>
+		<p class="ml-10 text-sm text-gray-800">{comment.content}</p>
 	{/each}
 </div>
