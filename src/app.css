@@ -42,11 +42,6 @@ img {
 
 /* css reset end */
 
-body {
-	width: 100vw;
-	height: 100vh;
-}
-
 input {
 	background-color: rgb(246, 247, 248);
 	border: 1px solid #eee;
