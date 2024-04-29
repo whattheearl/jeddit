@@ -18,3 +18,8 @@ bun run build
 bun ./build
 # goto http://localhost:5173
 ```
+
+## Deploy
+```bash
+/bin/bash ./scripts/deploy.sh
+```
