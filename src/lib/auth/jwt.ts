@@ -1,91 +1,89 @@
-import { Logger } from "$lib/logger";
+import { Logger } from '$lib/logger';
 
-const logger = Logger("jwt");
+const logger = Logger('jwt');
 
 export interface VerifyOptions {
-  issuer: string;
-  audience: string;
+	issuer: string;
+	audience: string;
 }
 
 export interface IClaims {
-  iss: string;
-  sub: string;
-  given_name: string;
-  family_name: string;
-  email: string;
-  email_verified: boolean;
-  picture: string;
-  nonce: string;
+	iss: string;
+	sub: string;
+	aud: string;
+	given_name: string;
+	family_name: string;
+	email: string;
+	email_verified: boolean;
+	picture: string;
+	nonce: string;
+	iat: number;
+	exp: number;
 }
 
 interface JWK extends JsonWebKey {
-  kid: string;
+	kid: string;
 }
 
 interface JWKS {
-  keys: JWK[];
+	keys: JWK[];
 }
 
-export const verifyJwt = async (
-  jwks: JWKS,
-  token: string,
-  options: VerifyOptions,
-) => {
-  logger.debug("validating token");
+export const getJwks = async (jwks_uri: string) => {
+	const certs = await fetch(jwks_uri);
+	const jwks = await certs.json();
+	logger.debug('jwks', jwks);
+	return jwks as JWKS;
+};
 
-  const [headerEncoded, payloadEncoded, signatureEncoded] = token.split(".");
-  const header = JSON.parse(
-    Buffer.from(headerEncoded, "base64").toString(),
-  ) as { kid: string };
-  const payload = JSON.parse(
-    Buffer.from(payloadEncoded, "base64").toString(),
-  ) as any;
-  logger.debug("payload.header", { payload, header });
+export const verifyJwt = async (jwks: JWKS, token: string, options: VerifyOptions) => {
+	logger.debug('validating token');
 
-  const jwk = jwks.keys.filter((k: any) => k.kid == header.kid)[0];
-  logger.debug("jwk", { jwk });
+	const [headerEncoded, payloadEncoded, signatureEncoded] = token.split('.');
+	const header = JSON.parse(Buffer.from(headerEncoded, 'base64').toString()) as { kid: string };
+	const payload = JSON.parse(Buffer.from(payloadEncoded, 'base64').toString()) as IClaims;
+	logger.debug('payload.header', { payload, header });
 
-  const publicKey = await crypto.subtle.importKey(
-    "jwk",
-    jwk,
-    {
-      //these are the algorithm options
-      name: "RSASSA-PKCS1-v1_5",
-      hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
-    },
-    false,
-    ["verify"],
-  );
+	const jwk = jwks.keys.filter((k) => k.kid == header.kid)[0];
+	logger.debug('jwk', { jwk });
 
-  logger.debug("now verify", { signatureEncoded, payload });
-  const isValidSignature = await crypto.subtle.verify(
-    {
-      name: "RSASSA-PKCS1-v1_5",
-    },
-    publicKey, //from generateKey or importKey above
-    Buffer.from(signatureEncoded, "base64url"),
-    Buffer.from(`${headerEncoded}.${payloadEncoded}`),
-  );
+	const publicKey = await crypto.subtle.importKey(
+		'jwk',
+		jwk,
+		{
+			//these are the algorithm options
+			name: 'RSASSA-PKCS1-v1_5',
+			hash: { name: 'SHA-256' } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+		},
+		false,
+		['verify']
+	);
 
-  logger.debug(isValidSignature);
-  if (!isValidSignature) throw new Error(`invalid signature`);
+	logger.debug('now verify', { signatureEncoded, payload });
+	const isValidSignature = await crypto.subtle.verify(
+		{
+			name: 'RSASSA-PKCS1-v1_5'
+		},
+		publicKey, //from generateKey or importKey above
+		Buffer.from(signatureEncoded, 'base64url'),
+		Buffer.from(`${headerEncoded}.${payloadEncoded}`)
+	);
 
-  if (options.audience && options.audience != payload.aud)
-    throw new Error(
-      `audience does not match [${options.audience}] [${payload.aud}]`,
-    );
+	logger.debug(isValidSignature);
+	if (!isValidSignature) throw new Error(`invalid signature`);
 
-  if (options.issuer && options.issuer != payload.iss)
-    throw new Error(
-      `issuer does not match [${options.issuer}] [${payload.iss}]`,
-    );
+	if (options.audience && options.audience != payload.aud)
+		throw new Error(`audience does not match [${options.audience}] [${payload.aud}]`);
 
-  const { exp } = payload;
-  const now = Math.floor(Date.now() / 1000);
-  if (exp - now < 0) throw new Error(`token expired [${exp}] [${now}]`);
+	if (options.issuer && options.issuer != payload.iss)
+		throw new Error(`issuer does not match [${options.issuer}] [${payload.iss}]`);
 
-  const { iat } = payload;
-  if (now - iat < 0) throw new Error(`token not valid yet [${iat}] [${now}]`);
+	const { exp } = payload;
+	const now = Math.floor(Date.now() / 1000);
+	if (exp - now < 0) throw new Error(`token expired [${exp}] [${now}]`);
 
-  return payload as IClaims;
+	const { iat } = payload;
+	if (now - iat < 0) throw new Error(`token not valid yet [${iat}] [${now}]`);
+
+	return payload as IClaims;
 };
