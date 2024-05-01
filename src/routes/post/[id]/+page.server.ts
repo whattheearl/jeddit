@@ -66,5 +66,11 @@ export const actions: Actions = {
 			createdAt: Date.now()
 		});
 		redirect(302, `/post/${pid}`);
-	}
+	},
+  uploadImage: async (e) => {
+    const formData = await e.request.formData();
+    const image = formData.get('image');
+    console.log(image);
+    return {}
+  }
 };

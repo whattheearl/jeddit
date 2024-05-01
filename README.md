@@ -1,6 +1,11 @@
 # Jon's Reddit
-
 Just another practice project...
+
+- md parser
+- drafts
+- image uploads
+- comment-likes
+- subcomments
 
 ## Dev
 ```bash

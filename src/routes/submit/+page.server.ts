@@ -13,8 +13,7 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const title = formData.get('title') as string;
 		const content = formData.get('content') as string;
-
-		if (!title) return { title, content };
+		if (!title || !content) return { title, content };
 
 		const community_id = 1; //jeddit hardcoded`
 
