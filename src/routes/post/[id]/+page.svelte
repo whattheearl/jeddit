@@ -7,8 +7,8 @@
 	});
 </script>
 
-<div class="w-full max-w-2xl mx-auto">
-	<div class="mt-12 flex items-center gap-2">
+<div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">
+	<div class="flex items-center gap-2">
 		<a href="/"
 			><svg
 				viewBox="0 0 24 24"
