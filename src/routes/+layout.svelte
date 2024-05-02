@@ -15,7 +15,7 @@
 		jeddit
 	</a>
 	{#if $page.data.user}
-		<div class="ml-auto flex items-center gap-8">
+		<div class="ml-auto flex items-center gap-2">
 			<a
 				class="flex items-center gap-1 leading-4 py-2 px-4 rounded-full hover:curser hover:bg-gray-200"
 				href="/submit"
