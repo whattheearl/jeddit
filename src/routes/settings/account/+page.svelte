@@ -3,12 +3,12 @@
 
 	export let data: PageData;
 
-	const settingRowClass = 'flex px-4 max-w-[700px] mb-8';
+	const settingRowClass = 'flex flex-wrap px-4 max-w-[700px] mb-8';
 	const settingNameClass = 'font-semibold text-gray-800';
 	const settingValueClass = 'text-sm text-gray-400';
 </script>
 
-<main class="w-full max-w-[900px] mx-auto">
+<main class="p-4 w-full max-w-[700px] mx-auto">
 	<div class="display: flex; flex-direction: column;">
 		<h2 class="mx-4 py-4 font-semibold text-xl text-gray-800">Account settings</h2>
 
@@ -23,7 +23,7 @@
 					{/if}
 				</p>
 			</div>
-			<div style="display: flex; align-items: center; margin-left: auto;">
+			<div class="mt-4 w-full md:w-auto md:mt-0 md:ml-auto flex items-center">
 				<input
 					class="mr-2 w-[35ch] h-[38px]"
 					type="text"
