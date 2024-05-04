@@ -1,11 +1,14 @@
 # Jeddit
 
 - comment-likes
-- drafts
-- image uploads
-- subcomments
+- post-edit
+- comment-edit
+- post-image
+- comment-image
+- comment-comments
 
 ## Dev
+
 ```bash
 bun i
 bun run migrate
@@ -14,6 +17,7 @@ bun run dev
 ```
 
 ## Run
+
 ```bash
 bun i
 bun run migrate
@@ -23,6 +27,7 @@ bun ./build
 ```
 
 ## Deploy
+
 ```bash
 /bin/bash ./scripts/deploy.sh
 ```

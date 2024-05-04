@@ -19,14 +19,14 @@ export const actions: Actions = {
 
 		const now = Date.now();
 		db.prepare(
-			`INSERT INTO posts (user_id, title, community_id, content, createdAt) 
-      VALUES ($user_id, $title, $community_id, $content, $createdAt)`
+			`INSERT INTO posts (user_id, title, community_id, content, created_at) 
+      VALUES ($user_id, $title, $community_id, $content, $created_at)`
 		).values({
 			$user_id: user.id,
 			$community_id: community_id,
 			$title: title,
 			$content: content,
-			$createdAt: now
+			$created_at: now
 		});
 
 		redirect(302, '/');

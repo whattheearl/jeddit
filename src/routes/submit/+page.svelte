@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { ActionData, PageData } from "./$types";
+	import type { ActionData, PageData } from './$types';
 
-  export let form: ActionData
+	export let form: ActionData;
 	// const onPaste = (e: any) => {
 	// 	console.log(e);
 	// 	console.log(e.clipboardData.files);
@@ -22,14 +22,14 @@
 		name="title"
 		placeholder="Title"
 		contenteditable="true"
-    value={form?.title ?? ''}
+		value={form?.title ?? ''}
 	/>
 	<textarea
 		contenteditable="true"
 		class="py-2 w-full h-[10em]"
 		name="content"
 		placeholder="Text (optional)"
-    value={form?.content ?? ''}
+		value={form?.content ?? ''}
 	/>
 	<button
 		class="ml-auto py-2 px-4 bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
