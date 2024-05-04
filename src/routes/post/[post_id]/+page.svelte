@@ -96,7 +96,7 @@
 			<span class="text-xs font-bold">{comment.like_count}</span>
 			<button
 				formaction={`/comment/${comment.id}?/dislike`}
-        class={comment.isDisliked ? downSelected : downUnselected}
+				class={comment.isDisliked ? downSelected : downUnselected}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
