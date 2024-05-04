@@ -1,5 +1,11 @@
 # Jeddit
 
+- md parser
+- drafts
+- image uploads
+- comment-likes
+- subcomments
+
 ## Dev
 ```bash
 bun i

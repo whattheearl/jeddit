@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Heart from '$lib/components/heart.svelte';
+	import { marked } from 'marked';
 	import type { PageData } from './$types';
+
+	marked.use({
+		gfm: true
+	});
 
 	export let data: PageData;
 </script>
@@ -14,7 +19,7 @@
 			{#each data.posts as p}
 				<a href={`/post/${p.id}`}>
 					<article
-						class="w-full h-full px-4 py-1 my-1 rounded hover:bg-gray-100 hover:cursor-pointer"
+						class="w-full h-full px-4 py-1 my-1 rounded hover:cursor-pointer"
 					>
 						<header class="flex h-6 items-center">
 							<div
@@ -34,9 +39,9 @@
 							{p.title}
 						</h3>
 						{#if p.content}
-							<p style="color: rgb(28, 28, 28); font-size: 14px; line-height: 22px;">
-								{p.content}
-							</p>
+							<section class="text-sm line-clamp-6">
+								{@html marked.parseInline(p.content)}
+							</section>
 						{/if}
 						<button
 							on:click={(e) => e.stopPropagation()}

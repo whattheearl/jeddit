@@ -1,9 +1,14 @@
 <script>
+	import { marked } from 'marked';
+	import './markdown-light.css';
 	export let data;
+	marked.use({
+		gfm: true
+	});
 </script>
 
-<div class="w-full max-w-2xl mx-auto">
-	<div class="mt-12 flex items-center gap-2">
+<div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">
+	<div class="flex items-center gap-2">
 		<a href="/"
 			><svg
 				viewBox="0 0 24 24"
@@ -34,7 +39,10 @@
 		</div>
 	</div>
 	<h1 class="text-2xl font-semibold">{data.post.title}</h1>
-	<p class="mt-4 text-sm">{data.post.content}</p>
+	<section class="markdown-body mt text-sm">
+		<!-- {@html marked.parse(data.post.content)} -->
+		{@html marked.parse(data.post.content)}
+	</section>
 	<form method="POST" action="?/comment" class="mt-4 flex items-center">
 		<input class="rounded-full" type="text" name="content" placeholder="Add a comment" />
 		<button class="p-2 ml-2 text-white text-sm font-semibold bg-blue-500 rounded-full" type="submit"

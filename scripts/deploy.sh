@@ -1,5 +1,5 @@
 #!/bin/bash
-ip=10.0.0.11
+ip=jon@blackbox
 green=$(tput setaf 2)
 normal=$(tput sgr0)
 
@@ -8,7 +8,7 @@ function printG {
 }
 
 printG "BUILDING CONTAINER" 
-docker build . --tag jeddit
+docker build . --tag jeddit --platform linux/amd64
 
 printG "PUSHING CONTAINER"
 docker save jeddit:latest | ssh $ip docker load

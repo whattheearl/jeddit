@@ -8,9 +8,9 @@ export const load: PageServerLoad = (e) => {
 	const posts = db
 		.query(
 			`
-      SELECT posts.id, title, content, profiles.username as author, communities.name as community, createdAt
+      SELECT posts.id, title, content, users.username as author, communities.name as community, createdAt
       FROM posts
-      JOIN profiles on profiles.id = posts.user_id
+      JOIN users on users.id = posts.user_id
       JOIN communities on communities.id = posts.community_id
     `
 		)
