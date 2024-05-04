@@ -1,6 +1,6 @@
-node_modules
 .svelte-kit
+build
+node_modules
 .env
 .env.prod
-build
 db.sqlite

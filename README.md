@@ -1,9 +1,8 @@
 # Jeddit
 
-- md parser
+- comment-likes
 - drafts
 - image uploads
-- comment-likes
 - subcomments
 
 ## Dev

@@ -1,5 +1,5 @@
-#!/bin/bash
-ip=jon@blackbox
+#!/bin/sh
+ip=blackbox.wte.sh
 green=$(tput setaf 2)
 normal=$(tput sgr0)
 
