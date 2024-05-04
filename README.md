@@ -1,6 +1,4 @@
-# Jon's Reddit
-
-Just another practice project...
+# Jeddit
 
 ## Dev
 ```bash
