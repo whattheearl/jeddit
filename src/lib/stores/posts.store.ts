@@ -44,7 +44,7 @@ export const getPostById = (post_id: number) => {
 
 export const getPostLikes = (post_id: number) => {
   const likes = db
-    .query(`SELECT COUNT(user_id) AS count FROM posts_likes WHERE posts_likes.post_id = ?`)
+    .query(`SELECT COUNT(user_id) AS count FROM users_posts_likes WHERE users_posts_likes.post_id = ?`)
     .get(post_id) as { count: number };
   return likes.count;
 };
@@ -52,12 +52,12 @@ export const getPostLikes = (post_id: number) => {
 export const isPostLikedByUser = (post_id: number, user_id: number) => {
   const result = db
     .query(
-      'SELECT post_id FROM posts_likes WHERE posts_likes.post_id = ? AND posts_likes.user_id = ?'
+      'SELECT post_id FROM users_posts_likes WHERE users_posts_likes.post_id = ? AND users_posts_likes.user_id = ?'
     )
     .all(post_id, user_id).length != 0;
   return result;
 };
 
-export const likePost = (post_id: number, user_id: number) => db.prepare('INSERT INTO posts_likes (post_id, user_id) VALUES (?, ?)').run(post_id, user_id);
+export const likePost = (post_id: number, user_id: number) => db.prepare('INSERT INTO users_posts_likes (post_id, user_id) VALUES (?, ?)').run(post_id, user_id);
 
-export const unlikePost = (post_id: number, user_id: number) => db.prepare('DELETE FROM posts_likes WHERE post_id = ? AND user_id = ?').run(post_id, user_id)
+export const unlikePost = (post_id: number, user_id: number) => db.prepare('DELETE FROM users_posts_likes WHERE post_id = ? AND user_id = ?').run(post_id, user_id)

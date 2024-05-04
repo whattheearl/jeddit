@@ -17,17 +17,21 @@ export const load: PageServerLoad = (e) => {
 
   const { user } = getSession(e);
   const comments = getCommentsByPostId(post_id);
+
   return {
     post: {
       ...post,
       created_at: post.created_at ? getSecondsFromUTC(post.created_at) : ''
     },
-    comments: comments.map((c) => ({
-      ...c,
-      created_at: getSecondsFromUTC(c.created_at),
-      isLiked: user ? getCommentsLikesByCommentId(c.id).filter(c => c.user_id == user.id)[0].like_value == 1 : false,
-      isDisliked: user ? getCommentsLikesByCommentId(c.id).filter(c => c.user_id == user.id)[0].like_value == -1 : false,
-    }))
+    comments: comments.map(c => {
+      const likes = user ? getCommentsLikesByCommentId(c.id).filter(c => c.user_id == user.id) : [];
+      return {
+        ...c,
+        created_at: getSecondsFromUTC(c.created_at),
+        isLiked: likes.length > 0 ? likes[0].like_value == 1 : false,
+        isDisliked: likes.length > 0 ? likes[0].like_value == -1 : false,
+      }
+    })
   };
 };
 
