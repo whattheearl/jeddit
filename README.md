@@ -1,5 +1,4 @@
-# Jon's Reddit
-Just another practice project...
+# Jeddit
 
 - md parser
 - drafts
