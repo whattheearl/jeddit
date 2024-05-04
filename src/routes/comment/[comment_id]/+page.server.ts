@@ -6,7 +6,6 @@ import { addCommentsLikes, getCommentsLikesByCommentId, getCommentsLikesByUserId
 export const actions: Actions = {
 
   like: async (e) => {
-    console.log({ like: 'like' })
     const { params } = e;
     const { user } = getSession(e);
     if (!user)
