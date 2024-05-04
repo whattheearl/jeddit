@@ -16,14 +16,14 @@ export const actions: Actions = {
 		const comment_id = +params.comment_id;
 		if (!comment_id) error(400, 'comment_id required');
 
-		const likes = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
-
-		if (!likes) {
+    let liked = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
+		if (!liked) {
 			addCommentsLikes(comment_id, user.id, 0);
 		}
 
-		const new_like_value = likes.like_value == 1 ? 0 : 1;
-		const like_count_difference = new_like_value - likes.like_value;
+    liked = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
+		const new_like_value = liked.like_value == 1 ? 0 : 1;
+		const like_count_difference = new_like_value - liked.like_value;
 		updateCommentslikes(comment_id, user.id, new_like_value, like_count_difference);
 		return {};
 	},
@@ -36,13 +36,15 @@ export const actions: Actions = {
 		const comment_id = +params.comment_id;
 		if (!comment_id) error(400, 'comment_id required');
 
-		const likes = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
-		if (!likes) {
+		let liked = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
+    console.log(liked);
+		if (!liked) {
 			addCommentsLikes(comment_id, user.id, 0);
 		}
-
-		const new_like_value = likes.like_value == -1 ? 0 : -1;
-		const like_count_difference = new_like_value - likes.like_value;
+		
+    liked = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
+		const new_like_value = liked.like_value == -1 ? 0 : -1;
+		const like_count_difference = new_like_value - liked.like_value;
 		updateCommentslikes(comment_id, user.id, new_like_value, like_count_difference);
 		return {};
 	}
