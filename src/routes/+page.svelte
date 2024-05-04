@@ -18,9 +18,7 @@
 		<main style="width: 100%;">
 			{#each data.posts as p}
 				<a href={`/post/${p.id}`}>
-					<article
-						class="w-full h-full px-4 py-1 my-1 rounded hover:cursor-pointer"
-					>
+					<article class="w-full h-full px-4 py-1 my-1 rounded hover:cursor-pointer">
 						<header class="flex h-6 items-center">
 							<div
 								class="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center text-white font-black"
@@ -30,7 +28,7 @@
 							<a class="flex text-xs items-center" href={`/post/${p.community}`}
 								><span class="px-1 text-gray-700 font-semibold">{`/j/${p.community}`}</span></a
 							>
-							<span class="text-xs text-gray-500">{`${p.createdAt}`}</span>
+							<span class="text-xs text-gray-500">{`${p.created_at}`}</span>
 						</header>
 						<h3
 							class="my-2 font-bold"
