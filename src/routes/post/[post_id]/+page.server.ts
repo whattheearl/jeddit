@@ -1,18 +1,13 @@
 import type { Actions, PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
-import { Database } from 'bun:sqlite';
 import { getSession } from '$lib/auth/index';
 import { getPostById, isPostLikedByUser, likePost, unlikePost } from '$lib/stores/posts.store';
 import { getSecondsFromUTC } from '$lib/time';
 import {
   addComment,
   getCommentsByPostId,
-  getCommentsLikesByUserId,
-  isCommentDislikedByUser,
-  isCommentLikedByUser
+  getCommentsLikesByCommentId,
 } from '$lib/stores/comments.store';
-
-const db = new Database('db.sqlite');
 
 export const load: PageServerLoad = (e) => {
   const { params } = e;
@@ -22,8 +17,6 @@ export const load: PageServerLoad = (e) => {
 
   const { user } = getSession(e);
   const comments = getCommentsByPostId(post_id);
-  console.log(comments);
-  const commentLikes = user ? getCommentsLikesByUserId(user.id) : [];
   return {
     post: {
       ...post,
@@ -32,8 +25,8 @@ export const load: PageServerLoad = (e) => {
     comments: comments.map((c) => ({
       ...c,
       created_at: getSecondsFromUTC(c.created_at),
-      isLiked: user ? isCommentLikedByUser(c.id, user.id) : false,
-      isDisliked: user ? isCommentDislikedByUser(c.id, user.id) : false,
+      isLiked: user ? getCommentsLikesByCommentId(c.id).filter(c => c.user_id == user.id)[0].like_value == 1 : false,
+      isDisliked: user ? getCommentsLikesByCommentId(c.id).filter(c => c.user_id == user.id)[0].like_value == -1 : false,
     }))
   };
 };

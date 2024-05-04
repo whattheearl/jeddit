@@ -21,12 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS users_comments_likes (
   comment_id INTEGER,
   user_id INTEGER,
-  PRIMARY KEY (comment_id, user_id)
-);
-
-CREATE TABLE IF NOT EXISTS users_comments_dislikes (
-  comment_id INTEGER,
-  user_id INTEGER,
+  like_value INTEGER DEFAULT 0,
   PRIMARY KEY (comment_id, user_id)
 );
 
@@ -69,13 +64,13 @@ INSERT INTO users (id, username) VALUES (1,'firstuser');
 
 INSERT INTO communities (id, name) VALUES (1,'jeddit');
 
-INSERT INTO posts (id, user_id, community_id, title, content, created_at, like_count) VALUES (1,1,1,'Hello world!!','Just some place holder text. Don''t worry about it...',0,3);
+INSERT INTO posts (id, user_id, community_id, title, content, created_at) VALUES (1,1,1,'Hello world!!','Just some place holder text. Don''t worry about it...',0);
 
 INSERT INTO users_posts_likes (post_id, user_id) VALUES (1, 1);
 
-INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (1,1,'Wow this is such a good comment',100000);
+INSERT INTO posts_comments (post_id, user_id, content, created_at, like_count) VALUES (1,1,'Wow this is such a good comment',100000, 3);
 
-INSERT INTO users_comments_likes (comment_id,user_id) VALUES (1,1);
-INSERT INTO users_comments_likes (comment_id,user_id) VALUES (1,2);
-INSERT INTO users_comments_likes (comment_id,user_id) VALUES (1,3);
+INSERT INTO users_comments_likes (comment_id,user_id,like_value) VALUES (1,1,1);
+INSERT INTO users_comments_likes (comment_id,user_id,like_value) VALUES (1,2,1);
+INSERT INTO users_comments_likes (comment_id,user_id,like_value) VALUES (1,3,1);
 
