@@ -11,9 +11,7 @@
 	export let data: PageData;
 </script>
 
-<div
-  class="p-4 flex flex-col items-center md:max-w-[756px] mx-auto"
->
+<div class="p-4 flex flex-col items-center md:max-w-[756px] mx-auto">
 	<main style="width: 100%;">
 		{#each data.posts as p}
 			<a href={`/post/${p.id}`}>

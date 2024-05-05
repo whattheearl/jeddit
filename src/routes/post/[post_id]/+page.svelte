@@ -3,7 +3,7 @@
 	import './markdown-light.css';
 	import { enhance } from '$app/forms';
 	export let data;
-  
+
 	marked.use({
 		gfm: true
 	});
@@ -71,14 +71,18 @@
 	</div>
 	<h1 class="text-2xl font-semibold">{data.post.title}</h1>
 	{#if edit}
-		<form method="POST" class="flex flex-col max-w-[700px] my-4 mx-auto gap-y-2" use:enhance={() => {
-      return async ({ result, update }) => {
-        console.log(result, update)
-        edit = false;
-      };
-    }}>
+		<form
+			method="POST"
+			class="flex flex-col max-w-[700px] my-4 mx-auto gap-y-2"
+			use:enhance={() => {
+				return async ({ result, update }) => {
+					console.log(result, update);
+					edit = false;
+				};
+			}}
+		>
 			<textarea
-        bind:value={data.post.content}
+				bind:value={data.post.content}
 				contenteditable="true"
 				class="py-2 w-full h-[50vh] rounded"
 				name="content"
@@ -102,7 +106,13 @@
 			{@html marked.parse(data.post.content)}
 		</section>
 		<form method="POST" action="?/comment" class="mt-4 flex items-center">
-			<input id="content" class="rounded-full" type="text" name="content" placeholder="Add a comment"/>
+			<input
+				id="content"
+				class="rounded-full"
+				type="text"
+				name="content"
+				placeholder="Add a comment"
+			/>
 			<button
 				class="p-2 ml-2 text-white text-sm font-semibold bg-blue-500 rounded-full"
 				type="submit">Comment</button

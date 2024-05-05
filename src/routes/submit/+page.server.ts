@@ -19,13 +19,13 @@ export const actions: Actions = {
 
 		const sanitizedContent = sanitizeHtml(content.trim());
 
-    addPost({
-      user_id: user.id,
+		addPost({
+			user_id: user.id,
 			community_id: community_id,
 			title: title,
 			content: sanitizedContent,
 			created_at: Date.now()
-    })
+		});
 
 		redirect(302, '/');
 	}
