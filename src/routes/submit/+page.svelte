@@ -2,13 +2,6 @@
 	import type { ActionData } from './$types';
 
 	export let form: ActionData;
-	// const onPaste = (e: any) => {
-	// 	console.log(e);
-	// 	console.log(e.clipboardData.files);
-	// 	const file = e.clipboardData.files[0];
-	// 	if (!file || !file.type.startsWith('image/')) return;
-	// 	console.log({ file });
-	// };
 </script>
 
 <div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">

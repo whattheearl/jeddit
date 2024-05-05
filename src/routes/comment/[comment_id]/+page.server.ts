@@ -37,7 +37,6 @@ export const actions: Actions = {
 		if (!comment_id) error(400, 'comment_id required');
 
 		let liked = getCommentsLikesByCommentId(comment_id).filter((l) => l.user_id == user.id)[0];
-    console.log(liked);
 		if (!liked) {
 			addCommentsLikes(comment_id, user.id, 0);
 		}
