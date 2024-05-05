@@ -1,13 +1,14 @@
 import type { Actions, PageServerLoad } from './$types';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { getSession } from '$lib/auth/index';
-import { getPostById, isPostLikedByUser, likePost, unlikePost } from '$lib/stores/posts.store';
+import { getPostById, isPostLikedByUser, likePost, unlikePost, updatePost } from '$lib/stores/posts.store';
 import { getSecondsFromUTC } from '$lib/time';
 import {
 	addComment,
 	getCommentsByPostId,
 	getCommentsLikesByCommentId
 } from '$lib/stores/comments.store';
+import { sanitizeHtml } from '$lib/domsanitizer';
 
 export const load: PageServerLoad = (e) => {
 	const { params } = e;
@@ -77,5 +78,24 @@ export const actions: Actions = {
 		});
 
 		redirect(302, `/post/${post_id}`);
-	}
+	},
+
+  edit: async (e) => {
+    const { user } = getSession(e);
+		if (!user) return redirect(302, '/signin');
+
+    const { params } = e;
+		const post_id = +params.post_id;
+		const post = getPostById(+post_id);
+		if (!post) return redirect(302, '/');
+
+    if (post.username != user.username) return error(403, 'Unauthorized');
+
+    const { request } = e;
+    const formData = await request.formData();
+    const content = formData.get('content') as string;
+    post.content = sanitizeHtml(content.trim());
+    updatePost(post);
+    return {};
+  }
 };
