@@ -6,6 +6,5 @@ RUN bun i
 COPY . .
 RUN bun run build
 ENV PORT=5173
-EXPOSE $PORT
 RUN bun run migrate
 CMD [ "bun", "--bun", "./build" ]
