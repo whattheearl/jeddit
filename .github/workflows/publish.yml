@@ -20,4 +20,5 @@ jobs:
           # node-20 required bunx fallback
           bun i -p
           bunx semantic-release
-
+        env:
+          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
