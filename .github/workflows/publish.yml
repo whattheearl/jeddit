@@ -16,11 +16,9 @@ jobs:
           node-version: '20'
       - uses: oven-sh/setup-bun@v1
       - run: |
-          gh issue --repo ${{ github.repository }} \
-              create --title "Issue title" --body "Issue body"
-          # docker build .
-          # # node-20 required bunx fallback
-          # bun i -p
-          # bunx semantic-release
+          docker build .
+          # node-20 required bunx fallback
+          bun i -p
+          bunx semantic-release
         env:
           GH_TOKEN: "${{ github.token }}"
