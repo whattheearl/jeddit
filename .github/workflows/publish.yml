@@ -23,4 +23,4 @@ jobs:
           # bun i -p
           # bunx semantic-release
         env:
-          GH_TOKEN: "${{ secrets.GH_TOKEN }}"
+          GH_TOKEN: "${{ github.token }}"
