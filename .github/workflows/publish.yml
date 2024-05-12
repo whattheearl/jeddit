@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,5 +20,4 @@ jobs:
           # node-20 required bunx fallback
           bun i -p
           bunx semantic-release
-        permissions: write-all
 
