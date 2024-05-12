@@ -15,9 +15,9 @@ jobs:
           node-version: '20'
       - uses: oven-sh/setup-bun@v1
       - run: |
-          bun i
           docker build .
           # node-20 required bunx fallback
+          bun i -p
           bunx semantic-release
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
