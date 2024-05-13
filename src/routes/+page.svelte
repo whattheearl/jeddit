@@ -55,4 +55,6 @@
 	</main>
 </div>
 
-<form id="likeForm" hidden method="POST" use:enhance></form>
+<form id="likeForm" hidden method="POST" use:enhance>
+	<input type="text" hidden name="csrf" value={data.csrf} />
+</form>

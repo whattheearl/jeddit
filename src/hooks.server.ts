@@ -49,6 +49,10 @@ export const auth: Handle = async ({ event: e, resolve }) => {
       logger.info('updating session:', { user_id: user.id });
       updateSession(e, user.id);
 
+      const sid = e.cookies.get('sid') ?? '';
+      const csrfToken = await createCsrfToken(sid) as string;
+      setCsrfToken(e.cookies, csrfToken);
+
       return redirect(302, '/');
     }
 
@@ -61,32 +65,39 @@ export const auth: Handle = async ({ event: e, resolve }) => {
   }
 };
 
+const forbidResponse = () => new Response(`Cross-site POST form submissions are forbidden`, { status: 403 });
+
 export const csrf: Handle = async ({ event, resolve }) => {
   const logger = Logger('csrf');
   const { request, cookies } = event;
-  const sid = cookies.get('sid') ?? '';
-  const csrfToken = await createCsrfToken(sid) as string;
-  setCsrfToken(cookies, csrfToken);
 
   logger.info('csrf');
-  const type = request.headers.get('content-type')?.split(';')[0];
+  const contentType = request.headers.get('content-type')?.split(';')[0];
   const shouldValidate =
     request.method === 'POST' &&
-    (type === 'application/x-www-form-urlencoded' || type === 'multipart/form-data');
+    (contentType == 'application/x-www-form-urlencoded' || contentType == 'multipart/form-data');
+  logger.info(`shouldValidate ${shouldValidate}`);
+  if (!shouldValidate) return resolve(event);
 
-  logger.info('shouldValidate', shouldValidate);
-  if (shouldValidate) {
-    const csrfToken = getCsrfToken(cookies) ?? '';
-    const sid = cookies.get('sid') ?? '';
-    logger.info('csrftoken, sid', {csrfToken, sid});
-    const sessionId = await verifyCsrfToken(csrfToken);
-    if (sessionId != sid)
-      return new Response(`Cross-site ${request.method} form submissions are forbidden`, {
-        status: 403
-      });
-  }
+  const clonedRequest = event.request.clone();
+  const formData = await event.request.formData();
+  const csrf = formData.get('csrf');
+  logger.info(`csrf: ${csrf?.toString()}`)
+  const csrfToken = getCsrfToken(cookies) ?? '';
+  logger.info('csrftoken', { csrfToken })
 
-  return resolve(event);
+  const tokesMatch = !!csrf && csrf == csrfToken;
+  logger.info('tokesnmatch', { tokesMatch })
+  if (!tokesMatch) return forbidResponse()
+    
+  const sid = cookies.get('sid') ?? '';
+  const sessionId = await verifyCsrfToken(csrfToken);
+  logger.info('csrftoken, sid', { sid, sessionId });
+  
+  
+  if (sessionId != sid) return forbidResponse();
+  event.request = clonedRequest;
+  return await resolve(event);
 }
 
-export const handle: Handle = sequence(auth,csrf)
+export const handle: Handle = sequence(auth, csrf)
