@@ -19,7 +19,6 @@ jobs:
       - uses: oven-sh/setup-bun@v1
       - run: |
           docker build .
-          # node-20 required bunx fallback
           bun i -p
           bunx semantic-release
         env:
