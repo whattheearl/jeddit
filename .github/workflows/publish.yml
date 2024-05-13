@@ -19,6 +19,6 @@ jobs:
       - run: bunx semantic-release
         env:
           GH_TOKEN: "${{ secrets.GHCR_SECRET }}"
-      - run: ./scripts/publish.sh
-        env:
-          GH_TOKEN: "${{ secrets.GHCR_SECRET }}"
+      # - run: ./scripts/publish.sh
+      #   env:
+      #     GH_TOKEN: "${{ secrets.GHCR_SECRET }}"

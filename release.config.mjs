@@ -10,5 +10,9 @@ export default {
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
     "@semantic-release/github",
+    ["@semantic-release/exec", {
+      "verifyConditionsCmd": "./scripts/verify.sh",
+      "publishCmd": "./scripts/publish.sh ${nextRelease.version}"
+    }],
   ]
 }
