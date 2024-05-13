@@ -18,7 +18,5 @@ jobs:
       - run: bun i -p
       - run: bunx semantic-release
       - run: ./scripts/publish.sh
-        with: # Set the secret as an input
-          GH_TOKEN: ${{ github.token }}
         env:
-          GH_TOKEN: "${{ github.token }}"
+          GH_TOKEN: "${{ secrets.GHCR_SECRET }}"
