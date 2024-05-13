@@ -11,7 +11,8 @@ export default {
     "@semantic-release/changelog",
     "@semantic-release/github",
     ["@semantic-release/exec", {
-      "publishCmd": "echo test"
+      "verifyConditions": "exit 1",
+      "publishCmd": "./scripts/publish.sh ${nextRelease.version}"
     }],
   ]
 }
