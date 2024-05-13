@@ -64,7 +64,7 @@ INSERT INTO users (id, username) VALUES (1,'firstuser');
 
 INSERT INTO communities (id, name) VALUES (1,'jeddit');
 
-INSERT INTO posts (id, user_id, community_id, title, content, created_at) VALUES (1,1,1,'Hello world!!','Just some place holder text. Don''t worry about it...',0);
+INSERT INTO posts (id, user_id, community_id, title, content, created_at) VALUES (1,1,1,'Hello world!!!!','Just some place holder text. Don''t worry about it...',0);
 
 INSERT INTO users_posts_likes (post_id, user_id) VALUES (1, 1);
 
