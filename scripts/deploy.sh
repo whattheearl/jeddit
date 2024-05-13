@@ -1,5 +1,10 @@
 #!/bin/sh
-ip=blackbox.wte.sh
+IP=blackbox.wte.sh
+REGISTRY=ghcr.io
+REGISTRY_USER=whattheearl
+IMAGE=jeddit:latest
+CONTAINER_NAME=jeddit
+
 green=$(tput setaf 2)
 normal=$(tput sgr0)
 
@@ -11,25 +16,26 @@ printG "BUILDING CONTAINER"
 docker build . --tag jeddit --platform linux/amd64
 
 printG "PUSHING CONTAINER"
-docker save jeddit:latest | ssh $ip docker load
+docker save jeddit:latest | ssh $IP docker load
 
 printG "PUSHING ENV"
-ssh $ip mkdir -p /home/jon/jeddit
-scp .env.prod $ip:/home/jon/jeddit/.env.prod
+ssh $IP mkdir -p /home/jon/jeddit
+scp .env.prod $IP:/home/jon/jeddit/.env.prod
 
 printG "STOPPING CONTAINER"
-ssh $ip docker stop jeddit
+ssh $IP docker stop jeddit
 
 printG "REMOVING CONTAINER"
-ssh $ip docker rm jeddit
+ssh $IP docker rm jeddit
 
 printG "STARTING CONTAINER"
-ssh $ip docker run \
+ssh $IP docker pull $REGISTRY/$REGISTRY_USER/$IMAGE
+ssh $IP docker run \
     --restart unless-stopped \
     -p 5174:5174 \
     -d \
     --env-file /home/jon/jeddit/.env.prod \
-    --name jeddit jeddit:latest
+    --name $CONTAINER_NAME $REGISTRY/$REGISTRY_USER/$IMAGE
     
 
 
