@@ -1,5 +1,6 @@
 #!/bin/sh
 IP=blackbox.wte.sh
+PROJECT=jeddit
 REGISTRY=ghcr.io
 REGISTRY_USER=whattheearl
 CONTAINER_NAME=jeddit
@@ -8,7 +9,7 @@ VERSION=latest
 green=$(tput setaf 2)
 normal=$(tput sgr0)
 
-function printG {
+function info {
   printf "${green}\n$1\n\n\n${normal}" 
 }
 
@@ -18,15 +19,15 @@ docker build . --tag $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION --platfor
 printG "PUSHING CONTAINER"
 docker push $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION 
 
-printG "PUSHING ENV"
+info "PUSHING ENV"
 ssh $IP mkdir -p /home/jon/jeddit
 scp .env.prod $IP:/home/jon/jeddit/.env.prod
 
-printG "STOPPING CONTAINER"
-ssh $IP docker stop jeddit
+info "STOPPING CONTAINER"
+ssh $IP docker stop $PROJECT
 
-printG "REMOVING CONTAINER"
-ssh $IP docker rm jeddit
+info "REMOVING CONTAINER"
+ssh $IP docker rm $PROJECT
 
 printG "STARTING CONTAINER"
 ssh $IP docker pull $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION
