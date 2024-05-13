@@ -17,5 +17,8 @@ jobs:
       - uses: oven-sh/setup-bun@v1
       - run: bun i -p
       - run: bunx semantic-release
+      - run: ./scripts/publish.sh
+        with: # Set the secret as an input
+          GH_TOKEN: ${{ github.token }}
         env:
           GH_TOKEN: "${{ github.token }}"
