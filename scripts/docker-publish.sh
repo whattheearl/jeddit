@@ -1,3 +1,4 @@
+#!/bin/sh
 VERSION=${1:-"latest"}
 REGISTRY=ghcr.io
 USER=whattheearl
