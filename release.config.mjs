@@ -11,7 +11,7 @@ export default {
     "@semantic-release/changelog",
     "@semantic-release/github",
     ["@semantic-release/exec", {
-      "Prepare": "echo 'PREPARE; docker build .",
+      "verifyConditionsCmd": "echo 'PREPARE; docker build .",
       "publishCmd": "./scripts/publish.sh ${nextRelease.version}"
     }],
   ]
