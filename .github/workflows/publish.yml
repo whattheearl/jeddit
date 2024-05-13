@@ -18,9 +18,7 @@ jobs:
         with:
           node-version: '20'
       - uses: oven-sh/setup-bun@v1
-      - run: |
-          docker build .
-          bun i -p
-          bunx semantic-release
+      - run: bun i -p
+      - run: bunx semantic-release
         env:
           GH_TOKEN: "${{ github.token }}"
