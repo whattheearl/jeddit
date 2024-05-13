@@ -11,7 +11,7 @@ export default {
     "@semantic-release/github",
     ["@semantic-release/exec", {
       "verifyConditionsCmd": "./scripts/docker-build.sh",
-      "publishCmd": "./scripts/docker-publish.sh ${nextRelease.version}; ./scripts/docker-publish.sh latest"
+      "publishCmd": "./scripts/docker-publish.sh ${nextRelease.version}; ./scripts/docker-publish.sh ${nextRelease.version.split('.')[0]}; ./scripts/docker-publish.sh latest"
     }],
   ]
 }
