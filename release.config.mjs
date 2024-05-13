@@ -11,8 +11,12 @@ export default {
     "@semantic-release/changelog",
     "@semantic-release/github",
     ["@semantic-release/exec", {
-      "verifyConditionsCmd": "echo 'PREPARE'; docker build .",
-      "publishCmd": "./scripts/publish.sh ${nextRelease.version}"
-    }],
+      "verifyConditionsCmd": "docker build .",
+      "publishCmd": `
+        docker build -t ghcr.io/whattheearl/jeddit:latest -t ghcr.io/whattheearl/jeddit:${nextRelease.version} .
+        echo $GH_TOKEN | docker login ghcr.io -u whattheearl --password-stdin
+        docker push ghcr.io/whattheearl/jeddit --all-tags
+      `}
+    ],
   ]
 }
