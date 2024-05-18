@@ -12,7 +12,7 @@
 </script>
 
 <div class="p-4 flex flex-col items-center md:max-w-[756px] mx-auto">
-	<main style="width: 100%;">
+  <main style="width: 100%;">
 		{#each data.posts as p}
 			<a href={`/post/${p.id}`}>
 				<article class="w-full h-full px-4 py-1 my-1 rounded hover:cursor-pointer">

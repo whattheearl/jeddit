@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
 
   export let data: PageData;
@@ -8,7 +7,7 @@
 </script>
 
 <div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">
-	<form method="POST" class="flex flex-col max-w-[700px] my-8 mx-auto gap-y-2" use:enhance>
+	<form method="POST" class="flex flex-col max-w-[700px] my-8 mx-auto gap-y-2">
     <input type="text" hidden name="csrf" value={data.csrf} />
 		<header class="w-full border-b-1 border-gray-800">
 			<h1 class="font-semibold text-xl text-gray-800">Create a post</h1>
