@@ -1,4 +1,4 @@
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3';
 
 const db = new Database('db.sqlite');
 
@@ -26,12 +26,9 @@ interface ICommentLike {
 }
 
 export const addComment = (comment: IAddComment) =>
-	db.run('INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (?,?,?,?)', [
-		comment.post_id,
-		comment.user_id,
-		comment.content,
-		Date.now()
-	]);
+	db
+		.prepare('INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (?,?,?,?)')
+		.run(comment.post_id, comment.user_id, comment.content, Date.now());
 
 export const getCommentById = (comment_id: number) =>
 	db.prepare('SELECT * FROM posts_comments WHERE id = ?').run(comment_id);
@@ -39,7 +36,7 @@ export const getCommentById = (comment_id: number) =>
 export const getCommentsByPostId = (post_id: number) => {
 	return (
 		db
-			.query<IComment, number>(
+			.prepare<IComment, number>(
 				`
     SELECT posts_comments.id, users.username, users.picture, posts_comments.content, posts_comments.created_at, posts_comments.like_count
     FROM posts_comments
