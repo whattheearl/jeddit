@@ -1,7 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { getUserById, type IUser } from './users.store';
-import { Database } from 'bun:sqlite';
 import { dev } from '$app/environment';
+import Database from 'better-sqlite3';
 
 const db = new Database('db.sqlite');
 const cookieName = 'sid';
@@ -25,21 +25,18 @@ export const createSession = ({ cookies }: RequestEvent) => {
 		expires: new Date(),
 		maxAge: 60 * 60 * 24 * 30
 	});
-	db.prepare('INSERT INTO sessions (id) VALUES ($sid)').values({ $sid: sid });
+	db.prepare('INSERT INTO sessions (id) VALUES (?)').run(sid);
 };
 
 export const updateSession = ({ cookies }: RequestEvent, uid: number) => {
 	const sid = cookies.get(cookieName) as string;
 	if (!sid) throw new Error('sid is required');
-	db.prepare('UPDATE sessions SET user_id = $user_id WHERE id == $sid').values({
-		$sid: sid,
-		$user_id: uid
-	});
+	db.prepare('UPDATE sessions SET user_id = $user_id WHERE id == ?').run(sid, uid);
 };
 
 export const getSession = ({ cookies }: RequestEvent) => {
 	const sid = cookies.get(cookieName) as string;
-	const cookieSession = db.query('SELECT * FROM sessions WHERE id = $sid').get({ $sid: sid }) as {
+	const cookieSession = db.prepare('SELECT * FROM sessions WHERE id = ?').get(sid) as {
 		user_id: number;
 	};
 	if (!cookieSession) return { user: null } as ISession;
@@ -56,5 +53,5 @@ export const deleteSession = ({ cookies }: RequestEvent) => {
 
 	cookies.delete('sid', { path: '/' });
 	const db = new Database('db.sqlite');
-	db.prepare('DELETE FROM sessions WHERE id == $sid').values({ $sid: sid });
+	db.prepare('DELETE FROM sessions WHERE id == ?').run(sid);
 };

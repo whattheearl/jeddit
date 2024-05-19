@@ -1,4 +1,4 @@
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3'
 import type { IClaims } from '$lib/auth/jwt';
 
 const db = new Database('db.sqlite');

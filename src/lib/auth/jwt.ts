@@ -1,5 +1,7 @@
 import { Logger } from '$lib/logger';
 
+const crypto = globalThis.crypto;
+
 const logger = Logger('jwt');
 
 export interface VerifyOptions {

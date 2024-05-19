@@ -1,10 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { base } from '$app/paths';
-import { Database } from 'bun:sqlite';
 import { getSession } from '$lib/auth';
+import Database from 'better-sqlite3';
 
-const db = new Database('./db.sqlite');
+const db = Database('db.sqlite');
 
 export const load: PageServerLoad = async (e) => {
 	const { user } = getSession(e);

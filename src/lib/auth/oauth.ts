@@ -1,5 +1,6 @@
 import { Logger } from '../logger';
 
+const crypto = globalThis.crypto;
 const logger = Logger('auth');
 
 export const generateRandomBytes = () =>

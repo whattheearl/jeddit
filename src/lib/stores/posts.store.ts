@@ -1,4 +1,4 @@
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3';
 
 const db = new Database('db.sqlite');
 
@@ -15,7 +15,7 @@ interface IPost {
 
 export const getAllPosts = () => {
 	const posts = db
-		.query(
+		.prepare(
 			`
     SELECT posts.id, title, content, users.username, communities.name as community, created_at
     FROM posts
@@ -29,7 +29,7 @@ export const getAllPosts = () => {
 
 export const getPostById = (post_id: number) => {
 	const post = db
-		.query(
+		.prepare(
 			`
     SELECT posts.id, title, content, users.username, communities.name as community, created_at
     FROM posts
@@ -54,22 +54,22 @@ export const addPost = (addPost: IAddPost) =>
 	db
 		.prepare(
 			`INSERT INTO posts (user_id, title, community_id, content, created_at) 
-  VALUES ($user_id, $title, $community_id, $content, $created_at)`
+  VALUES (?,?,?,?,?)`
 		)
-		.values({
-			$user_id: addPost.user_id,
-			$community_id: addPost.community_id,
-			$title: addPost.title,
-			$content: addPost.content,
-			$created_at: addPost.created_at
-		});
+		.run(
+			addPost.user_id,
+			addPost.community_id,
+			addPost.title,
+			addPost.content,
+			addPost.created_at
+		);
 
 export const updatePost = (post: IPost) =>
 	db.prepare('UPDATE posts SET content = ? WHERE id = ?').run(post.content, post.id);
 
 export const getPostLikes = (post_id: number) => {
 	const likes = db
-		.query(
+		.prepare(
 			`SELECT COUNT(user_id) AS count FROM users_posts_likes WHERE users_posts_likes.post_id = ?`
 		)
 		.get(post_id) as { count: number };
@@ -79,7 +79,7 @@ export const getPostLikes = (post_id: number) => {
 export const isPostLikedByUser = (post_id: number, user_id: number) => {
 	const result =
 		db
-			.query(
+			.prepare(
 				'SELECT post_id FROM users_posts_likes WHERE users_posts_likes.post_id = ? AND users_posts_likes.user_id = ?'
 			)
 			.all(post_id, user_id).length != 0;
