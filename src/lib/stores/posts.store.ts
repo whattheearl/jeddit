@@ -17,7 +17,7 @@ export const getAllPosts = () => {
 	const posts = db
 		.prepare(
 			`
-    SELECT posts.id, title, content, users.username, communities.name as community, created_at
+    SELECT posts.id, posts.title, posts.content, users.username, communities.name as community, posts.created_at
     FROM posts
     JOIN users on users.id = posts.user_id
     JOIN communities on communities.id = posts.community_id`
@@ -50,16 +50,12 @@ export interface IAddPost {
 	created_at: number;
 }
 
-export const addPost = (addPost: IAddPost) =>
-	db
-		.prepare(
-			`INSERT INTO posts (user_id, title, community_id, content, created_at) 
-  VALUES (?,?,?,?,?)`
-		)
+export const addPost = (addPost: IAddPost) => db
+		.prepare("INSERT INTO posts (user_id, title, community_id, content, created_at) VALUES (?,?,?,?,?)")
 		.run(
 			addPost.user_id,
-			addPost.community_id,
 			addPost.title,
+			addPost.community_id,
 			addPost.content,
 			addPost.created_at
 		);

@@ -31,7 +31,7 @@ export const createSession = ({ cookies }: RequestEvent) => {
 export const updateSession = ({ cookies }: RequestEvent, uid: number) => {
 	const sid = cookies.get(cookieName) as string;
 	if (!sid) throw new Error('sid is required');
-	db.prepare('UPDATE sessions SET user_id = $user_id WHERE id == ?').run(sid, uid);
+	db.prepare('UPDATE sessions SET user_id = ? WHERE id == ?').run(uid, sid);
 };
 
 export const getSession = ({ cookies }: RequestEvent) => {
@@ -39,8 +39,7 @@ export const getSession = ({ cookies }: RequestEvent) => {
 	const cookieSession = db.prepare('SELECT * FROM sessions WHERE id = ?').get(sid) as {
 		user_id: number;
 	};
-	if (!cookieSession) return { user: null } as ISession;
-
+	if (!cookieSession || !cookieSession.user_id) return { user: null } as ISession;
 	const user = getUserById(cookieSession.user_id);
 	if (!user) return { user: null };
 

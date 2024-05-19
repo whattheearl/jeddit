@@ -7,7 +7,8 @@ export const generateRandomBytes = () =>
 	Buffer.from(crypto.getRandomValues(new Uint8Array(64))).toString('hex');
 
 export const hashCodeChallenge = async (code_verifier: string) => {
-	const hashBuf = await crypto.subtle.digest('sha256', Buffer.from(code_verifier));
+  console.log(code_verifier);
+  const hashBuf = await crypto.subtle.digest('SHA-256', Buffer.from(code_verifier));
 	return Buffer.from(hashBuf).toString('base64url');
 };
 

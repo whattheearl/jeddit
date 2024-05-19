@@ -15,30 +15,33 @@ export type IUser = {
 };
 
 export const addUser = (user: Partial<IUser>) => {
-	db.run(
+  db.prepare(
 		`
     INSERT INTO users (username, sub, iss, username, username_finalized, email, email_verified, picture) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `,
-		[
-			user.username ?? '',
-			user.sub ?? '',
-			user.iss ?? '',
-			user.username ?? '',
-			user.username_finalized ?? false,
-			user.email ?? '',
-			user.email_verified ?? false,
-			user.picture ?? ''
-		]
+  `).run(
+		user.username ?? '',
+		user.sub ?? '',
+		user.iss ?? '',
+		user.username ?? '',
+		user.username_finalized ? 1 : 0,
+		user.email ?? '',
+		user.email_verified ? 1 : 0,
+		user.picture ?? ''	
 	);
 };
+
 export const getUserById = (id: number) =>
-	db.query('SELECT * FROM users WHERE id = $id').get({ $id: id }) as IUser | null;
+	db.prepare('SELECT * FROM users WHERE id = ?').get(id) as IUser | null;
+
 export const getUserByClaims = (c: IClaims) =>
 	db
-		.query('SELECT * FROM users WHERE iss = $iss AND sub = $sub')
-		.get({ $iss: c.iss, $sub: c.sub }) as IUser | null;
+		.prepare('SELECT * FROM users WHERE iss = ? AND sub = ?')
+		.get(c.iss, c.sub) as IUser | null;
+
 export const getUserByEmail = (email: string) =>
-	db.query('SELECT * FROM users WHERE email = ?').get(email) as IUser | null;
+	db.prepare('SELECT * FROM users WHERE email = ?').get(email) as IUser | null;
+
 export const getUserByUsername = (username: string) =>
-	db.query('SELECT * FROM users WHERE username = ?').get(username) as IUser | null;
+	db.prepare('SELECT * FROM users WHERE username = ?').get(username) as IUser | null;
+

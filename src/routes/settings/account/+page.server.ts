@@ -26,11 +26,12 @@ export const actions: Actions = {
 		const name = formData.get('name')?.toString();
 		if (!name) error(400, 'name is required');
 
-		const existingUser = db.query('SELECT id FROM users WHERE name = ?').get(name);
+		const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(name);
 		if (existingUser) error(400, 'name is already taken');
 
 		user.username = name;
-		db.run('UPDATE users SET name=?, name_finalized=1 WHERE id=?', [name, user.id]);
+		db.prepare('UPDATE users SET username = ?, username_finalized = 1 WHERE id = ?')
+      .run(name, user.id);
 
 		return {
 			user
