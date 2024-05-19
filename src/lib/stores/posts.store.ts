@@ -50,15 +50,12 @@ export interface IAddPost {
 	created_at: number;
 }
 
-export const addPost = (addPost: IAddPost) => db
-		.prepare("INSERT INTO posts (user_id, title, community_id, content, created_at) VALUES (?,?,?,?,?)")
-		.run(
-			addPost.user_id,
-			addPost.title,
-			addPost.community_id,
-			addPost.content,
-			addPost.created_at
-		);
+export const addPost = (addPost: IAddPost) =>
+	db
+		.prepare(
+			'INSERT INTO posts (user_id, title, community_id, content, created_at) VALUES (?,?,?,?,?)'
+		)
+		.run(addPost.user_id, addPost.title, addPost.community_id, addPost.content, addPost.created_at);
 
 export const updatePost = (post: IPost) =>
 	db.prepare('UPDATE posts SET content = ? WHERE id = ?').run(post.content, post.id);

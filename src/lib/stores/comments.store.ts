@@ -25,14 +25,10 @@ interface ICommentLike {
 	like_value: number;
 }
 
-export const addComment = (comment: IAddComment) =>db
-  .prepare('INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (?,?,?,?)')
-  .run(
-		comment.post_id,
-		comment.user_id,
-		comment.content,
-		Date.now()
-	);
+export const addComment = (comment: IAddComment) =>
+	db
+		.prepare('INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (?,?,?,?)')
+		.run(comment.post_id, comment.user_id, comment.content, Date.now());
 
 export const getCommentById = (comment_id: number) =>
 	db.prepare('SELECT * FROM posts_comments WHERE id = ?').run(comment_id);

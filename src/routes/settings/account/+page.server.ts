@@ -30,8 +30,10 @@ export const actions: Actions = {
 		if (existingUser) error(400, 'name is already taken');
 
 		user.username = name;
-		db.prepare('UPDATE users SET username = ?, username_finalized = 1 WHERE id = ?')
-      .run(name, user.id);
+		db.prepare('UPDATE users SET username = ?, username_finalized = 1 WHERE id = ?').run(
+			name,
+			user.id
+		);
 
 		return {
 			user
