@@ -48,10 +48,6 @@ export const auth: Handle = async ({ event: e, resolve }) => {
       logger.info('updating session:', { user_id: user.id });
       updateSession(e, user.id);
 
-      const sid = e.cookies.get('sid') ?? '';
-      const csrfToken = await createCsrfToken(sid) as string;
-      setCsrfToken(e.cookies, csrfToken);
-
       return redirect(302, '/');
     }
 

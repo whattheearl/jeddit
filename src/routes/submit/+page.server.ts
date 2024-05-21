@@ -4,14 +4,10 @@ import { getSession } from '$lib/auth/index';
 import { sanitizeHtml } from '$lib/domsanitizer';
 import { addPost } from '$lib/stores/posts.store';
 import { Logger } from '$lib/logger';
-import { getCsrfToken } from '$lib/csrf';
 
 export const load: PageServerLoad = (event) => {
-  const { cookies } = event;
-  const csrf = getCsrfToken(cookies) ?? '';
   const { user } = getSession(event);
-
-  return { user, csrf }
+  return { user }
 }
 
 export const actions: Actions = {
@@ -24,8 +20,6 @@ export const actions: Actions = {
     const formData = await request.formData();
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
-    const csrf = formData.get('csrf') ?? '';
-    logger.info('csrf', { csrf })
     if (!title || !content) return { title, content };
 
     const community_id = 1; //jeddit hardcoded`
