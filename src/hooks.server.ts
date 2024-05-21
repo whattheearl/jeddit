@@ -65,39 +65,4 @@ export const auth: Handle = async ({ event: e, resolve }) => {
   }
 };
 
-const forbidResponse = () => new Response(`Cross-site POST form submissions are forbidden`, { status: 403 });
-
-export const csrf: Handle = async ({ event, resolve }) => {
-  const logger = Logger('csrf');
-  const { request, cookies } = event;
-
-  logger.info('csrf');
-  const contentType = request.headers.get('content-type')?.split(';')[0];
-  const shouldValidate =
-    request.method === 'POST' &&
-    (contentType == 'application/x-www-form-urlencoded' || contentType == 'multipart/form-data');
-  logger.info(`shouldValidate ${shouldValidate}`);
-  if (!shouldValidate) return resolve(event);
-
-  const clonedRequest = event.request.clone();
-  const formData = await event.request.formData();
-  const csrf = formData.get('csrf');
-  logger.info(`csrf: ${csrf?.toString()}`)
-  const csrfToken = getCsrfToken(cookies) ?? '';
-  logger.info('csrftoken', { csrfToken })
-
-  const tokesMatch = !!csrf && csrf == csrfToken;
-  logger.info('tokesnmatch', { tokesMatch })
-  if (!tokesMatch) return forbidResponse()
-    
-  const sid = cookies.get('sid') ?? '';
-  const sessionId = await verifyCsrfToken(csrfToken);
-  logger.info('csrftoken, sid', { sid, sessionId });
-  
-  
-  if (sessionId != sid) return forbidResponse();
-  event.request = clonedRequest;
-  return await resolve(event);
-}
-
-export const handle: Handle = sequence(auth, csrf)
+export const handle: Handle = sequence(auth)
