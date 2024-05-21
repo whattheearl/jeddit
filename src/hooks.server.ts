@@ -5,7 +5,6 @@ import { deleteSession, updateSession } from '$lib/stores/sessions.store';
 import { env } from '$env/dynamic/private';
 import { generateUsername } from '$lib/username';
 import { sequence } from '@sveltejs/kit/hooks';
-import { createCsrfToken, getCsrfToken, setCsrfToken, verifyCsrfToken } from '$lib/csrf';
 
 export const auth: Handle = async ({ event: e, resolve }) => {
   const logger = Logger('handle');
