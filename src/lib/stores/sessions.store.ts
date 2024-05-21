@@ -20,6 +20,7 @@ export const createSession = ({ cookies }: RequestEvent) => {
 	expirationDate.setDate(expirationDate.getDate() + 30);
 	cookies.set(cookieName, sid, {
 		path: '/',
+    sameSite: true,
 		httpOnly: true,
 		secure: !dev,
 		expires: new Date(),

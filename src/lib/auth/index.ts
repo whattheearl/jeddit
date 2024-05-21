@@ -2,7 +2,6 @@ import { Logger } from '../logger';
 import { error, redirect, type RequestEvent } from '@sveltejs/kit';
 import {
 	generateAuthorizationUrl,
-	generateRandomBytes,
 	generateTokenUrl,
 	getDiscoveryDocument,
 	getTokensAsync,
@@ -12,6 +11,7 @@ import { env } from '$env/dynamic/private';
 import { getJwks, verifyJwt } from './jwt';
 import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '../stores/oauths.store';
 import { createSession } from '../stores/sessions.store';
+import { generateRandomBytes } from '$lib/crypto';
 
 export * from '../stores/users.store';
 export { getSession } from '../stores/sessions.store';
@@ -92,9 +92,9 @@ export const HandleSignIn = async (
 	const discoveryDocument = await getDiscoveryDocument(wellKnown);
 	if (!discoveryDocument) error(500, `Unable to retrieve discovery document at [${wellKnown}]`);
 
-	const code_verifier = generateRandomBytes();
-	const nonce = generateRandomBytes();
-	const state = generateRandomBytes();
+	const code_verifier = generateRandomBytes(64);
+	const nonce = generateRandomBytes(64);
+	const state = generateRandomBytes(64);
 
 	SaveOauth(e, { code_verifier, nonce, state });
 

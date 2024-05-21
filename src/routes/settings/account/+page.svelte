@@ -13,6 +13,7 @@
 		<h2 class="mx-4 py-4 font-semibold text-xl text-gray-800">Account settings</h2>
 
 		<form method="POST" class={settingRowClass}>
+      <input type="text" hidden name="csrf" value={data.csrf} />
 			<div>
 				<h3 class={settingNameClass}>Display name</h3>
 				<p class={settingValueClass}>

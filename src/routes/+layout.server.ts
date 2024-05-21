@@ -3,5 +3,6 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = (e) => {
 	const { user } = getSession(e);
-	return { user };
+  const csrf = e.cookies.get('csrf') ?? '';
+	return { user, csrf };
 };

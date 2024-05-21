@@ -81,6 +81,7 @@
 				};
 			}}
 		>
+  		<input type="text" hidden name="csrf" value={data.csrf} />
 			<textarea
 				bind:value={data.post.content}
 				contenteditable="true"
@@ -106,6 +107,7 @@
 			{@html marked.parse(data.post.content)}
 		</section>
 		<form method="POST" action="?/comment" class="mt-4 flex items-center">
+		  <input type="text" hidden name="csrf" value={data.csrf} />
 			<input
 				id="content"
 				class="rounded-full"
@@ -134,6 +136,7 @@
 		</div>
 		<p class="ml-10 text-sm text-gray-800">{comment.content}</p>
 		<form method="POST" class="mt-4 flex items-center" use:enhance>
+			<input type="text" hidden name="csrf" value={data.csrf} />
 			<button
 				formaction={`/comment/${comment.id}?/like`}
 				class={comment.isLiked ? upSelected : upUnselected}
