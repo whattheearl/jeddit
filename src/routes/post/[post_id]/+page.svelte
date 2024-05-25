@@ -9,8 +9,7 @@
 	//** @type {import('./$types').PageLoad */
 	export let data;
 
-	const submit = () => {
-		console.log();
+	const submit = (content: string) => {
 	};
 	let editable = false;
 	const upUnselected =
