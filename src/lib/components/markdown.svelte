@@ -5,16 +5,15 @@
 
 	export let editable: boolean = false;
 	export let content = '';
+	export let updateContent: Function;
 	let element: any;
 	let editor: any;
-	
-  beforeUpdate(() => {
-    if (!editor)
-      return;
-    editor.setEditable(editable);
+	beforeUpdate(() => {
+		if (!editor) return;
+		editor.setEditable(editable);
 	});
-	
-  onMount(() => {
+
+	onMount(() => {
 		editor = new Editor({
 			element: element,
 			editable,
@@ -23,7 +22,11 @@
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected
 				editor = editor;
-			}
+			},
+			onUpdate: ({ editor }) => {
+				console.log(editor.getHTML());
+				updateContent(editor.getHTML());
+			},
 		});
 	});
 
@@ -34,4 +37,12 @@
 	});
 </script>
 
-<div bind:this={element} />
+<div class="markdown-editor" bind:this={element} />
+
+<style>
+	.markdown-editor {
+		outline-color: #bbb;
+		outline-style: auto;
+		outline-width: 1px;
+	}
+</style>

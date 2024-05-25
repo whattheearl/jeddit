@@ -9,9 +9,16 @@
 	//** @type {import('./$types').PageLoad */
 	export let data;
 
-	const submit = (content: string) => {
+	const updateContent = (content: string) => {
+		data.post.content = content;
 	};
-	let editable = false;
+
+	const saveChanges = async () => {
+		const res = await fetch(`/post/${data.post.id}`, { method: 'PATCH', body: JSON.stringify(data.post) });
+		console.log(res.status);
+	};
+
+	let editable = true;
 	const upUnselected =
 		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-gray-200 rounded-full';
 	const upSelected =
@@ -42,7 +49,7 @@
 			<HorizontalElipsis />
 		</button>
 	</div>
-	<Markdown bind:editable content={data.post.content} />
+	<Markdown bind:editable bind:content={data.post.content} {updateContent} />
 	{#if editable}
 		<div class="w-full flex justify-end">
 			<button
@@ -51,6 +58,7 @@
 				type="submit">Cancel</button
 			>
 			<button
+				on:click={saveChanges}
 				formaction="?/edit"
 				class="ml-2 py-2 px-4 text-sm bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
 				type="submit">Save</button
