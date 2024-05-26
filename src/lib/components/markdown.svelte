@@ -26,7 +26,7 @@
 			onUpdate: ({ editor }) => {
 				console.log(editor.getHTML());
 				updateContent(editor.getHTML());
-			},
+			}
 		});
 	});
 
@@ -41,6 +41,7 @@
 
 <style>
 	.markdown-editor {
+		min-height: 5em;
 		outline-color: #bbb;
 		outline-style: auto;
 		outline-width: 1px;

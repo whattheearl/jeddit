@@ -9,9 +9,8 @@
 
 	const addPost = async () => {
 		const res = await fetch('/post', { method: 'POST', body: JSON.stringify(post) });
-    if (res.status == 204)
-      goto('/');
-  };
+		if (res.status == 204) goto('/');
+	};
 </script>
 
 <div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">
@@ -29,7 +28,7 @@
 </div>
 
 <style>
-  Markdown {
-    min-height: 50vh;
-  }
+	Markdown {
+		min-height: 50vh;
+	}
 </style>

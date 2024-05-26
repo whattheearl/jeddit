@@ -14,7 +14,10 @@
 	};
 
 	const saveChanges = async () => {
-		const res = await fetch(`/post/${data.post.id}`, { method: 'PATCH', body: JSON.stringify(data.post) });
+		const res = await fetch(`/post/${data.post.id}`, {
+			method: 'PATCH',
+			body: JSON.stringify(data.post)
+		});
 		console.log(res.status);
 	};
 
@@ -49,7 +52,9 @@
 			<HorizontalElipsis />
 		</button>
 	</div>
-	<Markdown bind:editable bind:content={data.post.content} {updateContent} />
+	<div class="w-full my-4">
+		<Markdown bind:editable bind:content={data.post.content} {updateContent} />
+	</div>
 	{#if editable}
 		<div class="w-full flex justify-end">
 			<button
