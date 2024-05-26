@@ -109,6 +109,5 @@ export const HandleSignIn = async (
 
 	logger.debug(`redirectUri [${redirectUri}]`);
 
-	createSession(e);
 	redirect(302, redirectUri);
 };

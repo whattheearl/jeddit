@@ -14,19 +14,20 @@ export interface ICookieSession {
 	user_id: number;
 }
 
-export const createSession = ({ cookies }: RequestEvent) => {
+export const createSession = ({ cookies }: RequestEvent, userId: number) => {
 	const sid = crypto.randomUUID();
 	const expirationDate = new Date();
 	expirationDate.setDate(expirationDate.getDate() + 30);
 	cookies.set(cookieName, sid, {
 		path: '/',
-    sameSite: true,
+        sameSite: 'lax',
 		httpOnly: true,
 		secure: !dev,
 		expires: new Date(),
 		maxAge: 60 * 60 * 24 * 30
 	});
-	db.prepare('INSERT INTO sessions (id) VALUES (?)').run(sid);
+	db.prepare('INSERT INTO sessions (id, user_id) VALUES (?,?)').run(sid, userId);
+	return sid;
 };
 
 export const updateSession = ({ cookies }: RequestEvent, uid: number) => {

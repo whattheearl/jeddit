@@ -1,7 +1,7 @@
 import { error, redirect, type Handle } from '@sveltejs/kit';
 import { Logger } from '$lib/logger';
 import { HandleCallback, HandleSignIn, addUser, getUserByClaims } from '$lib/auth';
-import { deleteSession, updateSession } from '$lib/stores/sessions.store';
+import { createSession, deleteSession } from '$lib/stores/sessions.store';
 import { env } from '$env/dynamic/private';
 import { generateUsername } from '$lib/username';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -46,7 +46,10 @@ export const auth: Handle = async ({ event: e, resolve }) => {
       if (!user) return error(500, 'could not create user');
 
       logger.info('updating session:', { user_id: user.id });
-      updateSession(e, user.id);
+
+	    createSession(e, user.id);
+
+      // updateSession(e, user.id);
 
       return redirect(302, '/');
     }
