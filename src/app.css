@@ -38,9 +38,10 @@ textarea:focus {
 
 .tiptap {
 	padding: 8px;
-	min-height: 4em;
 	height: 100%;
-	outline-style: none;
+	min-height: 5em;
+    border-radius: 8px;	
+	
 	> * + * {
 		margin-top: 0.75em;
 	}

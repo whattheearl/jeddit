@@ -7,10 +7,12 @@
 	export let content = '';
 	export let updateContent: Function;
 	let element: any;
-	let editor: any;
+	let editor: Editor;
+
 	beforeUpdate(() => {
 		if (!editor) return;
 		editor.setEditable(editable);
+		editor.commands.focus('end');
 	});
 
 	onMount(() => {
@@ -20,7 +22,6 @@
 			extensions: [StarterKit],
 			content,
 			onTransaction: () => {
-				// force re-render so `editor.isActive` works as expected
 				editor = editor;
 			},
 			onUpdate: ({ editor }) => {
@@ -28,6 +29,7 @@
 				updateContent(editor.getHTML());
 			}
 		});
+		editor.commands.focus('end');
 	});
 
 	onDestroy(() => {
@@ -37,13 +39,4 @@
 	});
 </script>
 
-<div class="markdown-editor" bind:this={element} />
-
-<style>
-	.markdown-editor {
-		min-height: 5em;
-		outline-color: #bbb;
-		outline-style: auto;
-		outline-width: 1px;
-	}
-</style>
+<div class="min-h-[5em]" bind:this={element} />

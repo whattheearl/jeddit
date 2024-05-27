@@ -9,6 +9,8 @@
 	//** @type {import('./$types').PageLoad */
 	export let data;
 
+	const isLoggedIn = data.user && data.user.id == data.post.id;
+
 	const updateContent = (content: string) => {
 		data.post.content = content;
 	};
@@ -18,10 +20,10 @@
 			method: 'PATCH',
 			body: JSON.stringify(data.post)
 		});
-		console.log(res.status);
+		editable = false;
 	};
 
-	let editable = true;
+	let editable = false;
 	const upUnselected =
 		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-gray-200 rounded-full';
 	const upSelected =
@@ -48,14 +50,16 @@
 			</div>
 			<span class="text-xs mt-[-4px] text-gray-700">{data.post.username}</span>
 		</div>
-		<button on:click={() => (editable = !editable)} class="ml-auto">
-			<HorizontalElipsis />
-		</button>
+		{#if isLoggedIn}
+			<button on:click={() => (editable = !editable)} class="ml-auto">
+				<HorizontalElipsis />
+			</button>
+		{/if}
 	</div>
 	<div class="w-full my-4">
 		<Markdown bind:editable bind:content={data.post.content} {updateContent} />
 	</div>
-	{#if editable}
+	{#if isLoggedIn && editable}
 		<div class="w-full flex justify-end">
 			<button
 				on:click={() => (editable = !editable)}
