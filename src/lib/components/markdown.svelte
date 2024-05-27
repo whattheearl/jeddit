@@ -12,7 +12,6 @@
 	beforeUpdate(() => {
 		if (!editor) return;
 		editor.setEditable(editable);
-		editor.commands.focus('end');
 	});
 
 	onMount(() => {

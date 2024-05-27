@@ -28,6 +28,7 @@ export const load: PageServerLoad = (e) => {
 	return {
 		post: {
 			...post,
+			content: sanitizeHtml(post.content),
 			created_at: post.created_at ? getSecondsFromUTC(post.created_at) : ''
 		},
 		comments: comments.map((c) => {
