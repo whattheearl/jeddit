@@ -13,10 +13,10 @@ function info {
   printf "${green}\n$1\n\n\n${normal}" 
 }
 
-printG "BUILDING CONTAINER" 
+info "BUILDING CONTAINER" 
 docker build . --tag $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION --platform linux/amd64
 
-printG "PUSHING CONTAINER"
+info "PUSHING CONTAINER"
 docker push $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION 
 
 info "PUSHING ENV"
@@ -29,7 +29,7 @@ ssh $IP docker stop $PROJECT
 info "REMOVING CONTAINER"
 ssh $IP docker rm $PROJECT
 
-printG "STARTING CONTAINER"
+info "STARTING CONTAINER"
 ssh $IP docker pull $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION
 ssh $IP docker run \
     --restart unless-stopped \
@@ -37,6 +37,3 @@ ssh $IP docker run \
     -d \
     --env-file /home/jon/jeddit/.env.prod \
     --name $CONTAINER_NAME $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION
-    
-
-
