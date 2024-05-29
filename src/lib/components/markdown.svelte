@@ -6,7 +6,8 @@
 	export let editable: boolean = false;
 	export let content = '';
 	export let updateContent: Function;
-	let element: any;
+
+	let element: HTMLElement;
 	let editor: Editor;
 
 	beforeUpdate(() => {
@@ -38,4 +39,7 @@
 	});
 </script>
 
-<div class="min-h-[5em]" bind:this={element} />
+{#if !editor}
+	<div class="tiptap ProseMirror">{@html content}</div>
+{/if}
+<div bind:this={element} />

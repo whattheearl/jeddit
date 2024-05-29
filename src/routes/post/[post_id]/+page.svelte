@@ -51,6 +51,7 @@
 			<span class="text-xs mt-[-4px] text-gray-700">{data.post.username}</span>
 		</div>
 		{#if isLoggedIn}
+			<!-- lazy load editor?? most users will just be reading -->
 			<button on:click={() => (editable = !editable)} class="ml-auto">
 				<HorizontalElipsis />
 			</button>
