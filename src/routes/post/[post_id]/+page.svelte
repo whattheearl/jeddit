@@ -1,14 +1,15 @@
-<script>
-	import { marked } from 'marked';
-	import './markdown-light.css';
+<script lang="ts">
 	import { enhance } from '$app/forms';
+	import Markdown from '$lib/components/markdown.svelte';
+	import LeftArrow from '$lib/components/left-arrow.svelte';
+	import HorizontalElipsis from '$lib/components/horizontal-elipsis.svelte';
+	import ThumbsDown from '$lib/components/thumbs-down.svelte';
+	import ThumbsUp from '$lib/components/thumbs-up.svelte';
+
+	//** @type {import('./$types').PageLoad */
 	export let data;
-
-	marked.use({
-		gfm: true
-	});
-
-	$: edit = false;
+	const showEditButton = data.user && data.user.username == data.post.username;
+	let editable = false;
 	const upUnselected =
 		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-gray-200 rounded-full';
 	const upSelected =
@@ -17,25 +18,23 @@
 		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-200 rounded-full';
 	const downSelected =
 		'w-8 h-8 flex items-center justify-center text-red-600 hover:bg-gray-200 rounded-full';
+
+	const updateContent = (content: string) => {
+		data.post.content = content;
+	};
+
+	const saveChanges = async () => {
+		const res = await fetch(`/post/${data.post.id}`, {
+			method: 'PATCH',
+			body: JSON.stringify(data.post)
+		});
+		editable = false;
+	};
 </script>
 
 <div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">
 	<div class="flex items-center gap-2">
-		<a href="/"
-			><svg
-				viewBox="0 0 24 24"
-				width="40"
-				height="40"
-				stroke="currentColor"
-				stroke-width="1.4"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="css-i6dzq1 p-2 bg-gray-200 rounded-full"
-				><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"
-				></polyline></svg
-			></a
-		>
+		<a href="/"><LeftArrow /></a>
 		<span
 			class="p-2 h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white font-black"
 		>
@@ -49,62 +48,30 @@
 			</div>
 			<span class="text-xs mt-[-4px] text-gray-700">{data.post.username}</span>
 		</div>
-		<button on:click={() => (edit = true)} class="ml-auto">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="feather feather-more-horizontal"
-				><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle
-					cx="5"
-					cy="12"
-					r="1"
-				/></svg
-			>
-		</button>
+		{#if showEditButton}
+			<button on:click={() => (editable = !editable)} class="ml-auto">
+				<HorizontalElipsis />
+			</button>
+		{/if}
 	</div>
-	<h1 class="text-2xl font-semibold">{data.post.title}</h1>
-	{#if edit}
-		<form
-			method="POST"
-			class="flex flex-col max-w-[700px] my-4 mx-auto gap-y-2"
-			use:enhance={() => {
-				return async ({ result, update }) => {
-					console.log(result, update);
-					edit = false;
-				};
-			}}
-		>
-			<textarea
-				bind:value={data.post.content}
-				contenteditable="true"
-				class="py-2 w-full h-[50vh] rounded"
-				name="content"
-				placeholder="Text (optional)"
-			/>
-			<div class="w-full flex justify-end">
-				<button
-					on:click={() => (edit = !edit)}
-					class="py-2 px-4 text-sm bg-gray-200 font-extrabold text-gray-800 rounded-full hover:curser hover:bg-blue-500"
-					type="submit">Cancel</button
-				>
-				<button
-					formaction="?/edit"
-					class="ml-2 py-2 px-4 text-sm bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
-					type="submit">Save</button
-				>
-			</div>
-		</form>
+	<div class="w-full my-4">
+		<Markdown bind:editable bind:content={data.post.content} {updateContent} />
+	</div>
+	{#if showEditButton && editable}
+		<div class="w-full flex justify-end">
+			<button
+				on:click={() => (editable = !editable)}
+				class="py-2 px-4 text-sm bg-gray-200 font-extrabold text-gray-800 rounded-full hover:curser hover:bg-blue-500"
+				type="submit">Cancel</button
+			>
+			<button
+				on:click={saveChanges}
+				formaction="?/edit"
+				class="ml-2 py-2 px-4 text-sm bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
+				type="submit">Save</button
+			>
+		</div>
 	{:else}
-		<section class="markdown-body mt text-sm">
-			{@html marked.parse(data.post.content)}
-		</section>
 		<form method="POST" action="?/comment" class="mt-4 flex items-center">
 			<input
 				id="content"
@@ -138,42 +105,14 @@
 				formaction={`/comment/${comment.id}?/like`}
 				class={comment.isLiked ? upSelected : upUnselected}
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="feather feather-thumbs-up"
-					><path
-						d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
-					/>
-				</svg>
+				<ThumbsUp />
 			</button>
 			<span class="text-xs font-bold">{comment.like_count}</span>
 			<button
 				formaction={`/comment/${comment.id}?/dislike`}
 				class={comment.isDisliked ? downSelected : downUnselected}
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="feather feather-thumbs-down"
-					><path
-						d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"
-					/></svg
-				>
+				<ThumbsDown />
 			</button>
 		</form>
 	{/each}

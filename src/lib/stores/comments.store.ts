@@ -35,16 +35,16 @@ export const getCommentById = (comment_id: number) =>
 
 export const getCommentsByPostId = (post_id: number) => {
 	return (
-		db
-			.prepare<IComment, number>(
+		(db
+			.prepare(
 				`
-    SELECT posts_comments.id, users.username, users.picture, posts_comments.content, posts_comments.created_at, posts_comments.like_count
-    FROM posts_comments
-    JOIN users on users.id = posts_comments.user_id
-    WHERE posts_comments.post_id = ?
-  `
+      SELECT posts_comments.id, users.username, users.picture, posts_comments.content, posts_comments.created_at, posts_comments.like_count
+      FROM posts_comments
+      JOIN users on users.id = posts_comments.user_id
+      WHERE posts_comments.post_id = ?
+    `
 			)
-			.all(post_id) ?? []
+			.all(post_id) as IComment[]) ?? ([] as IComment[])
 	);
 };
 
@@ -52,7 +52,7 @@ export const updateCommentsLikeCount = (comment_id: number, like_count: number) 
 	db.prepare('UPDATE posts_comment SET like_count = ? WHERE id = ?').run(like_count, comment_id);
 
 export const getCommentsLikesByUserId = (user_id: number) =>
-	db.query(`SELECT * FROM users_comments_likes WHERE user_id = ?`).all(user_id) as ICommentLike[];
+	db.prepare(`SELECT * FROM users_comments_likes WHERE user_id = ?`).all(user_id) as ICommentLike[];
 
 export const getCommentsLikesByCommentId = (comment_id: number) =>
 	db
