@@ -26,9 +26,3 @@
 		>
 	</div>
 </div>
-
-<style>
-	Markdown {
-		min-height: 50vh;
-	}
-</style>

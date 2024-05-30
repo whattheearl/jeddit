@@ -8,8 +8,16 @@
 
 	//** @type {import('./$types').PageLoad */
 	export let data;
-
-	const isLoggedIn = data.user && data.user.id == data.post.id;
+	const showEditButton = data.user && data.user.username == data.post.username;
+	let editable = false;
+	const upUnselected =
+		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-gray-200 rounded-full';
+	const upSelected =
+		'w-8 h-8 flex items-center justify-center text-green-600 hover:bg-gray-200 rounded-full';
+	const downUnselected =
+		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-200 rounded-full';
+	const downSelected =
+		'w-8 h-8 flex items-center justify-center text-red-600 hover:bg-gray-200 rounded-full';
 
 	const updateContent = (content: string) => {
 		data.post.content = content;
@@ -22,16 +30,6 @@
 		});
 		editable = false;
 	};
-
-	let editable = false;
-	const upUnselected =
-		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-gray-200 rounded-full';
-	const upSelected =
-		'w-8 h-8 flex items-center justify-center text-green-600 hover:bg-gray-200 rounded-full';
-	const downUnselected =
-		'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-gray-200 rounded-full';
-	const downSelected =
-		'w-8 h-8 flex items-center justify-center text-red-600 hover:bg-gray-200 rounded-full';
 </script>
 
 <div class="px-6 py-5 md:mt-6 w-full max-w-2xl mx-auto">
@@ -50,8 +48,7 @@
 			</div>
 			<span class="text-xs mt-[-4px] text-gray-700">{data.post.username}</span>
 		</div>
-		{#if isLoggedIn}
-			<!-- lazy load editor?? most users will just be reading -->
+		{#if showEditButton}
 			<button on:click={() => (editable = !editable)} class="ml-auto">
 				<HorizontalElipsis />
 			</button>
@@ -60,7 +57,7 @@
 	<div class="w-full my-4">
 		<Markdown bind:editable bind:content={data.post.content} {updateContent} />
 	</div>
-	{#if isLoggedIn && editable}
+	{#if showEditButton && editable}
 		<div class="w-full flex justify-end">
 			<button
 				on:click={() => (editable = !editable)}

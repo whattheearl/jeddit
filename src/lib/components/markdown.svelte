@@ -13,6 +13,8 @@
 	beforeUpdate(() => {
 		if (!editor) return;
 		editor.setEditable(editable);
+		if (editable) editor.commands.focus('end');
+		else editor.commands.blur();
 	});
 
 	onMount(() => {
@@ -25,11 +27,9 @@
 				editor = editor;
 			},
 			onUpdate: ({ editor }) => {
-				console.log(editor.getHTML());
 				updateContent(editor.getHTML());
 			}
 		});
-		editor.commands.focus('end');
 	});
 
 	onDestroy(() => {
