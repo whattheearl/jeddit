@@ -80,7 +80,7 @@
 
 .tiptap {
 	padding: 8px;
-	max-height: 66vh;
+	max-height: 50vh;
 	overflow-y: auto; 
 	/* height: 100%; */
 	min-height: 5em;
