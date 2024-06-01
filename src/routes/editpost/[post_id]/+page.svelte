@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LeftArrow from '$lib/components/left-arrow.svelte';
-	import EditorOptions from '$lib/components/editor/editor-options.svelte';
+	// import EditorOptions from '$lib/components/editor/editor-options.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
@@ -66,7 +66,7 @@
 	<div class="w-full my-4">
 		<div bind:this={element} />
 	</div>
-	<div class="w-full flex justify-end mb-[300px]">
+	<div class="w-full flex justify-end">
 		<button
 			on:click={() => goto(`/post/${data.post.id}`)}
 			class="py-2 px-4 text-sm bg-gray-200 font-extrabold text-gray-800 rounded-full hover:curser hover:bg-blue-500"

@@ -80,7 +80,9 @@
 
 .tiptap {
 	padding: 8px;
-	height: 100%;
+	max-height: 66vh;
+	overflow-y: auto; 
+	/* height: 100%; */
 	min-height: 5em;
 	border-radius: 8px;
 
