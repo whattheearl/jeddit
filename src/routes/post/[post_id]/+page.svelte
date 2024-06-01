@@ -1,10 +1,10 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import HorizontalElipsis from '$lib/components/horizontal-elipsis.svelte';
+	import HorizontalElipsis from '$lib/components/icons/horizontal-elipsis.svelte';
 	import { enhance } from '$app/forms';
-	import LeftArrow from '$lib/components/left-arrow.svelte';
-	import ThumbsDown from '$lib/components/thumbs-down.svelte';
-	import ThumbsUp from '$lib/components/thumbs-up.svelte';
+	import LeftArrow from '$lib/components/icons/left-arrow.svelte';
+	import ThumbsDown from '$lib/components/icons/thumbs-down.svelte';
+	import ThumbsUp from '$lib/components/icons/thumbs-up.svelte';
 	import { goto } from '$app/navigation';
 
 	//** @type {import('./$types').PageLoad */

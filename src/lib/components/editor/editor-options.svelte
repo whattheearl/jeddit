@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import HorizontalElipsis from '$lib/components/horizontal-elipsis.svelte';
+	import HorizontalElipsis from '$lib/components/icons/horizontal-elipsis.svelte';
 </script>
 
 <DropdownMenu.Root>

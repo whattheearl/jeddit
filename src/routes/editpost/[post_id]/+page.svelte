@@ -1,11 +1,12 @@
 <script lang="ts">
-	import LeftArrow from '$lib/components/left-arrow.svelte';
+	import LeftArrow from '$lib/components/icons/left-arrow.svelte';
 	// import EditorOptions from '$lib/components/editor/editor-options.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Image from '@tiptap/extension-image';
 	import { goto } from '$app/navigation';
+	import ImageIcon from '$lib/components/icons/image.svelte';
 
 	//** @type {import('./$types').PageLoad */
 	export let data;
@@ -66,17 +67,24 @@
 	<div class="w-full my-4">
 		<div bind:this={element} />
 	</div>
-	<div class="w-full flex justify-end">
-		<button
-			on:click={() => goto(`/post/${data.post.id}`)}
-			class="py-2 px-4 text-sm bg-gray-200 font-extrabold text-gray-800 rounded-full hover:curser hover:bg-blue-500"
-			type="submit">Cancel</button
-		>
-		<button
-			on:click={savePost}
-			formaction="?/edit"
-			class="ml-2 py-2 px-4 text-sm bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
-			type="submit">Save</button
-		>
+	<div class="w-full flex justify-between items-center">
+		<div>
+			<button on:click>
+				<ImageIcon />
+			</button>
+		</div>
+		<div>
+			<button
+				on:click={() => goto(`/post/${data.post.id}`)}
+				class="py-2 px-4 text-sm bg-gray-200 font-extrabold text-gray-800 rounded-full hover:curser hover:bg-blue-500"
+				type="submit">Cancel</button
+			>
+			<button
+				on:click={savePost}
+				formaction="?/edit"
+				class="ml-2 py-2 px-4 text-sm bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
+				type="submit">Save</button
+			>
+		</div>
 	</div>
 </div>
