@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getSession } from '$lib/auth/index';
 import { sanitizeHtml } from '$lib/domsanitizer';
-import { addPost } from '$lib/stores/posts.store';
+import { addPost } from '$lib/db/posts';
 import { Logger } from '$lib/logger';
 
 export const load: PageServerLoad = (event) => {

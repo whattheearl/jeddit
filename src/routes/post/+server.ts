@@ -1,5 +1,5 @@
-import * as Posts from '$lib/stores/posts.store.js';
-import { getSession } from '$lib/stores/sessions.store.js';
+import * as Posts from '$lib/db/posts';
+import { getSession } from '$lib/db/sessions';
 
 /** @type {import('./$types.js').RequestHandler} */
 export const POST = async (event) => {

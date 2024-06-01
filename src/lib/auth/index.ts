@@ -9,12 +9,12 @@ import {
 } from './oauth';
 import { env } from '$env/dynamic/private';
 import { getJwks, verifyJwt } from './jwt';
-import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '../stores/oauths.store';
-import { createSession } from '../stores/sessions.store';
+import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '../db/oauths';
+import { createSession } from '../db/sessions';
 import { generateRandomBytes } from '$lib/crypto';
 
-export * from '../stores/users.store';
-export { getSession } from '../stores/sessions.store';
+export * from '../db/users';
+export { getSession } from '../db/sessions';
 
 export interface HandleCallbackConfig {
 	authority: string;

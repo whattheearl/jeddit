@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { getSecondsFromUTC } from '$lib/time';
 import { getSession } from '$lib/auth';
-import { getAllPosts, getPostLikes, isPostLikedByUser } from '$lib/stores/posts.store';
+import { getAllPosts, getPostLikes, isPostLikedByUser } from '$lib/db/posts';
 
 export const load: PageServerLoad = (e) => {
 	const { user } = getSession(e);

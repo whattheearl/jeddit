@@ -7,13 +7,13 @@ import {
 	likePost,
 	unlikePost,
 	updatePost
-} from '$lib/stores/posts.store';
+} from '$lib/db/posts';
 import { getSecondsFromUTC } from '$lib/time';
 import {
 	addComment,
 	getCommentsByPostId,
 	getCommentsLikesByCommentId
-} from '$lib/stores/comments.store';
+} from '$lib/db/comments';
 import { sanitizeHtml } from '$lib/domsanitizer';
 
 export const load: PageServerLoad = (e) => {

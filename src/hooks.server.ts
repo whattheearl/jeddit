@@ -1,7 +1,7 @@
 import { error, redirect, type Handle } from '@sveltejs/kit';
 import { Logger } from '$lib/logger';
 import { HandleCallback, HandleSignIn, addUser, getUserByClaims } from '$lib/auth';
-import { deleteSession, createSession } from '$lib/stores/sessions.store';
+import { deleteSession, createSession } from '$lib/db/sessions';
 import { env } from '$env/dynamic/private';
 import { generateUsername } from '$lib/username';
 import { sequence } from '@sveltejs/kit/hooks';
