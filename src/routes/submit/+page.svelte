@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Markdown from '$lib/components/markdown.svelte';
+	import Editor from '$lib/components/editor.svelte';
 
 	$: post = { content: '' };
 	const updateContent = (content: string) => {
@@ -18,7 +18,7 @@
 		<header class="w-full border-b-1 border-gray-800">
 			<h1 class="font-semibold text-xl text-gray-800">Create a post</h1>
 		</header>
-		<Markdown content={''} {updateContent} editable={true} />
+		<Editor content={''} {updateContent} editable={true} />
 		<button
 			on:click={addPost}
 			class="ml-auto py-2 px-4 bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"

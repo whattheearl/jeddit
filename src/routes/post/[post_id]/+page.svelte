@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Markdown from '$lib/components/markdown.svelte';
+	import Editor from '$lib/components/editor.svelte';
 	import LeftArrow from '$lib/components/left-arrow.svelte';
 	import HorizontalElipsis from '$lib/components/horizontal-elipsis.svelte';
 	import ThumbsDown from '$lib/components/thumbs-down.svelte';
@@ -55,7 +55,7 @@
 		{/if}
 	</div>
 	<div class="w-full my-4">
-		<Markdown bind:editable bind:content={data.post.content} {updateContent} />
+		<Editor bind:editable bind:content={data.post.content} {updateContent} />
 	</div>
 	{#if showEditButton && editable}
 		<div class="w-full flex justify-end">
