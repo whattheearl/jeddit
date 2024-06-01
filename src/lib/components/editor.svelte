@@ -12,9 +12,10 @@
 
 	beforeUpdate(() => {
 		if (!editor) return;
+		const wasEditable = editor.isEditable;
 		editor.setEditable(editable);
-		if (editable) editor.commands.focus('end');
-		else editor.commands.blur();
+		if (!wasEditable && editable) editor.commands.focus('end');
+		if (!editable) editor.commands.blur();
 	});
 
 	onMount(() => {
@@ -30,6 +31,7 @@
 				updateContent(editor.getHTML());
 			}
 		});
+		editor.commands.focus('end');
 	});
 
 	onDestroy(() => {

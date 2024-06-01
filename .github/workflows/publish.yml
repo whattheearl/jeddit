@@ -1,7 +1,7 @@
-name: publish 
+name: publish
 
-on: 
-  push: 
+on:
+  push:
     branches:
       - main
 
