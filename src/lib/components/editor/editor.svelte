@@ -4,7 +4,7 @@
 	import StarterKit from '@tiptap/starter-kit';
 	import Image from '@tiptap/extension-image';
 
-  export let content: string;
+	export let content: string;
 	let element: HTMLElement;
 	let editor: Editor;
 
@@ -12,7 +12,7 @@
 		editor = new Editor({
 			element: element,
 			editable: true,
-      content,
+			content,
 			extensions: [StarterKit, Image.configure({ allowBase64: true })],
 			onTransaction: () => {
 				editor = editor;
@@ -21,8 +21,8 @@
 				// EditorStore.updateContent(editor.getHTML());
 			}
 		});
-    editor.commands.focus('end');
-  });
+		editor.commands.focus('end');
+	});
 
 	onDestroy(() => {
 		if (editor) {
@@ -32,9 +32,3 @@
 </script>
 
 <div bind:this={element} />
-
-<style>
-  :global(.tiptap) {
-    padding: 16px;
-  }
-</style>

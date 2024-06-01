@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import Editor from '$lib/components/editor/editor.svelte';
 
-
 	const addPost = async () => {
 		// EditorStore.content.subscribe(async (value) => {
 		// 	const res = await fetch('/post', {
