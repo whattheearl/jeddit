@@ -1,8 +1,11 @@
 <script lang="ts">
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import HorizontalElipsis from '$lib/components/horizontal-elipsis.svelte';
 	import { enhance } from '$app/forms';
 	import LeftArrow from '$lib/components/left-arrow.svelte';
 	import ThumbsDown from '$lib/components/thumbs-down.svelte';
 	import ThumbsUp from '$lib/components/thumbs-up.svelte';
+	import { goto } from '$app/navigation';
 
 	//** @type {import('./$types').PageLoad */
 	export let data;
@@ -34,7 +37,18 @@
 			<span class="text-xs mt-[-4px] text-gray-700">{data.post.username}</span>
 		</div>
 		{#if showEditButton}
-			<a href={`/editpost/${data.post.id}`} class="ml-auto">edit</a>
+			<div class="ml-auto">
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger><HorizontalElipsis /></DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						<DropdownMenu.Group>
+							<DropdownMenu.Item on:click={() => goto(`/editpost/${data.post.id}`)}>
+								Edit
+							</DropdownMenu.Item>
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			</div>
 		{/if}
 	</div>
 	<div class="w-full my-4">
