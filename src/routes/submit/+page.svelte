@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Editor from '$lib/components/editor.svelte';
+	import Editor from '$lib/components/editor/editor.svelte';
 
-	$: post = { content: '' };
-	const updateContent = (content: string) => {
-		post = { content };
-	};
 
 	const addPost = async () => {
-		const res = await fetch('/post', { method: 'POST', body: JSON.stringify(post) });
-		if (res.status == 204) goto('/');
+		// EditorStore.content.subscribe(async (value) => {
+		// 	const res = await fetch('/post', {
+		// 		method: 'POST',
+		// 		body: JSON.stringify({ content: value })
+		// 	});
+		// 	if (res.status == 204) goto('/');
+		// });
 	};
 </script>
 
@@ -18,7 +19,7 @@
 		<header class="w-full border-b-1 border-gray-800">
 			<h1 class="font-semibold text-xl text-gray-800">Create a post</h1>
 		</header>
-		<Editor content={''} {updateContent} editable={true} />
+		<Editor />
 		<button
 			on:click={addPost}
 			class="ml-auto py-2 px-4 bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
