@@ -80,13 +80,10 @@
 
 .tiptap {
 	padding: 8px;
-	max-height: 50vh;
-	overflow-y: auto; 
-	/* height: 100%; */
 	min-height: 5em;
 	border-radius: 8px;
 
-	> * + * {
+	>*+* {
 		margin-top: 0.75em;
 	}
 
@@ -154,4 +151,9 @@
 		border-top: 2px solid rgba(#0d0d0d, 0.1);
 		margin: 2rem 0;
 	}
+}
+
+.editmode .tiptap {
+	max-height: 50vh;
+	overflow-y: auto;
 }

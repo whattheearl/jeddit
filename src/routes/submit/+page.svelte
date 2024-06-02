@@ -60,10 +60,9 @@
 		<header class="w-full border-b-1 border-gray-800">
 			<h1 class="font-semibold text-xl text-gray-800">Create a post</h1>
 		</header>
-		<div class="w-full my-4">
+		<div class="w-full my-4 editmode">
 			<div bind:this={element} />
 		</div>
-		<!-- <Editor /> -->
 		<div class="flex justify-between items-center">
 			<form>
 				<input
