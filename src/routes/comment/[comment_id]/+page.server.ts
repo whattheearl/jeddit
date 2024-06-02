@@ -5,7 +5,7 @@ import {
 	addCommentsLikes,
 	getCommentsLikesByCommentId,
 	updateCommentslikes
-} from '$lib/db/comments.store';
+} from '$lib/db/comments';
 
 export const actions: Actions = {
 	like: async (e) => {

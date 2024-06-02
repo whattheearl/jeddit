@@ -37,18 +37,17 @@
 
 	const openImageFilePicker = () => {
 		const input = document.querySelector('#image') as HTMLInputElement;
-		console.log('open', { input });
 		if (!input) return;
 		input.click();
 	};
 
 	const onImageSelect = async () => {
 		const input = document.querySelector('#image') as HTMLInputElement;
-		console.log('onselct', { input });
 		if (!input) return;
-		console.log(input.files);
-    if (!input.files || input.files.length == 0) return;
-    await fetch(`/editpost/${data.post.id}`, { method: 'POST', body: input.files[0]})
+		if (!input.files || input.files.length == 0) return;
+		const res = await fetch(`/images`, { method: 'POST', body: input.files[0] });
+		const data = await res.json();
+		editor.commands.setImage({ src: data.imageurl });
 	};
 
 	const savePost = async () => {
@@ -85,7 +84,14 @@
 	</div>
 	<div class="w-full flex justify-between items-center">
 		<form>
-			<input id="image" name="image" type="file" accept="image/*" hidden on:change={onImageSelect} />
+			<input
+				id="image"
+				name="image"
+				type="file"
+				accept="image/*"
+				hidden
+				on:change={onImageSelect}
+			/>
 			<button on:click={openImageFilePicker}>
 				<ImageIcon />
 			</button>
