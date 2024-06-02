@@ -32,7 +32,7 @@ const adjectives = [
 	'technically_a',
 	'undead',
 	'perculating',
-	'chrochetted',
+	'crocheted',
 	'forever_and_ever',
 	'high_fidelity'
 ];
