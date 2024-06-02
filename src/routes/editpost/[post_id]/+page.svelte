@@ -35,6 +35,22 @@
 		}
 	});
 
+	const openImageFilePicker = () => {
+		const input = document.querySelector('#image') as HTMLInputElement;
+		console.log('open', { input });
+		if (!input) return;
+		input.click();
+	};
+
+	const onImageSelect = async () => {
+		const input = document.querySelector('#image') as HTMLInputElement;
+		console.log('onselct', { input });
+		if (!input) return;
+		console.log(input.files);
+    if (!input.files || input.files.length == 0) return;
+    await fetch(`/editpost/${data.post.id}`, { method: 'POST', body: input.files[0]})
+	};
+
 	const savePost = async () => {
 		const res = await fetch(`/post/${data.post.id}`, {
 			method: 'PATCH',
@@ -68,11 +84,12 @@
 		<div bind:this={element} />
 	</div>
 	<div class="w-full flex justify-between items-center">
-		<div>
-			<button on:click>
+		<form>
+			<input id="image" name="image" type="file" accept="image/*" hidden on:change={onImageSelect} />
+			<button on:click={openImageFilePicker}>
 				<ImageIcon />
 			</button>
-		</div>
+		</form>
 		<div>
 			<button
 				on:click={() => goto(`/post/${data.post.id}`)}
