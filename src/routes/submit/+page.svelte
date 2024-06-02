@@ -1,14 +1,56 @@
 <script lang="ts">
+  import ImageIcon from '$lib/components/icons/image.svelte'
 	import { goto } from '$app/navigation';
-	import Editor from '$lib/components/editor.svelte';
+	import { Editor } from '@tiptap/core';
+	import Image from '@tiptap/extension-image';
+	import StarterKit from '@tiptap/starter-kit';
+	import { onDestroy, onMount } from 'svelte';
+	let element: HTMLElement;
+	let editor: Editor;
 
-	$: post = { content: '' };
-	const updateContent = (content: string) => {
-		post = { content };
+	onMount(() => {
+		editor = new Editor({
+			element: element,
+			editable: true,
+			content: '',
+			extensions: [StarterKit, Image.configure({ allowBase64: true })],
+			onTransaction: () => {
+				editor = editor;
+			},
+			onUpdate: ({ editor }) => {
+				// data.post.content = editor.getHTML();
+			}
+		});
+		editor.commands.focus('end');
+	});
+
+	onDestroy(() => {
+		if (editor) {
+			editor.destroy();
+		}
+	});
+
+	const openImageFilePicker = () => {
+		const input = document.querySelector('#image') as HTMLInputElement;
+		if (!input) return;
+		input.click();
+	};
+
+	const onImageSelect = async () => {
+		const input = document.querySelector('#image') as HTMLInputElement;
+		if (!input) return;
+		if (!input.files || input.files.length == 0) return;
+		const res = await fetch(`/images`, { method: 'POST', body: input.files[0] });
+		const data = await res.json();
+		editor.commands.setImage({ src: data.imageurl });
 	};
 
 	const addPost = async () => {
-		const res = await fetch('/post', { method: 'POST', body: JSON.stringify(post) });
+		if (!editor) return;
+		const res = await fetch('/post', {
+			method: 'POST',
+			body: JSON.stringify({ content: editor.getHTML() })
+		});
 		if (res.status == 204) goto('/');
 	};
 </script>
@@ -18,11 +60,30 @@
 		<header class="w-full border-b-1 border-gray-800">
 			<h1 class="font-semibold text-xl text-gray-800">Create a post</h1>
 		</header>
-		<Editor content={''} {updateContent} editable={true} />
-		<button
-			on:click={addPost}
-			class="ml-auto py-2 px-4 bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
-			type="submit">Post</button
-		>
+		<div class="w-full my-4">
+			<div bind:this={element} />
+		</div>
+		<!-- <Editor /> -->
+		<div class="flex justify-between items-center">
+			<form>
+				<input
+					id="image"
+					name="image"
+					type="file"
+					accept="image/*"
+					hidden
+					on:change={onImageSelect}
+				/>
+				<button on:click={openImageFilePicker}>
+					<ImageIcon />
+				</button>
+			</form>
+
+			<button
+				on:click={addPost}
+				class="ml-auto py-2 px-4 bg-blue-600 font-extrabold text-white rounded-full hover:curser hover:bg-blue-500"
+				type="submit">Post</button
+			>
+		</div>
 	</div>
 </div>

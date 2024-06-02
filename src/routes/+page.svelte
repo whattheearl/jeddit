@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Heart from '$lib/components/heart.svelte';
+	import Heart from '$lib/components/icons/heart.svelte';
 	import { marked } from 'marked';
 	import type { PageData } from './$types';
 

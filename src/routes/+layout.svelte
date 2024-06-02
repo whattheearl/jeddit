@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/avatar.svelte';
-	import Plus from '$lib/components/plus.svelte';
+	import Plus from '$lib/components/icons/plus.svelte';
 </script>
 
 <header

@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS communities;
 DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS posts_comments;
+DROP TABLE IF EXISTS images;
 
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,6 +59,13 @@ CREATE TABLE IF NOT EXISTS posts_comments (
   content TEXT,
   created_at INTEGER,
   like_count INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS images (
+  id VARCHAR(32) PRIMARY KEY,
+  image BLOB,
+  version INTERGER,
+  file_type TEXT
 );
 
 INSERT INTO users (id, username) VALUES (1,'firstuser');

@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { getUserById, type IUser } from './users.store';
+import { getUserById, type IUser } from './users';
 import { dev } from '$app/environment';
 import Database from 'better-sqlite3';
 

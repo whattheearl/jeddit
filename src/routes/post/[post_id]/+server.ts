@@ -1,6 +1,6 @@
 import { sanitizeHtml } from '$lib/domsanitizer';
-import * as Posts from '$lib/stores/posts.store.js';
-import { getSession } from '$lib/stores/sessions.store.js';
+import * as Posts from '$lib/db/posts';
+import { getSession } from '$lib/db/sessions';
 import type { RequestHandler } from './$types';
 
 export const PATCH: RequestHandler = async (event) => {
