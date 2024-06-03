@@ -16,7 +16,10 @@ export const POST: RequestHandler = async (event) => {
   const imageId = db.prepare('SELECT id FROM images WHERE id = ?').get(fileName);
   if (imageId)
     return new Response(JSON.stringify({ imageurl: `/images/${fileName}` }), { status: 201 })
-  const img = await sharp(buf).webp().toBuffer();
+  const img = await sharp(buf)
+    .resize({ width: 1280, height: 1280, fit: "cover"})
+    .webp()
+    .toBuffer();
   db
     .prepare('INSERT INTO images (id,image,file_type,version) VALUES (?,?,?,?)')
     .run(fileName, Buffer.from(img), fileType, '1')

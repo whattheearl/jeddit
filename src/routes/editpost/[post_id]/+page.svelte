@@ -1,6 +1,5 @@
 <script lang="ts">
 	import LeftArrow from '$lib/components/icons/left-arrow.svelte';
-	// import EditorOptions from '$lib/components/editor/editor-options.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
@@ -75,9 +74,6 @@
 			</div>
 			<span class="text-xs mt-[-4px] text-gray-700">{data.post.username}</span>
 		</div>
-		<!-- <div class="ml-auto">
-			<EditorOptions />
-		</div> -->
 	</div>
 	<div class="w-full my-4 editmode">
 		<div bind:this={element} />
