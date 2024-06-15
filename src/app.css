@@ -157,3 +157,10 @@
 	max-height: 50vh;
 	overflow-y: auto;
 }
+
+.layer-ui__wrapper__top-right,
+.App-menu_top__left button,
+.mobile-misc-tools-container,
+.App-bottom-bar {
+	display: none !important;
+}

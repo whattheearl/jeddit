@@ -1,7 +1,7 @@
 # Jeddit
 
 ### todo:
-- [image] max size
+- [diagrams] inject / edit excalidraw
 - [image] load by screensize
 - [postlist] auto title image
 - [comment] emoji / image
