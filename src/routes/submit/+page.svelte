@@ -2,6 +2,7 @@
   import Excalidraw from '$lib/components/excalidraw.svelte';
   import { render, toggleVisibility, exportToBlob  } from '$lib/exalidraw.ts';
   import ImageIcon from '$lib/components/icons/image.svelte';
+  import PenIcon from '$lib/components/icons/pen.svelte';
 	import { goto } from '$app/navigation';
 	import { Editor } from '@tiptap/core';
 	import Image from '@tiptap/extension-image';
@@ -88,7 +89,9 @@
 				<button on:click={openImageFilePicker}>
 					<ImageIcon />
 				</button>
-        <button on:click={toggleVisibility}><ImageIcon /></button>
+        <button on:click={toggleVisibility}>
+          <PenIcon />
+        </button>
 			</form>
 			<button
 				on:click={addPost}
