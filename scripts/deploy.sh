@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 IP=blackbox.wte.sh
 PROJECT=jeddit
 REGISTRY=ghcr.io
