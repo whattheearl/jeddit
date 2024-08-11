@@ -2,13 +2,13 @@
 	import React from 'react';
 	import ReactDom from 'react-dom/client';
 	import { onMount } from 'svelte';
-  import * as Excalidraw from '$lib/exalidraw';
+	import * as Excalidraw from '$lib/exalidraw';
 
-  export let onSave: Function;
+	export let onSave: Function;
 
 	onMount(async () => {
-    await Excalidraw.render({ onSave: onSave });
-  });
+		await Excalidraw.render({ onSave: onSave });
+	});
 </script>
 
 <div

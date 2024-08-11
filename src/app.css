@@ -83,7 +83,7 @@
 	min-height: 5em;
 	border-radius: 8px;
 
-	>*+* {
+	> * + * {
 		margin-top: 0.75em;
 	}
 

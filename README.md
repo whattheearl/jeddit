@@ -1,6 +1,7 @@
 # Jeddit
 
 ### todo:
+
 - [diagrams] inject / edit excalidraw
 - [image] load by screensize
 - [postlist] auto title image
