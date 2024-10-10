@@ -3,79 +3,83 @@ import Database from 'better-sqlite3';
 const db = new Database('db.sqlite');
 
 interface IAddComment {
-	post_id: number;
-	user_id: number;
-	content: string;
-	created_at: number;
+    post_id: number;
+    user_id: number;
+    content: string;
+    created_at: number;
 }
 
 interface IComment {
-	id: number;
-	username: string;
-	picture: string;
-	content: string;
-	created_at: number;
-	like_count: number;
-	isLiked: boolean;
+    id: number;
+    username: string;
+    picture: string;
+    content: string;
+    created_at: number;
+    like_count: number;
+    isLiked: boolean;
 }
 
 interface ICommentLike {
-	user_id: number;
-	comment_id: number;
-	like_value: number;
+    user_id: number;
+    comment_id: number;
+    like_value: number;
 }
 
 export const addComment = (comment: IAddComment) =>
-	db
-		.prepare('INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (?,?,?,?)')
-		.run(comment.post_id, comment.user_id, comment.content, Date.now());
+    db
+        .prepare(
+            'INSERT INTO posts_comments (post_id, user_id, content, created_at) VALUES (?,?,?,?)'
+        )
+        .run(comment.post_id, comment.user_id, comment.content, Date.now());
 
 export const getCommentById = (comment_id: number) =>
-	db.prepare('SELECT * FROM posts_comments WHERE id = ?').run(comment_id);
+    db.prepare('SELECT * FROM posts_comments WHERE id = ?').run(comment_id);
 
 export const getCommentsByPostId = (post_id: number) => {
-	return (
-		(db
-			.prepare(
-				`
+    return (
+        (db
+            .prepare(
+                `
       SELECT posts_comments.id, users.username, users.picture, posts_comments.content, posts_comments.created_at, posts_comments.like_count
       FROM posts_comments
       JOIN users on users.id = posts_comments.user_id
       WHERE posts_comments.post_id = ?
     `
-			)
-			.all(post_id) as IComment[]) ?? ([] as IComment[])
-	);
+            )
+            .all(post_id) as IComment[]) ?? ([] as IComment[])
+    );
 };
 
 export const updateCommentsLikeCount = (comment_id: number, like_count: number) =>
-	db.prepare('UPDATE posts_comment SET like_count = ? WHERE id = ?').run(like_count, comment_id);
+    db.prepare('UPDATE posts_comment SET like_count = ? WHERE id = ?').run(like_count, comment_id);
 
 export const getCommentsLikesByUserId = (user_id: number) =>
-	db.prepare(`SELECT * FROM users_comments_likes WHERE user_id = ?`).all(user_id) as ICommentLike[];
+    db
+        .prepare(`SELECT * FROM users_comments_likes WHERE user_id = ?`)
+        .all(user_id) as ICommentLike[];
 
 export const getCommentsLikesByCommentId = (comment_id: number) =>
-	db
-		.prepare('SELECT * FROM users_comments_likes WHERE comment_id = ?')
-		.all(comment_id) as ICommentLike[];
+    db
+        .prepare('SELECT * FROM users_comments_likes WHERE comment_id = ?')
+        .all(comment_id) as ICommentLike[];
 
 export const addCommentsLikes = (comment_id: number, user_id: number, like_value: number) =>
-	db
-		.prepare('INSERT INTO users_comments_likes (comment_id,user_id,like_value) VALUES (?,?,?)')
-		.run(comment_id, user_id, like_value);
+    db
+        .prepare('INSERT INTO users_comments_likes (comment_id,user_id,like_value) VALUES (?,?,?)')
+        .run(comment_id, user_id, like_value);
 
 export const updateCommentslikes = (
-	comment_id: number,
-	user_id: number,
-	like_value: number,
-	like_count_difference: number
+    comment_id: number,
+    user_id: number,
+    like_value: number,
+    like_count_difference: number
 ) =>
-	db.transaction(() => {
-		db.prepare(
-			'UPDATE users_comments_likes SET like_value = ? WHERE comment_id = ? AND user_id = ?'
-		).run(like_value, comment_id, user_id);
-		db.prepare('UPDATE posts_comments SET like_count = like_count + ? WHERE id = ?').run(
-			like_count_difference,
-			comment_id
-		);
-	})();
+    db.transaction(() => {
+        db.prepare(
+            'UPDATE users_comments_likes SET like_value = ? WHERE comment_id = ? AND user_id = ?'
+        ).run(like_value, comment_id, user_id);
+        db.prepare('UPDATE posts_comments SET like_count = like_count + ? WHERE id = ?').run(
+            like_count_difference,
+            comment_id
+        );
+    })();

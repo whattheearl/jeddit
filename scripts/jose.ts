@@ -3,8 +3,8 @@ import crypto from 'crypto';
 
 const secret = new TextEncoder().encode('SECRET_STRING');
 const token = await new SignJWT({ sid: 'somesidhererererere' })
-	.setProtectedHeader({ alg: 'HS256' })
-	.sign(secret);
+    .setProtectedHeader({ alg: 'HS256' })
+    .sign(secret);
 
 console.log({ token });
 

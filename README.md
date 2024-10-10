@@ -2,11 +2,11 @@
 
 ### todo:
 
-- [diagrams] inject / edit excalidraw
-- [image] load by screensize
-- [postlist] auto title image
-- [comment] emoji / image
-- [comment] comments
+-   [diagrams] inject / edit excalidraw
+-   [image] load by screensize
+-   [postlist] auto title image
+-   [comment] emoji / image
+-   [comment] comments
 
 ## Dev
 
