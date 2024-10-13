@@ -1,16 +1,12 @@
 import { Logger } from '../logger';
 import { error, redirect, type RequestEvent } from '@sveltejs/kit';
 import {
-    generateAuthorizationUrl,
-    generateTokenUrl,
     getDiscoveryDocument,
-    getTokensAsync,
     hashCodeChallenge
 } from './oauth';
 import { env } from '$env/dynamic/private';
 import { getJwks, verifyJwt } from './jwt';
 import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '../db/oauths';
-import { createSession } from '../db/sessions';
 import { generateRandomBytes } from '$lib/crypto';
 
 export * from '../db/users';
@@ -20,12 +16,12 @@ export interface HandleCallbackConfig {
     authority: string;
     client_id: string;
     client_secret: string;
-    redirect_url: string;
+    redirect_uri: string;
 }
 
 export const HandleCallback = async (
     e: RequestEvent,
-    { authority, client_id, client_secret, redirect_url }: HandleCallbackConfig
+    { authority, client_id, client_secret, redirect_uri }: HandleCallbackConfig
 ) => {
     const logger = Logger('HandleCallback');
 
@@ -41,32 +37,51 @@ export const HandleCallback = async (
     const wellKnown = `${authority}/.well-known/openid-configuration`;
     const discoveryDocument = await getDiscoveryDocument(wellKnown);
 
-    const token_url = generateTokenUrl(
-        discoveryDocument.token_endpoint,
-        code,
-        client_id,
-        client_secret,
-        redirect_url,
-        code_verifier
-    );
+    const token_url = new URL(discoveryDocument.token_endpoint);
+    token_url.searchParams.append('code', code);
+    token_url.searchParams.append('client_id', client_id);
+    token_url.searchParams.append('client_secret', client_secret);
+    token_url.searchParams.append('redirect_uri', redirect_uri);
+    token_url.searchParams.append('grant_type', 'authorization_code');
+    token_url.searchParams.append('code_verifier', code_verifier);
+    logger.debug('token_url', token_url.toString());
 
-    const tokens = await getTokensAsync(token_url);
-    if (!tokens.id_token)
+    const res = await fetch(token_url.toString(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+
+    if (res.status != 200) {
+        logger.error('getTokensAsync response', await res.text());
+        error(
+            500,
+            `Unable to retrieve access_token from authorization server [${discoveryDocument.token_endpoint}]`
+        )
+    }
+
+    const data = await res.json();
+    logger.debug('token response', { data });
+    const { id_token } = data;
+
+    if (!id_token) {
         error(
             500,
             `Unable to retrieve access_token from authorization server [${discoveryDocument.token_endpoint}]`
         );
+    }
 
     logger.info('verify token and get claims');
     const jwks = await getJwks(discoveryDocument.jwks_uri);
 
-    const claims = await verifyJwt(jwks, tokens.id_token, {
+    const claims = await verifyJwt(jwks, id_token, {
         issuer: authority as string,
         audience: client_id as string
     });
 
-    if (claims.nonce != nonce) error(400, '[nonce] does not match');
-
+    if (claims.nonce != nonce) {
+        error(400, '[nonce] does not match');
+    }
+    
     DeleteOauth(e);
     return claims;
 };
@@ -98,16 +113,18 @@ export const HandleSignIn = async (
 
     SaveOauth(e, { code_verifier, nonce, state });
 
-    const redirectUri = generateAuthorizationUrl(
-        discoveryDocument.authorization_endpoint,
-        env.google_client_id as string,
-        env.google_redirect_url as string,
-        await hashCodeChallenge(code_verifier),
-        nonce,
-        state
-    );
+    const code_challange = await hashCodeChallenge(code_verifier);
+    const authorization_url = new URL(discoveryDocument.authorization_endpoint);
+    authorization_url.searchParams.append('client_id', env!.google_client_id);
+    authorization_url.searchParams.append('scope', 'email openid profile');
+    authorization_url.searchParams.append('redirect_uri', env!.google_redirect_url);
+    authorization_url.searchParams.append('response_type', 'code');
+    authorization_url.searchParams.append('code_challenge', code_challange);
+    authorization_url.searchParams.append('code_challenge_method', 'S256');
+    authorization_url.searchParams.append('nonce', nonce);
+    authorization_url.searchParams.append('state', state);
+    logger.debug('generateAuthorizationUrl', authorization_url.toString());
 
-    logger.debug(`redirectUri [${redirectUri}]`);
-
-    redirect(302, redirectUri);
+    logger.debug(`redirectUri [${authorization_url.toString()}]`);
+    redirect(302, authorization_url.toString());
 };

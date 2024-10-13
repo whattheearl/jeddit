@@ -23,9 +23,9 @@ export const auth: Handle = async ({ event: e, resolve }) => {
                 authority: env.google_authority,
                 client_id: env.google_client_id,
                 client_secret: env.google_client_secret,
-                redirect_url: env.google_redirect_url
+                redirect_uri: env.google_redirect_url
             });
-
+            console.log(claims)
             let user = getUserByClaims(claims);
 
             if (!user) {
