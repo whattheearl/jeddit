@@ -5,7 +5,7 @@ import {
     hashCodeChallenge
 } from './oauth';
 import { env } from '$env/dynamic/private';
-import { getJwks, verifyJwt } from './jwt';
+import * as jose from 'jose';
 import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '../db/oauths';
 import { generateRandomBytes } from '$lib/crypto';
 
@@ -44,15 +44,17 @@ export const HandleCallback = async (
     token_url.searchParams.append('redirect_uri', redirect_uri);
     token_url.searchParams.append('grant_type', 'authorization_code');
     token_url.searchParams.append('code_verifier', code_verifier);
-    logger.debug('token_url', token_url.toString());
+    logger.debug('token_url', { token_url: token_url.toString() });
 
     const res = await fetch(token_url.toString(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
-
+        
+    console.log({status: res.status, })
     if (res.status != 200) {
-        logger.error('getTokensAsync response', await res.text());
+        const errorResponse = await res.text();
+        console.log('error response', errorResponse)
         error(
             500,
             `Unable to retrieve access_token from authorization server [${discoveryDocument.token_endpoint}]`
@@ -71,19 +73,20 @@ export const HandleCallback = async (
     }
 
     logger.info('verify token and get claims');
-    const jwks = await getJwks(discoveryDocument.jwks_uri);
+    const JWKS = jose.createRemoteJWKSet(new URL(discoveryDocument.jwks_uri)) 
+    logger.info('token', {JWKS})
+    const { payload, protectedHeader } = await jose.jwtVerify(id_token, JWKS, {
+        //issuer: authority as string,
+        //audience: client_id as string
+    })
 
-    const claims = await verifyJwt(jwks, id_token, {
-        issuer: authority as string,
-        audience: client_id as string
-    });
-
-    if (claims.nonce != nonce) {
+    logger.info('payload', payload)
+    if (payload.nonce != nonce) {
         error(400, '[nonce] does not match');
     }
     
     DeleteOauth(e);
-    return claims;
+    return payload;
 };
 
 export interface HandleSignInConfig {
