@@ -1,6 +1,6 @@
 import { error, redirect, type Handle } from '@sveltejs/kit';
 import { Logger } from '$lib/logger';
-import { HandleCallback, HandleSignIn, addUser, getUserByClaims } from '$lib/auth';
+import { HandleCallback, HandleSignIn, addUser, getUserByClaims, type IUser } from '$lib/auth';
 import { deleteSession, createSession } from '$lib/db/sessions';
 import { env } from '$env/dynamic/private';
 import { generateUsername } from '$lib/username';
@@ -24,21 +24,28 @@ export const auth: Handle = async ({ event: e, resolve }) => {
                 client_id: env.google_client_id,
                 client_secret: env.google_client_secret,
                 redirect_uri: env.google_redirect_url
-            });
+            }) as any;
             console.log(claims)
             let user = getUserByClaims(claims);
 
             if (!user) {
                 logger.debug('Usernot found, creating user');
-
-                const res = await fetch(claims.picture);
-                const buf = await res.arrayBuffer();
-                const picture = Buffer.from(buf).toString('base64');
+                const user: Partial<IUser> = {
+                    username: claims.username,
+                } 
+                if (claims.picture) {
+                    try {
+                        const res = await fetch(claims.picture);
+                        const buf = await res.arrayBuffer();
+                        const picture = Buffer.from(buf).toString('base64');
+                        user.picture = picture;
+                    } catch(err) {
+                        console.error('fFailed to retrieve user photo', claims.picture)
+                    }
+                }
 
                 addUser({
                     username: generateUsername(),
-                    ...claims,
-                    picture
                 });
             }
 
