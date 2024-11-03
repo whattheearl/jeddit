@@ -14,10 +14,11 @@ function info {
 }
 
 info "BUILDING CONTAINER" 
-docker build . --tag $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION --platform linux/amd64
+docker build . --tag $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION --platform linux/amd64 || exit 1
+
 
 info "PUSHING CONTAINER"
-docker push $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION 
+docker push $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION || exit 1
 
 info "PUSHING ENV"
 ssh $IP mkdir -p /home/jon/jeddit
