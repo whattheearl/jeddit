@@ -27,26 +27,26 @@ export const auth: Handle = async ({ event: e, resolve }) => {
             }) as any;
             console.log(claims)
             let user = getUserByClaims(claims);
-
+            
             if (!user) {
-                logger.debug('Usernot found, creating user');
-                const user: Partial<IUser> = {
-                    username: claims.username,
+                logger.debug('user not found, creating user');
+                let newUser = {
+                    ...claims,
+                    username: generateUsername(),
                 } 
+                console.log(claims.picture)
                 if (claims.picture) {
                     try {
                         const res = await fetch(claims.picture);
                         const buf = await res.arrayBuffer();
                         const picture = Buffer.from(buf).toString('base64');
-                        user.picture = picture;
+                        newUser.picture = picture;
                     } catch(err) {
-                        console.error('fFailed to retrieve user photo', claims.picture)
+                        console.error('failed to retrieve user photo', claims.picture)
                     }
                 }
 
-                addUser({
-                    username: generateUsername(),
-                });
+                addUser(newUser);
             }
 
             user = user ?? getUserByClaims(claims);
