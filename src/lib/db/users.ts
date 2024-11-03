@@ -15,12 +15,10 @@ export type IUser = {
 };
 
 export const addUser = (user: Partial<IUser>) => {
-    db.prepare(
-        `
-    INSERT INTO users (username, sub, iss, username, username_finalized, email, email_verified, picture) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `
-    ).run(
+    db.prepare(`
+        INSERT INTO users (username, sub, iss, username, username_finalized, email, email_verified, picture) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
         user.username ?? '',
         user.sub ?? '',
         user.iss ?? '',
@@ -32,7 +30,7 @@ export const addUser = (user: Partial<IUser>) => {
     );
 };
 
-export const getUserById = (id: number) =>
+export const getUserById = (id: number) => 
     db.prepare('SELECT * FROM users WHERE id = ?').get(id) as IUser | null;
 
 export const getUserByClaims = (c: IClaims) =>

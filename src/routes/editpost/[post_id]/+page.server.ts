@@ -16,6 +16,7 @@ export const load: PageServerLoad = (e) => {
     const comments = getCommentsByPostId(post_id);
 
     return {
+        user,
         post: {
             ...post,
             content: sanitizeHtml(post.content),

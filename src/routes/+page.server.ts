@@ -8,6 +8,7 @@ export const load: PageServerLoad = (e) => {
     const posts = getAllPosts();
 
     return {
+        user,
         posts:
             posts.reverse().map((p) => ({
                 ...p,
