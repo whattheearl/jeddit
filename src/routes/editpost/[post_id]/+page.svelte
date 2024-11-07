@@ -76,7 +76,7 @@
         </div>
     </div>
     <div class="w-full my-4 editmode">
-        <div bind:this={element} ></div>
+        <div bind:this={element}></div>
     </div>
     <div class="w-full flex justify-between items-center">
         <form>

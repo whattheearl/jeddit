@@ -2,9 +2,6 @@
 
 ### todo:
 
--   [eslint] ignore ui library files
--   [eslint] ignore excalidraw for now (kinda hacky anyways)
--   [eslint] html error (maybe move to ast html abstraction)
 -   [images] extract db/sharp code
 -   [diagrams] inject / edit excalidraw
 -   [image] load by screensize

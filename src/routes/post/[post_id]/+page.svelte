@@ -1,4 +1,5 @@
 <script lang="ts">
+    /* eslint svelte/no-at-html-tags: "off" */
     import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
     import HorizontalElipsis from '$lib/components/icons/horizontal-elipsis.svelte';
     import { enhance } from '$app/forms';

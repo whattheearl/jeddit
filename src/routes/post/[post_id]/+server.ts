@@ -8,7 +8,7 @@ export const PATCH: RequestHandler = async (event) => {
     if (!user) {
         return new Response(null, { status: 401, statusText: 'unauthenticated' });
     }
-        
+
     const data = await event.request.json();
     if (!data) {
         return new Response(null, { status: 400, statusText: 'bad request' });

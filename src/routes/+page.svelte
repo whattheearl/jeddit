@@ -1,4 +1,5 @@
 <script lang="ts">
+    /* eslint svelte/no-at-html-tags: "off" */
     import { enhance } from '$app/forms';
     import Heart from '$lib/components/icons/heart.svelte';
     import { marked } from 'marked';
@@ -14,16 +15,17 @@
 <div class="p-4 flex flex-col items-center md:max-w-[756px] mx-auto">
     <main style="width: 100%;">
         {#each data.posts as p}
-            <article class="w-full h-full px-4 py-1 my-1 rounded ">
+            <article class="w-full h-full px-4 py-1 my-1 rounded">
                 <header class="flex h-6 items-center">
                     <div
                         class="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center text-white font-black"
                     >
                         j/
                     </div>
-                    <a class="flex text-xs items-center hover:cursor-pointer" href={`/post/${p.community}`}
-                        ><span class="px-1 text-gray-700 font-semibold"
-                            >{`/j/${p.community}`}</span
+                    <a
+                        class="flex text-xs items-center hover:cursor-pointer"
+                        href={`/post/${p.community}`}
+                        ><span class="px-1 text-gray-700 font-semibold">{`/j/${p.community}`}</span
                         ></a
                     >
                     <span class="text-xs text-gray-500">{`${p.created_at}`}</span>

@@ -28,4 +28,4 @@
     });
 </script>
 
-<div bind:this={element} />
+<div bind:this={element}></div>

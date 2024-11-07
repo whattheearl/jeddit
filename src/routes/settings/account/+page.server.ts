@@ -4,7 +4,6 @@ import { base } from '$app/paths';
 import { getSession } from '$lib/db/sessions';
 import { db } from '$lib/db/_db';
 
-
 export const load: PageServerLoad = async (e) => {
     const { user } = getSession(e);
     if (!user) return redirect(302, '/');
