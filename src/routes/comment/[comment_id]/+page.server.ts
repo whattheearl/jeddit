@@ -1,4 +1,4 @@
-import { getSession } from '$lib/auth';
+import { getSession } from '$lib/db/sessions';
 import { error, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import {

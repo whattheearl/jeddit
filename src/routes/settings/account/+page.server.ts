@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { base } from '$app/paths';
-import { getSession } from '$lib/auth';
+import { getSession } from '$lib/db/sessions';
 import Database from 'better-sqlite3';
 
 const db = Database('db.sqlite');

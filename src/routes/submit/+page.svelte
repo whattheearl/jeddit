@@ -1,6 +1,6 @@
 <script lang="ts">
     import Excalidraw from '$lib/components/excalidraw.svelte';
-    import { render, toggleVisibility, exportToBlob } from '$lib/exalidraw.ts';
+    import { toggleVisibility, exportToBlob } from '$lib/exalidraw';
     import ImageIcon from '$lib/components/icons/image.svelte';
     import PenIcon from '$lib/components/icons/pen.svelte';
     import { goto } from '$app/navigation';
@@ -17,7 +17,7 @@
         const res = await fetch('/diagram', { method: 'POST', body: img });
         const data = await res.json();
         editor.commands.setImage({ src: data.imageurl });
-        await toggleVisibility();
+        toggleVisibility();
     };
 
     onMount(() => {
@@ -28,9 +28,6 @@
             extensions: [StarterKit, Image.configure({ allowBase64: true })],
             onTransaction: () => {
                 editor = editor;
-            },
-            onUpdate: ({ editor }) => {
-                // data.post.content = editor.getHTML();
             }
         });
         editor.commands.focus('end');

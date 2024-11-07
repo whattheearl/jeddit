@@ -1,6 +1,4 @@
-import Database from 'better-sqlite3';
-
-const db = new Database('db.sqlite');
+import { db } from './_db';
 
 interface IPost {
     id: number;
@@ -17,14 +15,18 @@ export const getAllPosts = () => {
     const posts = db
         .prepare(
             `
-    SELECT posts.id, posts.title, posts.content, users.username, communities.name as community, posts.created_at
-    FROM posts
-    JOIN users on users.id = posts.user_id
-    JOIN communities on communities.id = posts.community_id`
+            SELECT posts.id, posts.title, posts.content, users.username, communities.name as community, posts.created_at
+            FROM posts
+            JOIN users on users.id = posts.user_id
+            JOIN communities on communities.id = posts.community_id`
         )
-        .all() as IPost[];
+        .all();
 
-    return posts;
+    if (!posts) {
+        return [] as IPost[];
+    }
+
+    return posts as IPost[];
 };
 
 export const getPostById = (post_id: number) => {

@@ -16,9 +16,6 @@
             extensions: [StarterKit, Image.configure({ allowBase64: true })],
             onTransaction: () => {
                 editor = editor;
-            },
-            onUpdate: ({ editor }) => {
-                // EditorStore.updateContent(editor.getHTML());
             }
         });
         editor.commands.focus('end');

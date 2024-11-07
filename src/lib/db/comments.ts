@@ -1,6 +1,4 @@
-import Database from 'better-sqlite3';
-
-const db = new Database('db.sqlite');
+import { db } from './_db';
 
 interface IAddComment {
     post_id: number;

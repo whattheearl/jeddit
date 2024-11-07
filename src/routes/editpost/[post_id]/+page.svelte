@@ -50,7 +50,7 @@
     };
 
     const savePost = async () => {
-        const res = await fetch(`/post/${data.post.id}`, {
+        await fetch(`/post/${data.post.id}`, {
             method: 'PATCH',
             body: JSON.stringify(data.post)
         });

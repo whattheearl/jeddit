@@ -1,10 +1,11 @@
 import { error, redirect, type Handle } from '@sveltejs/kit';
 import { Logger } from '$lib/logger';
-import { HandleCallback, HandleSignIn, addUser, getUserByClaims, type IUser } from '$lib/auth';
+import { HandleCallback, HandleSignIn } from '$lib/oidc';
 import { deleteSession, createSession } from '$lib/db/sessions';
 import { env } from '$env/dynamic/private';
 import { generateUsername } from '$lib/username';
 import { sequence } from '@sveltejs/kit/hooks';
+import { addUser, getUserByClaims, type IUser } from '$lib/db/users';
 
 export const auth: Handle = async ({ event: e, resolve }) => {
     const logger = Logger('handle');
@@ -24,25 +25,25 @@ export const auth: Handle = async ({ event: e, resolve }) => {
                 client_id: env.google_client_id,
                 client_secret: env.google_client_secret,
                 redirect_uri: env.google_redirect_url
-            }) as any;
-            console.log(claims)
+            });
+            console.log(claims);
             let user = getUserByClaims(claims);
-            
+
             if (!user) {
                 logger.debug('user not found, creating user');
-                let newUser = {
+                const newUser = {
                     ...claims,
-                    username: generateUsername(),
-                } 
-                console.log(claims.picture)
+                    username: generateUsername()
+                } as IUser;
+                console.log(claims.picture);
                 if (claims.picture) {
                     try {
-                        const res = await fetch(claims.picture);
+                        const res = await fetch(claims.picture as string);
                         const buf = await res.arrayBuffer();
                         const picture = Buffer.from(buf).toString('base64');
                         newUser.picture = picture;
-                    } catch(err) {
-                        console.error('failed to retrieve user photo', claims.picture)
+                    } catch (err) {
+                        console.error('failed to retrieve user photo', claims.picture);
                     }
                 }
 

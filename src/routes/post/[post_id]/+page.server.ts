@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
-import { getSession } from '$lib/auth/index';
+import { getSession } from '$lib/db/sessions';
 import { getPostById, isPostLikedByUser, likePost, unlikePost, updatePost } from '$lib/db/posts';
 import { getSecondsFromUTC } from '$lib/time';
 import { addComment, getCommentsByPostId, getCommentsLikesByCommentId } from '$lib/db/comments';

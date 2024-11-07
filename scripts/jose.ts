@@ -14,3 +14,4 @@ console.log({ payload });
 console.time('prime generate');
 const arbitre = crypto.createDiffieHellman(512);
 console.timeEnd('prime generate');
+console.log(arbitre);

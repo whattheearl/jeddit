@@ -1,9 +1,8 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { getUserById, type IUser } from './users';
 import { dev } from '$app/environment';
-import Database from 'better-sqlite3';
+import { db } from './_db';
 
-const db = new Database('db.sqlite');
 const cookieName = 'sid';
 
 export interface ISession {

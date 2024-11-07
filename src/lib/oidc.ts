@@ -1,16 +1,9 @@
-import { Logger } from '../logger';
+import { Logger } from '$lib/logger';
 import { error, redirect, type RequestEvent } from '@sveltejs/kit';
-import {
-    getDiscoveryDocument,
-    hashCodeChallenge
-} from './oauth';
 import { env } from '$env/dynamic/private';
 import * as jose from 'jose';
-import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '../db/oauths';
+import { DeleteOauth, GetOauth, SaveOauth as SaveOauth } from '$lib/cookies/oauths';
 import { generateRandomBytes } from '$lib/crypto';
-
-export * from '../db/users';
-export { getSession } from '../db/sessions';
 
 export interface HandleCallbackConfig {
     authority: string;
@@ -50,15 +43,15 @@ export const HandleCallback = async (
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
-        
-    console.log({status: res.status, })
+
+    console.log({ status: res.status });
     if (res.status != 200) {
         const errorResponse = await res.text();
-        console.log('error response', errorResponse)
+        console.log('error response', errorResponse);
         error(
             500,
             `Unable to retrieve access_token from authorization server [${discoveryDocument.token_endpoint}]`
-        )
+        );
     }
 
     const data = await res.json();
@@ -73,18 +66,18 @@ export const HandleCallback = async (
     }
 
     logger.info('verify token and get claims');
-    const JWKS = jose.createRemoteJWKSet(new URL(discoveryDocument.jwks_uri)) 
-    logger.info('token', {JWKS})
-    const { payload, protectedHeader } = await jose.jwtVerify(id_token, JWKS, {
-        //issuer: authority as string,
-        //audience: client_id as string
-    })
+    const JWKS = jose.createRemoteJWKSet(new URL(discoveryDocument.jwks_uri));
+    logger.info('token', { JWKS });
+    const { payload } = await jose.jwtVerify(id_token, JWKS, {
+        issuer: authority as string,
+        audience: client_id as string
+    });
 
-    logger.info('payload', payload)
+    logger.info('payload', payload);
     if (payload.nonce != nonce) {
         error(400, '[nonce] does not match');
     }
-    
+
     DeleteOauth(e);
     return payload;
 };
@@ -130,4 +123,21 @@ export const HandleSignIn = async (
 
     logger.debug(`redirectUri [${authorization_url.toString()}]`);
     redirect(302, authorization_url.toString());
+};
+
+export const hashCodeChallenge = async (code_verifier: string) => {
+    const hashBuf = await crypto.subtle.digest('SHA-256', Buffer.from(code_verifier));
+    return Buffer.from(hashBuf).toString('base64url');
+};
+
+export const getDiscoveryDocument = async (openid_configuration_endpoint: string) => {
+    const res = await fetch(openid_configuration_endpoint);
+    const discoveryDoc = (await res.json()) as {
+        authorization_endpoint: string;
+        token_endpoint: string;
+        userinfo_endpoint: string;
+        issuer: string;
+        jwks_uri: string;
+    };
+    return discoveryDoc;
 };

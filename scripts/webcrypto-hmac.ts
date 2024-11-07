@@ -1,4 +1,4 @@
-let enc = new TextEncoder();
+const enc = new TextEncoder();
 const secret = enc.encode('SECRET_STRING');
 const text = enc.encode('I love cupcakes');
 export const key = await crypto.subtle.importKey(

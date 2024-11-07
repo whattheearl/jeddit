@@ -1,9 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getSession } from '$lib/auth/index';
+import { getSession } from '$lib/db/sessions';
 import { sanitizeHtml } from '$lib/domsanitizer';
 import { addPost } from '$lib/db/posts';
-import { Logger } from '$lib/logger';
 
 export const load: PageServerLoad = (event) => {
     const { user } = getSession(event);
@@ -12,7 +11,6 @@ export const load: PageServerLoad = (event) => {
 
 export const actions: Actions = {
     default: async (e) => {
-        const logger = Logger('submit.default');
         const { user } = getSession(e);
         if (!user) redirect(302, '/signin');
 
