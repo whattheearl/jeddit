@@ -1,6 +1,6 @@
 <script lang="ts">
     import Excalidraw from '$lib/components/excalidraw.svelte';
-    import { exportSVGElement, toggleVisibility } from '$lib/exalidraw.ts';
+    import { exportSVGElement, toggleVisibility } from '$lib/excalidraw';
 
     const onSave = async () => {
         const svg = await exportSVGElement();

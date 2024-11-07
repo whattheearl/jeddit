@@ -1,6 +1,6 @@
 <script lang="ts">
     import Excalidraw from '$lib/components/excalidraw.svelte';
-    import { toggleVisibility, exportToBlob } from '$lib/exalidraw';
+    import { toggleVisibility, exportToBlob } from '$lib/excalidraw';
     import ImageIcon from '$lib/components/icons/image.svelte';
     import PenIcon from '$lib/components/icons/pen.svelte';
     import { goto } from '$app/navigation';

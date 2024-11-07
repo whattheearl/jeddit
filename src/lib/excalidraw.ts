@@ -32,7 +32,7 @@ export const render = async (options: RenderOptions) => {
     // todo: overlay button over dialog so it will work in any screen size
     const footer = React.createElement(
         Excalidraw.Footer,
-        { key: 'exalidraw-footer' },
+        { key: 'excalidraw-footer' },
         saveButton as any
     );
     const excalidraw = React.createElement(
