@@ -2,7 +2,6 @@
     import type { PageData } from './$types';
 
     export let data: PageData;
-
     const settingRowClass = 'flex flex-wrap px-4 max-w-[700px] mb-8';
     const settingNameClass = 'font-semibold text-gray-800';
     const settingValueClass = 'text-sm text-gray-400';

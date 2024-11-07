@@ -12,23 +12,23 @@ export const load: PageServerLoad = (event) => {
 export const actions: Actions = {
     default: async (e) => {
         const { user } = getSession(e);
-        if (!user) redirect(302, '/signin');
+        if (!user) {
+            redirect(302, '/signin');
+        }
 
         const { request } = e;
         const formData = await request.formData();
         const title = formData.get('title') as string;
         const content = formData.get('content') as string;
-        if (!title || !content) return { title, content };
-
-        const community_id = 1; //jeddit hardcoded`
-
-        const sanitizedContent = sanitizeHtml(content.trim());
+        if (!title || !content) {
+            return { title, content };
+        }
 
         addPost({
             user_id: user.id,
-            community_id: community_id,
+            community_id: 1,
             title: title,
-            content: sanitizedContent,
+            content: sanitizeHtml(content.trim()),
             created_at: Date.now()
         });
 

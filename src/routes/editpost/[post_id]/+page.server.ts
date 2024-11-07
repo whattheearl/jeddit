@@ -10,7 +10,9 @@ export const load: PageServerLoad = (e) => {
     const { params } = e;
     const post_id = +params.post_id;
     const post = getPostById(post_id);
-    if (!post) redirect(302, '/');
+    if (!post) {
+        redirect(302, '/');
+    }
 
     const { user } = getSession(e);
     const comments = getCommentsByPostId(post_id);

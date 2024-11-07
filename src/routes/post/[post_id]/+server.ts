@@ -5,14 +5,26 @@ import type { RequestHandler } from './$types';
 
 export const PATCH: RequestHandler = async (event) => {
     const { user } = getSession(event);
-    if (!user) return new Response(null, { status: 401, statusText: 'unauthenticated' });
+    if (!user) {
+        return new Response(null, { status: 401, statusText: 'unauthenticated' });
+    }
+        
     const data = await event.request.json();
-    if (!data) return new Response(null, { status: 400, statusText: 'bad request' });
+    if (!data) {
+        return new Response(null, { status: 400, statusText: 'bad request' });
+    }
+
     const post = Posts.getPostById(data.id);
-    if (!post) return new Response(null, { status: 404, statusText: 'not found' });
-    if (post.username != user?.username)
+    if (!post) {
+        return new Response(null, { status: 404, statusText: 'not found' });
+    }
+
+    if (post.username != user?.username) {
         return new Response(null, { status: 403, statusText: 'unauthorized' });
+    }
+
     post.content = sanitizeHtml(data.content.trim());
     Posts.updatePost(post);
+
     return new Response(null, { status: 204, statusText: 'success' });
 };

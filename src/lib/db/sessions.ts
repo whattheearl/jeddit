@@ -52,6 +52,5 @@ export const deleteSession = ({ cookies }: RequestEvent) => {
     if (!sid) return;
 
     cookies.delete('sid', { path: '/' });
-    const db = new Database('db.sqlite');
     db.prepare('DELETE FROM sessions WHERE id == ?').run(sid);
 };

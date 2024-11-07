@@ -6,9 +6,9 @@
     import ThumbsDown from '$lib/components/icons/thumbs-down.svelte';
     import ThumbsUp from '$lib/components/icons/thumbs-up.svelte';
     import { goto } from '$app/navigation';
+    import type { PageData } from './$types';
 
-    //** @type {import('./$types').PageLoad */
-    export let data;
+    export let data: PageData;
     const showEditButton = data.user && data.user.username == data.post.username;
     const upUnselected =
         'w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-gray-200 rounded-full';

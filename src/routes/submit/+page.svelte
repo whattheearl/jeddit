@@ -12,7 +12,9 @@
     let editor: Editor;
 
     const onDiagramSave = async () => {
-        if (!editor) return;
+        if (!editor) {
+            return;
+        }
         const img = await exportToBlob();
         const res = await fetch('/diagram', { method: 'POST', body: img });
         const data = await res.json();
@@ -70,7 +72,7 @@
             <h1 class="font-semibold text-xl text-gray-800">Create a post</h1>
         </header>
         <div class="w-full my-4 editmode">
-            <div bind:this={element} />
+            <div bind:this={element}></div>
         </div>
         <div class="flex justify-between items-center">
             <form>
