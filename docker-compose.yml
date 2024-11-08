@@ -1,0 +1,11 @@
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - 8080:80
+    jeddit:
+        image: ghcr.io/whattheearl/jeddit:latest
+        ports:
+            - 5173:5173
+
+
