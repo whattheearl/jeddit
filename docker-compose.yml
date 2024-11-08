@@ -3,5 +3,7 @@ services:
         image: ghcr.io/whattheearl/jeddit:latest
         ports:
             - 5174:8080
+        env_file:
+            - ./.env.prod
 
 
