@@ -21,21 +21,12 @@ info "PUSHING CONTAINER"
 docker push $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION || exit 1
 
 info "PUSHING ENV"
-ssh $IP mkdir -p /home/jon/jeddit 
-scp .env.prod $IP:/home/jon/jeddit/.env.prod
-scp docker-compose.yml $IP:/home/jon/jeddit/.env.prod
+ssh $IP mkdir -p jeddit 
+scp .env.prod $IP:jeddit/.env.prod
+scp docker-compose.yml $IP:jeddit/docker-compose.yml
 
 info "PULLING CONTAINER"
 ssh $IP cd jeddit; docker compose pull; 
 
 info "RESTARTING CONTAINER"
 ssh $IP cd jeddit; docker compose up -d; 
-
-# info "STARTING CONTAINER"
-# ssh $IP docker pull $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION
-# ssh $IP docker run \
-#     --restart unless-stopped \
-#     -p 5174:5174 \
-#     -d \
-#     --env-file /home/jon/jeddit/.env.prod \
-#     --name $CONTAINER_NAME $REGISTRY/$REGISTRY_USER/$CONTAINER_NAME:$VERSION
