@@ -12,7 +12,7 @@
         href="/"
         style="display: flex; height: 48px; align-items: center; color: rgb(255, 69, 0); font-weight: 800; font-size: 24px; letter-spacing: -2px;"
     >
-        jeddit!
+        jeddit
     </a>
     {#if $page.data.user}
         <div class="ml-auto flex items-center gap-2">

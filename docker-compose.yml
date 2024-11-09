@@ -5,5 +5,8 @@ services:
             - 5174:8080
         env_file:
             - ./.env.prod
+        volumes:
+            - jeddit:/app/db.sqlite
 
-
+volumes:
+    jeddit:
