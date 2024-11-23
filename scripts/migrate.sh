@@ -1,2 +1,2 @@
-#! /bin/sh
-sqlite3 db.sqlite < ./scripts/migrate.sql
+#!/usr/bin/env sh
+sqlite3 ./data/db.sqlite < ./scripts/migrate.sql

@@ -13,18 +13,18 @@ export const auth: Handle = async ({ event: e, resolve }) => {
     switch (e.url.pathname) {
         case '/auth/google/signin': {
             return await HandleSignIn(e, {
-                authority: env.google_authority,
-                client_id: env.google_client_id as string,
-                redirect_uri: env.google_redirect_url as string
+                authority: env.google_authority ?? '',
+                client_id: env.google_client_id ?? '',
+                redirect_uri: env.google_redirect_url ?? ''
             });
         }
 
         case '/auth/google/callback': {
             const claims = await HandleCallback(e, {
-                authority: env.google_authority,
-                client_id: env.google_client_id,
-                client_secret: env.google_client_secret,
-                redirect_uri: env.google_redirect_url
+                authority: env.google_authority ?? '',
+                client_id: env.google_client_id ?? '',
+                client_secret: env.google_client_secret ?? '',
+                redirect_uri: env.google_redirect_url ?? ''
             });
             console.log(claims);
             let user = getUserByClaims(claims);
