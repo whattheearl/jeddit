@@ -3,7 +3,7 @@ SERVER=wte
 GIT_URL=https://github.com/whattheearl/jeddit
 BUILD_PATH=/root/build/jeddit
 TAG=ghcr.io/whattheearl/jeddit:latest
-APP_PATH=/root/apps/jeddit
+APP_PATH=/root/app/jeddit
 
 green=$(tput setaf 2)
 normal=$(tput sgr0)
@@ -13,8 +13,9 @@ function info {
 }
 
 info "CLONING REPOSITORY" 
-git push ssh://$SERVER:/root/git/jeddit
-ssh $SERVER rm -rf ${BUILD_PATH} && git clone /root/git/jeddit ${BUILD_PATH} || exit 1
+git push ssh://${SERVER}:/root/git/jeddit
+ssh ${SERVER} rm -rf ${BUILD_PATH}
+ssh ${SERVER} git clone /root/git/jeddit ${BUILD_PATH} || exit 1
 
 info "BUILDING CONTAINER"
 ssh $SERVER cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1
