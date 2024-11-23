@@ -13,8 +13,8 @@ function info {
 }
 
 info "BUILDING CONTAINER" 
-ssh $SERVER git clone ${GIT_URL} ${BUILD_PATH}
-ssh $SERVER cd ${BUILD_PATH} && git pull || exit 1
+git push ssh://$SERVER:/root/git/jeddit
+ssh $SERVER rm ${BUILD_PATH} && git clone /root/git/jeddit ${BUILD_PATH} || exit 1
 ssh $SERVER cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1
 
 info "PUSHING CONTAINER"
