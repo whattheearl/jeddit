@@ -2,7 +2,7 @@
 SERVER=wte
 GIT_URL=https://github.com/whattheearl/jeddit
 BUILD_PATH=/root/build/jeddit
-TAG=ghcr.io/whattheearl/jeddit:latest
+TAG=jeddit:local
 APP_PATH=/root/app/jeddit
 
 green=$(tput setaf 2)
@@ -20,8 +20,8 @@ ssh ${SERVER} git clone /root/git/jeddit ${BUILD_PATH} || exit 1
 info "BUILDING CONTAINER"
 ssh $SERVER cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1
 
-info "PUSHING CONTAINER"
-ssh $SERVER docker push $TAG || exit 1
+# info "PUSHING CONTAINER"
+# ssh $SERVER docker push $TAG || exit 1
 
 info "PUSHING ENV"
 ssh $SERVER mkdir -p $APP_PATH || exit 1

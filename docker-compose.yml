@@ -1,6 +1,6 @@
 services:
     jeddit:
-        image: ghcr.io/whattheearl/jeddit:latest
+        image: jeddit:local
         ports:
             - 5174:8080
         env_file:

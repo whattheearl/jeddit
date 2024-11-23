@@ -4,7 +4,7 @@ ENV PORT=8080
 RUN apk update && apk upgrade
 RUN apk add --no-cache sqlite
 COPY package.json package-lock.json ./
-RUN npm i
+RUN npm install --verbose
 COPY . .
 RUN ./scripts/migrate.sh
 RUN npm run build
