@@ -29,6 +29,9 @@ scp .env.prod $SERVER:$APP_PATH || exit 1
 scp docker-compose.yml $SERVER:$APP_PATH || exit 1
 
 info "RESTARTING SERVICE"
-ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml down"
-ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml pull"
-ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml up -d"
+ssh $SERVER docker stop wteos
+ssh $SERVER docker run -d -p 8080:8080 --env-file /root/app/jeddit/.env.prod ${TAG}
+
+# ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml down"
+# ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml pull"
+# ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml up -d"
