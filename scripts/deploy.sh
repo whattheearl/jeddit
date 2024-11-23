@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash 
 SERVER=wte
 GIT_URL=https://github.com/whattheearl/jeddit
 BUILD_PATH=/root/build/jeddit
