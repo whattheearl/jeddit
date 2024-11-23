@@ -13,9 +13,9 @@ function info {
 }
 
 info "BUILDING CONTAINER" 
-ssh $SERVER git clone $GIT_URL $BUILD_PATH
-ssh $SERVER cd $BUILD_PATH && git pull
-ssh $SERVER cd $BUILD_PATH && docker build . --tag $TAG || exit 1
+ssh $SERVER git clone ${GIT_URL} ${BUILD_PATH}
+ssh $SERVER cd ${BUILD_PATH} && git pull || exit 1
+ssh $SERVER cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1
 
 info "PUSHING CONTAINER"
 ssh $SERVER docker push $TAG || exit 1
