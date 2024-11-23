@@ -12,9 +12,11 @@ function info {
   printf "${green}\n$1\n\n${normal}" 
 }
 
-info "BUILDING CONTAINER" 
+info "CLONING REPOSITORY" 
 git push ssh://$SERVER:/root/git/jeddit
-ssh $SERVER rm ${BUILD_PATH} && git clone /root/git/jeddit ${BUILD_PATH} || exit 1
+ssh $SERVER rm -rf ${BUILD_PATH} && git clone /root/git/jeddit ${BUILD_PATH} || exit 1
+
+info "BUILDING CONTAINER"
 ssh $SERVER cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1
 
 info "PUSHING CONTAINER"
