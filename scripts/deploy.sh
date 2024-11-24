@@ -2,15 +2,15 @@
 SERVER=wte
 GIT_PATH=/root/git/jeddit
 BUILD_PATH=/root/build/jeddit
-TAG=jeddit:latest
+TAG=ghcr.io/whattheearl/jeddit:latest
 APP_PATH=/root/app/jeddit
 
-echo "CLONING REPOSITORY" 
+echo "PUSHING REPOSITORY" 
 git push "ssh://${SERVER}:${GIT_PATH}"
-ssh ${SERVER} "rm -rf ${BUILD_PATH}"
-ssh ${SERVER} "git clone -b main ${GIT_PATH} ${BUILD_PATH}"
 
 echo "BUILDING CONTAINER"
+ssh ${SERVER} "rm -rf ${BUILD_PATH}"
+ssh ${SERVER} "git clone -b main ${GIT_PATH} ${BUILD_PATH}"
 ssh ${SERVER} "cd ${BUILD_PATH} && docker build . --tag ${TAG}"
 
 echo "PUSHING CONTAINER"
