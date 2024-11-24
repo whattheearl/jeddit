@@ -5,12 +5,11 @@ BUILD_PATH="/root/build/jeddit"
 TAG="ghcr.io/whattheearl/jeddit:latest"
 APP_PATH="/root/app/jeddit"
 
+# echo "CHECKOUT REPOSITORY ${GIT_PATH}"
 # echo "PUSHING REPOSITORY ssh://${SERVER}:${GIT_PATH}\n" 
 # git push "ssh://${SERVER}:${GIT_PATH}"
-
-echo "CHECKOUT REPOSITORY ${GIT_PATH}"
-rm -rf ${BUILD_PATH}
-git clone -b main ${GIT_PATH} ${BUILD_PATH}
+# rm -rf ${BUILD_PATH}
+# git clone -b main ${GIT_PATH} ${BUILD_PATH}
 
 echo "BUILDING CONTAINER ${TAG}"
 cd ${BUILD_PATH} 
