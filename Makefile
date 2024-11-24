@@ -1,6 +1,6 @@
 # ==================================================================================== #
 # VARIABLES 
-# ==================================================================================== #
+
 
 SERVER=wte
 GIT_URL=https://github.com/whattheearl/jeddit
@@ -53,7 +53,7 @@ dev:
 ## deploy: deploys to server 
 .PHONY: deploy 
 deploy: 
-	git pull
+	git push ssh://wte:/root/git/jeddit
 	docker build . --tag "ghcr.io/whattheearl/jeddit:latest"
 	docker push "ghcr.io/whattheearl/jeddit:latest"
 	# docker compose up -d
