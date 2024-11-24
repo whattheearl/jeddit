@@ -1,13 +1,3 @@
-
-# VARIABLES 
-
-
-SERVER=wte
-GIT_URL=https://github.com/whattheearl/jeddit
-BUILD_PATH=/root/build/jeddit
-TAG=jeddit:local
-APP_PATH=/root/app/jeddit
-
 # ==================================================================================== #
 # HELPERS
 # ==================================================================================== #
