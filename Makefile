@@ -1,4 +1,4 @@
-# ==================================================================================== #
+
 # VARIABLES 
 
 
@@ -50,12 +50,30 @@ dev:
 # PUBLISH 
 # ==================================================================================== #
 
-## deploy: deploys to server 
-.PHONY: deploy 
-deploy: 
-	git push ssh://wte:/root/git/jeddit
-	docker build . --tag "ghcr.io/whattheearl/jeddit:latest"
-	docker push "ghcr.io/whattheearl/jeddit:latest"
-	# docker compose up -d
-	
+## env: sync environmental variables
+.PHONY: env
+env:
+	@ssh wte "rm -rf /home/jon/wte/jeddit; git clone -b main /root/git/jeddit /home/jon/wte/jeddit"
+	@rsync .env.prod		wte:/home/jon/wte/jeddit/.env.prod
+	@rsync docker-compose.yml	wte:/home/jon/wte/jeddit/docker-compose.yml
+	@rsync Makefile			wte:/home/jon/wte/jeddit/Makefile
 
+## build: build container ghcr.io/whattheearl/jeddit:latest
+.PHONY: build
+build:
+	@docker build /home/jon/wte/jeddit --tag ghcr.io/whattheearl/jeddit:latest
+
+## push: publish container to ghcr.io/whattheearl/jeddit:latest
+.PHONY: publish
+push:
+	@docker push ghcr.io/whattheearl/jeddit:latest
+
+## start: start service 
+.PHONY: start 
+start: build push
+	@docker compose -f /home/jon/wte/jeddit/docker-compose.yml up -d
+	
+# ## deploy: deploy service
+# .PHONY: deploy
+deploy: env
+	@ssh wte "make --file /home/jon/wte/jeddit/Makefile start"

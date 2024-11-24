@@ -1,7 +1,12 @@
 services:
     jeddit:
-        image: jeddit:local
+        image: ghcr.io/whattheearl/jeddit:latest
         ports:
             - 5174:8080
         env_file:
             - ./.env.prod
+        volumes:
+            - jeddit:/app/data
+
+volumes:
+    jeddit:
