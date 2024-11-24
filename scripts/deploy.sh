@@ -14,7 +14,7 @@ git clone -b main ${GIT_PATH} ${BUILD_PATH}
 
 echo "BUILDING CONTAINER ${TAG}"
 cd ${BUILD_PATH} 
-docker build . --tag ${tag}
+docker build . --tag ${TAG}
 # ssh ${SERVER} "rm -rf ${BUILD_PATH}"
 # ssh ${SERVER} "git clone -b main ${GIT_PATH} ${BUILD_PATH}"
 # ssh ${SERVER} "cd ${BUILD_PATH} && docker build . --tag ${TAG}"
