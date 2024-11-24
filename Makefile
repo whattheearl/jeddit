@@ -53,4 +53,9 @@ dev:
 ## deploy: deploys to server 
 .PHONY: deploy 
 deploy: 
-	./scripts/deploy.sh
+	git pull
+	docker build . --tag "ghcr.io/whattheearl/jeddit:latest"
+	docker push "ghcr.io/whattheearl/jeddit:latest"
+	# docker compose up -d
+	
+
