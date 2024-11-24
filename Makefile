@@ -50,30 +50,7 @@ dev:
 # PUBLISH 
 # ==================================================================================== #
 
-## docker-push: build and push latest container
-.PHONY: docker-push
-docker-push:
-	@echo "CLONING REPOSITORY" 
-	@git push ssh://${SERVER}:/root/git/jeddit
-	@ssh ${SERVER} "rm -rf ${BUILD_PATH}"
-	@ssh ${SERVER} "git clone -b main /root/git/jeddit ${BUILD_PATH} || exit 1"
-
-	@echo "BUILDING CONTAINER"
-	@ssh $SERVER "cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1"
-
-	@echo "PUSHING CONTAINER"
-	@ssh $SERVER docker push $TAG || exit 1
-
-## env-push: push env
-.PHONY: env-push
-	@echo "PUSHING ENV"
-	@ssh $SERVER "mkdir -p $APP_PATH || exit 1"
-	@scp .env.prod $SERVER:$APP_PATH || exit 1
-	@scp docker-compose.yml $SERVER:$APP_PATH || exit 1
-
 ## deploy: deploys to server 
 .PHONY: deploy 
-deploy: no-dirty docker-push env-push
-	@echo "RESTARTING SERVICE"
-	@ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml down"
-
+deploy: 
+	./scripts/deploy.sh
