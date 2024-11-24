@@ -3,10 +3,10 @@
 # ==================================================================================== #
 
 SERVER=wte
-
-APP_PATH=/root/apps/jeddit
+GIT_URL=https://github.com/whattheearl/jeddit
 BUILD_PATH=/root/build/jeddit
-TAG=ghcr.io/whattheearl/jeddit:latest
+TAG=jeddit:local
+APP_PATH=/root/app/jeddit
 
 # ==================================================================================== #
 # HELPERS
@@ -32,7 +32,7 @@ no-dirty:
 # ==================================================================================== #
 
 ## format: format files
-.PHONEY: format
+.PHONY: format
 format:
 	@npx prettier --write .
 
@@ -41,7 +41,7 @@ format:
 # ==================================================================================== #
 
 ## dev: starts dev server
-.PHONEY: dev 
+.PHONY: dev 
 dev:
 	npm i;
 	npm run dev;
@@ -50,8 +50,30 @@ dev:
 # PUBLISH 
 # ==================================================================================== #
 
+## docker-push: build and push latest container
+.PHONY: docker-push
+docker-push:
+	@echo "CLONING REPOSITORY" 
+	@git push ssh://${SERVER}:/root/git/jeddit
+	@ssh ${SERVER} "rm -rf ${BUILD_PATH}"
+	@ssh ${SERVER} "git clone -b main /root/git/jeddit ${BUILD_PATH} || exit 1"
+
+	@echo "BUILDING CONTAINER"
+	@ssh $SERVER "cd ${BUILD_PATH} && docker build . --tag ${TAG} || exit 1"
+
+	@echo "PUSHING CONTAINER"
+	@ssh $SERVER docker push $TAG || exit 1
+
+## env-push: push env
+.PHONY: env-push
+	@echo "PUSHING ENV"
+	@ssh $SERVER "mkdir -p $APP_PATH || exit 1"
+	@scp .env.prod $SERVER:$APP_PATH || exit 1
+	@scp docker-compose.yml $SERVER:$APP_PATH || exit 1
+
 ## deploy: deploys to server 
-.PHONEY: deploy 
-deploy: no-dirty
-	./scripts/deploy.sh
+.PHONY: deploy 
+deploy: no-dirty docker-push env-push
+	@echo "RESTARTING SERVICE"
+	@ssh $SERVER "docker compose -f ${APP_PATH}/docker-compose.yml down"
 
