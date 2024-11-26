@@ -48,6 +48,11 @@ env:
 		/home/jon/wte/jeddit/docker-compose.yml	\
 		/home/jon/wte/jeddit/Makefile wte:/home/jon/wte/jeddit
 
+## login: login to ghcr.io for publish
+.PHONY: login
+login:
+	@echo ${GITHUB_TOKEN} | docker login ghcr.io -u whattheearl --password-stdin
+
 ## build: build container ghcr.io/whattheearl/jeddit:latest
 .PHONY: build
 build:
