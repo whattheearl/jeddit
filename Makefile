@@ -43,10 +43,10 @@ dev:
 ## env: sync environmental variables
 .PHONY: env
 env:
-	@ssh wte "rm -rf /home/jon/wte/jeddit; git clone -b main /root/git/jeddit /home/jon/wte/jeddit"
-	@rsync .env.prod		wte:/home/jon/wte/jeddit/.env.prod
-	@rsync docker-compose.yml	wte:/home/jon/wte/jeddit/docker-compose.yml
-	@rsync Makefile			wte:/home/jon/wte/jeddit/Makefile
+	@ssh wte "rm -rf /home/jon/wte/jeddit; git clone -b main https://github.com/whattheearl/jeddit /home/jon/wte/jeddit" || exit 1
+	@scp /home/jon/wte/jeddit/.env.prod \
+		/home/jon/wte/jeddit/docker-compose.yml	\
+		/home/jon/wte/jeddit/Makefile wte:/home/jon/wte/jeddit
 
 ## build: build container ghcr.io/whattheearl/jeddit:latest
 .PHONY: build
