@@ -62,7 +62,13 @@ publish:
 ## start: start service 
 .PHONY: start 
 start: 
+	@docker compose pull
 	@docker compose up -d
+
+## stop: stop service 
+.PHONY: stop 
+stop: 
+	@docker compose stop
 
 ## env: sync environmental variables
 .PHONY: env
