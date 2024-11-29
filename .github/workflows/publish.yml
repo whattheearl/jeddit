@@ -16,7 +16,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: '20'
-            - run: npm i
-            - run: npx semantic-release
+            - run: make build
+            - run: make push
               env:
-                  GH_TOKEN: '${{ secrets.GHCR_SECRET }}'
+                  GITHUB_TOKEN: '${{ secrets.GHCR_SECRET }}'
