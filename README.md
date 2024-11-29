@@ -13,24 +13,19 @@
 
 ```bash
 nvm use --lts
-npm i
-npm run migrate
-npm run dev
+make dev
 # goto http://localhost:5173
 ```
 
 ## Run
 
 ```bash
-npm i
-npm run migrate
-npm run build
-node ./build
+make start
 # goto http://localhost:5173
 ```
 
 ## Deploy
 
 ```bash
-/bin/bash ./scripts/deploy.sh
+make deploy
 ```
