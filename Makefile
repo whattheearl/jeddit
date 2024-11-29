@@ -40,15 +40,7 @@ dev:
 # PUBLISH 
 # ==================================================================================== #
 
-## env: sync environmental variables
-.PHONY: env
-env:
-	@ssh wte "rm -rf /home/jon/wte/jeddit; git clone -b main https://github.com/whattheearl/jeddit /home/jon/wte/jeddit" || exit 1
-	@scp /home/jon/wte/jeddit/.env.prod \
-		/home/jon/wte/jeddit/docker-compose.yml	\
-		/home/jon/wte/jeddit/Makefile wte:/home/jon/wte/jeddit
-
-## login: login to ghcr.io for publish
+## login: login to ghcr.io with GITHUB_TOKEN for publishing container 
 .PHONY: login
 login:
 	@echo ${GITHUB_TOKEN} | docker login ghcr.io -u whattheearl --password-stdin
@@ -56,19 +48,30 @@ login:
 ## build: build container ghcr.io/whattheearl/jeddit:latest
 .PHONY: build
 build:
-	@docker build /home/jon/wte/jeddit --tag ghcr.io/whattheearl/jeddit:latest
+	@docker build . --tag ghcr.io/whattheearl/jeddit:latest
 
 ## push: publish container to ghcr.io/whattheearl/jeddit:latest
-.PHONY: publish
-push:
+.PHONY: publish 
+publish:
 	@docker push ghcr.io/whattheearl/jeddit:latest
+
+# ==================================================================================== #
+# DEPLOYMENT
+# ==================================================================================== #
 
 ## start: start service 
 .PHONY: start 
-start: build push
-	@docker compose -f /home/jon/wte/jeddit/docker-compose.yml up -d
-	
-# ## deploy: deploy service
+start: 
+	@docker compose up -d
+
+## env: sync environmental variables
+.PHONY: env
+env:
+	@ssh jeddit.wte.sh "rm -rf /home/jon/wte/jeddit; git clone https://github.com/whattheearl/jeddit /home/jon/wte/jeddit" || exit 1
+	@scp .env.prod jeddit.wte.sh:/home/jon/wte/jeddit/.env.prod || exit 1
+	@scp Makefile jeddit.wte.sh:/home/jon/wte/jeddit/Makefile || exit 1
+
+## deploy: deploy service
 # .PHONY: deploy
 deploy: env
-	@ssh wte "make --file /home/jon/wte/jeddit/Makefile start"
+	@ssh jeddit.wte.sh "make -C /home/jon/wte/jeddit start"
