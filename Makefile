@@ -50,7 +50,7 @@ login:
 build:
 	@docker build . --tag ghcr.io/whattheearl/jeddit:latest
 
-## push: publish container to ghcr.io/whattheearl/jeddit:latest
+## publish: publish docker container to ghcr.io/whattheearl/jeddit:latest
 .PHONY: publish 
 publish:
 	@docker push ghcr.io/whattheearl/jeddit:latest
