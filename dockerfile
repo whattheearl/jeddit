@@ -4,7 +4,7 @@ WORKDIR /home/jon/wte/jeddit
 COPY package.json package-lock.json .
 RUN npm ci --verbose
 COPY . .
-RUN ./scripts/migrate.sh
+RUN sqlite3 /home/jon/wte/jeddit/data/db.sqlite < ./scripts/migrate.sql
 RUN npm run build
 ARG NODE_ENV=production
 ENV NODE_ENV=$NODE_ENV

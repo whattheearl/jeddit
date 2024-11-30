@@ -52,6 +52,11 @@ dev:
 	npm i;
 	npm run dev;
 
+## migrate: creates tabe
+.PHONY: migrate
+migrate:
+	sqlite3 ${BUILD_PATH}/data/db.sqlite < ./scripts/migrate.sql
+
 # ==================================================================================== #
 # PUBLISH 
 # ==================================================================================== #
