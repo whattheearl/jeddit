@@ -24,7 +24,12 @@ no-dirty:
 ## format: format files
 .PHONY: format
 format:
-	@npx prettier --write .
+	@npm run format 
+
+## format: format files
+.PHONY: lint 
+lint:
+	@npm run lint
 
 # ==================================================================================== #
 # DEVELOPMENT 

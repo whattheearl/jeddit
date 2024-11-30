@@ -1,5 +1,19 @@
 /** @type { import("eslint").Linter.Config } */
 module.exports = {
+    ignores: [
+        '.DS_Store',
+        'node_modules',
+        'scripts',
+        '**/lib/components/ui/*',
+        '**/excalidraw*',
+        '/build',
+        '/.svelte-kit',
+        '/package',
+        '.env',
+        '.env.*',
+        '!.env.example',
+        'package-lock.json'
+    ],
     root: true,
     extends: [
         'eslint:recommended',

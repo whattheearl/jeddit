@@ -1,15 +1,16 @@
+import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
 import React from 'react';
 import ReactDom from 'react-dom/client';
 
 let Excalidraw: typeof import('@excalidraw/excalidraw');
-let excalidrawApi: any;
+let excalidrawApi: ExcalidrawImperativeAPI;
 
 export interface RenderOptions {
-    onSave: Function | undefined;
+    onSave: () => void | undefined;
 }
 
 export const render = async (options: RenderOptions) => {
-    window.process = { env: { IS_PREACT: false } } as any;
+    window.process.env.IS_PREACT = 'false';
     Excalidraw = await import('@excalidraw/excalidraw');
     const container = document.getElementById('root');
     const root = ReactDom.createRoot(container!);
@@ -30,11 +31,7 @@ export const render = async (options: RenderOptions) => {
     );
 
     // todo: overlay button over dialog so it will work in any screen size
-    const footer = React.createElement(
-        Excalidraw.Footer,
-        { key: 'excalidraw-footer' },
-        saveButton as any
-    );
+    const footer = React.createElement(Excalidraw.Footer, { key: 'excalidraw-footer' }, saveButton);
     const excalidraw = React.createElement(
         Excalidraw.Excalidraw,
         {
@@ -58,7 +55,6 @@ export const exportSVGElement = async () => {
     const svg = await Excalidraw.exportToSvg({
         appState: excalidrawApi.getAppState(),
         elements: excalidrawApi.getSceneElements(),
-        // files: excalidrawApi.getFiles(),
         files: null,
         renderEmbeddables: false
     });
@@ -70,7 +66,6 @@ export const exportToBlob = async () => {
         appState: excalidrawApi.getAppState(),
         elements: excalidrawApi.getSceneElements(),
         files: null,
-        renderEmbeddables: false,
         mimeType: 'image/png',
         exportPadding: 50,
         maxWidthOrHeight: 1200
@@ -80,5 +75,9 @@ export const exportToBlob = async () => {
 
 export const toggleVisibility = () => {
     const root = document.querySelector('#excalidraw') as HTMLElement;
-    root.style.display == 'none' ? (root.style.display = 'flex') : (root.style.display = 'none');
+    if (root.style.display == 'none') {
+        root.style.display = 'flex';
+    } else {
+        root.style.display = 'none';
+    }
 };

@@ -44,6 +44,7 @@ export const auth: Handle = async ({ event: e, resolve }) => {
                         newUser.picture = picture;
                     } catch (err) {
                         console.error('failed to retrieve user photo', claims.picture);
+                        console.error(err);
                     }
                 }
 
