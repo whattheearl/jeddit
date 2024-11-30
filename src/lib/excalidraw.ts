@@ -10,7 +10,8 @@ export interface RenderOptions {
 }
 
 export const render = async (options: RenderOptions) => {
-    window.process.env.IS_PREACT = 'false';
+    // @ts-expect-error - required for excalidraw
+    window.process = { env: { IS_PREACT: false } };
     Excalidraw = await import('@excalidraw/excalidraw');
     const container = document.getElementById('root');
     const root = ReactDom.createRoot(container!);
