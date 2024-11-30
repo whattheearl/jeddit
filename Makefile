@@ -1,4 +1,15 @@
 # ==================================================================================== #
+# VARIABLES
+# ==================================================================================== #
+
+SERVER=jeddit.wte.sh
+GIT_REPOSITORY=https://github.com/whattheearl/jeddit
+CONTAINER_REGISTRY=ghcr.io
+CONTAINER_REGISTRY_USER=whattheearl
+TAG=ghcr.io/whattheearl/jeddit:latest
+BUILD_PATH=/home/jon/wte/jeddit
+
+# ==================================================================================== #
 # HELPERS
 # ==================================================================================== #
 
@@ -45,20 +56,20 @@ dev:
 # PUBLISH 
 # ==================================================================================== #
 
-## login: login to ghcr.io with GITHUB_TOKEN for publishing container 
+## login: login to container registry
 .PHONY: login
 login:
-	@echo ${GITHUB_TOKEN} | docker login ghcr.io -u whattheearl --password-stdin
+	@echo ${GITHUB_TOKEN} | docker login ${CONTAINER_REGISTRY} -u ${CONTAINER_REGISTRY_USER} --password-stdin
 
-## build: build container ghcr.io/whattheearl/jeddit:latest
+## build: build container
 .PHONY: build
 build:
-	@docker build . --tag ghcr.io/whattheearl/jeddit:latest
+	@docker build . --tag ${TAG}
 
-## publish: publish docker container to ghcr.io/whattheearl/jeddit:latest
+## publish: publish docker container
 .PHONY: publish 
 publish:
-	@docker push ghcr.io/whattheearl/jeddit:latest
+	@docker push ${TAG}
 
 # ==================================================================================== #
 # DEPLOYMENT
@@ -78,11 +89,13 @@ stop:
 ## env: sync environmental variables
 .PHONY: env
 env:
-	@ssh jeddit.wte.sh "rm -rf /home/jon/wte/jeddit; git clone https://github.com/whattheearl/jeddit /home/jon/wte/jeddit" || exit 1
-	@scp .env.prod jeddit.wte.sh:/home/jon/wte/jeddit/.env.prod || exit 1
-	@scp Makefile jeddit.wte.sh:/home/jon/wte/jeddit/Makefile || exit 1
+	@ssh ${SERVER} "rm -rf ${BUILD_PATH}; git clone ${GIT_REPOSITORY} ${BUILD_PATH}"
+	@scp .env.prod "${SERVER}:${BUILD_PATH}/.env.prod"
+	@scp Makefile "${SERVER}:${BUILD_PATH}/Makefile"
 
 ## deploy: deploy service
 # .PHONY: deploy
 deploy: env
-	@ssh jeddit.wte.sh "make -C /home/jon/wte/jeddit start"
+	@ssh ${SERVER} "make -C ${BUILD_PATH} build"
+	@ssh ${SERVER} "make -C ${BUILD_PATH} publish"
+	@ssh ${SERVER} "make -C ${BUILD_PATH} start"
