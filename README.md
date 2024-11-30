@@ -2,12 +2,12 @@
 
 ### todo:
 
--   [images] extract db/sharp code
--   [diagrams] inject / edit excalidraw
--   [image] load by screensize
--   [postlist] auto title image
--   [comment] emoji / image
--   [comment] comments
+- [images] extract db/sharp code
+- [diagrams] inject / edit excalidraw
+- [image] load by screensize
+- [postlist] auto title image
+- [comment] emoji / image
+- [comment] comments
 
 ## Dev
 

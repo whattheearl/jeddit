@@ -1,8 +1,8 @@
 import * as Posts from '$lib/db/posts';
 import { getSession } from '$lib/db/sessions';
+import type { RequestHandler } from '@sveltejs/kit';
 
-/** @type {import('./$types.js').RequestHandler} */
-export const POST = async (event) => {
+export const POST: RequestHandler = async (event) => {
     const { user } = getSession(event);
     if (!user) {
         return new Response(null, { status: 401, statusText: 'unauthenticated' });
