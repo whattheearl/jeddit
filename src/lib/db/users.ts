@@ -32,24 +32,26 @@ export const addUser = (user: Partial<IUser>) => {
 export const getAllUsers = () => {
     const users = db.prepare('SELECT * FROM users').all();
     return users;
-}
+};
 
 export const getUserById = (id: number) => {
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(id) as IUser | null;
     return user;
-}
+};
 
 export const getUserByClaims = (c: { iss?: string; sub?: string }) => {
-    const user = db.prepare('SELECT * FROM users WHERE iss = ? AND sub = ?').get(c.iss, c.sub) as IUser | null;
+    const user = db
+        .prepare('SELECT * FROM users WHERE iss = ? AND sub = ?')
+        .get(c.iss, c.sub) as IUser | null;
     return user;
-}
+};
 
 export const getUserByEmail = (email: string) => {
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as IUser | null;
     return user;
-}
+};
 
 export const getUserByUsername = (username: string) => {
     const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username) as IUser | null;
     return user;
-}
+};

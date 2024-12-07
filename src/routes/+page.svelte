@@ -25,9 +25,9 @@
                     <a
                         class="flex text-xs items-center hover:cursor-pointer"
                         href={`/post/${p.community}`}
-                        ><span class="px-1 text-gray-700 font-semibold">{`/j/${p.community}`}</span
-                        ></a
                     >
+                        <span class="px-1 text-gray-700 font-semibold">{`/j/${p.community}`}</span>
+                    </a>
                     <span class="text-xs text-gray-500">{`${p.created_at}`}</span>
                 </header>
                 <h3
@@ -49,9 +49,9 @@
                     class="inline-flex my-2 items-center py-1 rounded-full bg-gray-100"
                 >
                     <Heart fill={p.liked} />
-                    <span class="pr-2 inline-block mx-1 text-sm font-semibold text-gray-700"
-                        >{p.likes}</span
-                    >
+                    <span class="pr-2 inline-block mx-1 text-sm font-semibold text-gray-700">
+                        {p.likes}
+                    </span>
                 </button>
             </article>
         {/each}

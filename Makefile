@@ -37,7 +37,7 @@ no-dirty:
 format:
 	@npm run format 
 
-## format: format files
+## lint: format files
 .PHONY: lint 
 lint:
 	@npm run lint

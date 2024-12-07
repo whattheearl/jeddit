@@ -67,14 +67,14 @@
             id="user-menu-item-1">Settings</a
         >
         {#if $page.data?.user?.email == 'earl.jonathan@gmail.com'}
-        <a
-            on:click={toggleProfileMenu}
-            href="/admin"
-            class="block px-3 py-1 text-sm leading-6 text-gray-900"
-            role="menuitem"
-            tabindex="-1"
-            id="user-menu-item-1">Admin</a
-        >
+            <a
+                on:click={toggleProfileMenu}
+                href="/admin"
+                class="block px-3 py-1 text-sm leading-6 text-gray-900"
+                role="menuitem"
+                tabindex="-1"
+                id="user-menu-item-1">Admin</a
+            >
         {/if}
         <a
             on:click={toggleProfileMenu}
